@@ -1,0 +1,260 @@
+﻿@model Public_Portal_Webservice.Models.viewModel.vmPCP
+
+@{
+    ViewBag.Title = "complaints from field officer ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;margin-top:3px" id="mySidebar">
+    <br>
+    <div class="w3-container w3-row">
+        <div class="w3-col s4">
+            @{
+                String gender = Model.acc.gender;
+                gender = gender.ToLower() + ".png";
+
+            }
+
+            <img src="~/Image/ProfileImages/@gender" class="w3-circle w3-margin-right" style="width:46px">
+        </div>
+        <div class="w3-col s8 w3-bar">
+            <span>Welcome, <strong>@Model.acc.Full_name </strong></span><br>
+            <span><strong>@Model.acc.UCArea.UCName nazim </strong></span><br>
+            <a href="#" class="w3-bar-item w3-button"><i class="fa fa-user"></i></a>
+            <a href="#" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
+        </div>
+    </div>
+    <hr>
+    <div class="w3-bar-block">
+        <div class="w3-bar-block">
+            <a class="w3-button w3-padding-large w3-blue w3-margin-bottom" href="@Url.Action("UCPanelOverview", "UCAccount")"><span class="glyphicon glyphicon-chevron-left "></span>Back to main panel</a>
+
+        </div>
+        <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
+        <a href="@Url.Action("UCManageAreaComplaints", "UCAccount")" class="w3-bar-item w3-button w3-padding "><i class="fa fa-bank fa-fw"></i>  Pending Complaints</a>
+        <a href="@Url.Action("UCResolveComplaint", "UCAccount")" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>  Resolved complaints</a>
+        <a href="@Url.Action("UCIncomingComplaints", "UCAccount")" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-eye fa-fw"></i>  Recieved from field officer</a>
+        <a href="@Url.Action("UCBudgetComplaints", "UCAccount")" class="w3-bar-item w3-button w3-padding "><i class="fa fa-eye fa-fw"></i>  Budget pending complaints</a>
+        <a href="@Url.Action("UCViewForwardedComplaints", "UCAccount")" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>  View forwarded complaints</a>
+    </div>
+</nav>
+
+
+<!-- Overlay effect when opening sidebar on <asp:scriptmanager runat="server" />all screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:300px;margin-top:10px;">
+
+    <div class="w3-container w3-col m12  w3-margin-bottom ">
+        <div class="w3-col m12 ">
+            <div class=" w3-small">
+                <h3> Pending @Model.acc.UCArea.UCName UC @Model.acc.Category.Category1 bogus,already resolved and budget lacking complaints</h3>
+            </div>
+            <h4 style="color:red;">@ViewBag.msg</h4>
+            @if (Model.comps.Count() != 0)
+            {
+
+                <a href="#" class="w3-button w3-white w3-large">Sort By Highest Severity</a>
+
+
+                <div class="w3-right w3-large">total @Model.comps.Count() Complaints</div>
+            }
+            else
+            {
+                <div class="w3-left w3-large ">No Complaints To Show</div>
+
+            }
+        </div>
+        <div class=" w3-col m12 " style="margin-top:20px;">
+
+            @{int counter = 1; }
+            @foreach (var comps in Model.comps)
+            {
+
+                <div class="w3-col m4 s12">
+
+
+
+                    <div class="w3-card-4 w3-margin w3-white">
+
+
+                        <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comps.complaint_Id,url=HttpContext.Current.Request.Url })"><img src="@Url.Content(comps.image1)" alt="Nature" style="width:100%;height:200px;" /></a>
+
+                        <div class="w3-container">
+
+                            <div class="w3-dropdown-hover w3-hide-small w3-right w3-blue">
+                                <button class="w3-padding-large w3-button" title="More">
+                                    Action
+                                    <i class="fa fa-caret-down"></i>
+                                </button>
+                                <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                                    <button class="w3-button w3-block w3-bar-item  " onclick="document.getElementById('@comps.complaint_Id').style.display='block'">Verify Complaint</button><hr />
+                                </div>
+                            </div>
+
+                            <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comps.complaint_Id,url=HttpContext.Current.Request.Url })"><h3><b>@comps.c_title</b></h3></a>
+                            <h5>Type: @comps.complaint_Type complaint</h5>
+
+                            <hr />
+                        </div>
+
+                        <div class="" style="margin-left:10px">
+                            <p>
+
+                                @comps.description.Substring(0, 59)
+                            </p>
+                            <div class="w3-row">
+                                <div class="w3-col m8 s12">
+                                    <p><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comps.complaint_Id,url=HttpContext.Current.Request.Url })" class="w3-button w3-padding-large w3-white w3-border"><b>READ MORE »</b></a></p>
+                                </div>
+                                <div class="w3-col m4 w3-hide-small w3-grey">
+                                    <p><span class="w3-padding-large w3-right w3-small">Supporting complaints:@comps.SupportingComplaints.Count</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+
+                </div>
+
+
+                <div id="@comps.complaint_Id" class="w3-modal">
+                    <div class="w3-modal-content w3-animate-zoom w3-padding-large">
+                        <div class=" w3-container w3-center w3-white ">
+                            @Html.AntiForgeryToken()
+
+                            @{var detcomp = Model.compDetailsList.Where(a => a.Complaint_id.Equals(comps.complaint_Id)).FirstOrDefault();
+
+                            }
+
+
+                            <i onclick="document.getElementById('@comps.complaint_Id').style.display='none'" class="fa fa-remove w3-button w3-xlarge w3-right w3-transparent"></i>
+                            <div class="">
+                                <h3>@comps.complaint_Type Complaint</h3><hr />
+                                <h5>Images</h5>
+                                <br /><br /><br /><br /><br /><br />
+                            </div>
+                            <div class="w3-content w3-display-container " style="margin-top:10px;">
+
+
+                                <img class="mySlides w3-display-middle" src="@Url.Content(comps.image1)" width="450px" />
+
+                                <img class="mySlides w3-display-middle" src="@(comps.image2 == null ? "" : Url.Content(comps.image2))" width="450px" />
+                                <img class="mySlides w3-display-middle" src="@(comps.image3 == null ? "" : Url.Content(comps.image3))" width="450px" />
+
+                                @* <img class="mySlides" src="@(detcomp.updated_Image2 == null ? "" : Url.Content(detcomp.updated_Image2))" width="500px" />*@
+
+                                @*<img class="mySlides w3-display-middle" src="@(detcomp.updated_Image3 == null ? "" : Url.Content(detcomp.updated_Image3))" width="500px" />*@
+                            </div>
+
+                            <br /><br /><br /><br /><hr />
+                            <div class="w3-center " style="margin-top:70px;">
+
+                                <button class="w3-button demo" onclick="currentDiv(@counter)">1</button>
+                                @{ counter++;}
+                                <button class="w3-button demo" onclick="currentDiv(@counter)">2</button>
+                                @{ counter++;}
+                                <button class="w3-button demo" onclick="currentDiv(@counter)">3</button>
+                                @{ counter++;}
+                            </div>
+
+
+
+                            <h5>Remarks</h5>
+
+
+                            <p>
+                                @Html.TextArea("Comments", Model.compDetailsList.Where(a => a.Complaint_id == comps.complaint_Id).FirstOrDefault().Remarks_Field_Off, 7, 9, new { @Value = detcomp.Remarks_Field_Off, @readonly = "readonly", @class = "form-control", style = "max-width:100%;", })
+
+                                <br />
+
+                            </p>
+                            @if (!(comps.complaint_Type.Equals("budget")))
+                            {
+                                <a href="@Url.Action("RejectIncomingAction", "UCAccount", new { Complaint_ID = comps.complaint_Id })" class="w3-button w3-padding-large w3-orange w3-margin-bottom">Reject</a>
+                                <a href="@Url.Action("ApproveIncomingAction", "UCAccount",new { Complaint_ID=comps.complaint_Id})" class="w3-button w3-padding-large w3-blue w3-margin-bottom"> Approve</a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("", "UCAccount", new { Complaint_ID = comps.complaint_Id })" class="w3-button w3-padding-large w3-orange w3-margin-bottom">Put in budget list</a>
+                                <a href="@Url.Action("", "UCAccount",new {Complaint_ID=comps.complaint_Id })" class="w3-button w3-padding-large w3-blue w3-margin-bottom"> Forward to Coordinator</a>
+
+                            }
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+            }
+
+        </div>
+
+
+    </div>
+</div>
+
+<script type="text/javascript">
+
+
+    var slideIndex = 1;
+    showDivs(slideIndex);
+
+    function currentDiv(n) {
+        showDivs(slideIndex = n);
+    }
+
+    function showDivs(n) {
+        var i;
+        var x = document.getElementsByClassName("mySlides");
+        var dots = document.getElementsByClassName("demo");
+        if (n > x.length) { slideIndex = 1 }
+        if (n < 1) { slideIndex = x.length }
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" w3-red", "");
+        }
+        x[slideIndex - 1].style.display = "block";
+        dots[slideIndex - 1].className += " w3-red";
+    }
+
+
+
+    // Get the Sidebar
+    var mySidebar = document.getElementById("mySidebar");
+
+    // Get the DIV with overlay effect
+    var overlayBg = document.getElementById("myOverlay");
+
+    // Toggle between showing and hiding the sidebar, and add overlay effect
+    function w3_open() {
+        if (mySidebar.style.display === 'block') {
+            mySidebar.style.display = 'none';
+            overlayBg.style.display = "none";
+        } else {
+            mySidebar.style.display = 'block';
+            overlayBg.style.display = "block";
+        }
+    }
+
+    // Close the sidebar with the close button
+    function w3_close() {
+        mySidebar.style.display = "none";
+        overlayBg.style.display = "none";
+    }
+
+
+
+
+
+</script>
+
+

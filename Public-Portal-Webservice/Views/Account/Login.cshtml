@@ -1,0 +1,99 @@
+﻿@model Public_Portal_Webservice.Models.viewModel.vmPCP
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LayoutBlank.cshtml";
+
+}
+
+<div class="body"></div>
+<div class="grad"></div>
+<div class="header">
+    <div>Karachi<span>Portal </span></div>
+</div>
+<br>
+<div class="login">
+    <h4 style="color:red">@ViewBag.msg</h4>
+    @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.EditorFor(Model => Model.login.username, new { htmlAttributes = new { placeholder = "Username" } })
+        @Html.ValidationMessageFor(model => model.login.username, "", new { @class = "text-danger" })<br>
+        @Html.EditorFor(model => model.login.password, new { htmlAttributes = new { placeholder = "Password" } })
+        @Html.ValidationMessageFor(model => model.login.password, "", new { @class = "text-danger" })<br>
+        <h4><a href="@Url.Action("ForgotPassword","Account")" style="color:dodgerblue">Forgot password?</a></h4>
+        <input type="submit" value="Login" class="btn btn-default btn-block btn-success"><br />
+        <h3>
+            <a href="@Url.Action("Registration", "Account")" style="color:dodgerblue">Register account</a>
+        </h3>
+
+    }
+</div>
+
+@*@using (Html.BeginForm("Login", "Account", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="w3-container" style="vertical-align:middle">
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-4">
+                    <h2>Login </h2>
+
+                </div>
+            </div>
+            <br />
+            <h4 style="color:red;" class="col-sm-4 col-sm-offset-4">
+                @TempData["Status"].ToString()
+            </h4>
+
+            <div class="row" style="vertical-align:middle">
+                <div class="col-sm-4 col-sm-offset-4">
+                    <label for="fname">username</label>
+                </div>
+                <div class="col-sm-4 col-sm-offset-4">
+                    @Html.EditorFor(Model => Model.login.username, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.login.username, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-4">
+                    <label for="lname">Password</label>
+                </div>
+                <div class="col-sm-4 col-sm-offset-4">
+                    @Html.EditorFor(model => model.login.password, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.login.password, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-4">
+                    <label for="lname">Frogot password?</label>
+                </div>
+                <div class="col-sm-4 col-sm-offset-4">
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-4">
+                    <label for="lname">Register New Account</label>
+                </div>
+                <div class="col-sm-4 col-sm-offset-4">
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-4">
+                    <input type="submit" value="Login" class="w3-button w3-green w3-block">
+                </div>
+            </div>
+            <div class="row">
+            </div>
+        </div>
+    }
+
+    @section Scripts{
+        <script src="~/Scripts/jquery.validate.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    }*@

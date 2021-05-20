@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="11d026efc5ae48998ad1a0924abc91e3" Name="Diagram1" ZoomLevel="74">
+        <EntityTypeShape EntityType="PCP5Model.Account" Width="1.5" PointX="3" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="PCP5Model.Category" Width="1.5" PointX="0.75" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PCP5Model.Complaint_Det_Remarks" Width="1.5" PointX="8.625" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="PCP5Model.Complaint" Width="1.5" PointX="5.25" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PCP5Model.Feedback" Width="1.5" PointX="7.5" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PCP5Model.PendingComplaint" Width="1.5" PointX="7.5" PointY="12.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PCP5Model.Status" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="PCP5Model.SupportingComplaint" Width="1.5" PointX="10.5" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PCP5Model.Town" Width="1.5" PointX="0.75" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PCP5Model.UCArea" Width="1.5" PointX="0.75" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PCP5Model.Voting" Width="1.5" PointX="10.5" PointY="6.125" IsExpanded="true" />
+        <AssociationConnector Association="PCP5Model.FK_Account_ToCategory" ManuallyRouted="false" />
+        <AssociationConnector Association="PCP5Model.FK_Account_Town" ManuallyRouted="false" />
+        <AssociationConnector Association="PCP5Model.FK_Accounts_ToUC" ManuallyRouted="false" />
+        <AssociationConnector Association="PCP5Model.FK_Complaints_ToAccount" ManuallyRouted="false" />
+        <AssociationConnector Association="PCP5Model.FK_Complaints_ToForward_Admin_id" ManuallyRouted="false" />
+        <AssociationConnector Association="PCP5Model.FK_SupportingComplaints_ToTable" ManuallyRouted="false" />
+        <AssociationConnector Association="PCP5Model.FK_Voting_ToAccount" ManuallyRouted="false" />
+        <AssociationConnector Association="PCP5Model.FK_Complaints_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="PCP5Model.FK_Complaint_Det_Remarks_ToTable" ManuallyRouted="false" />
+        <AssociationConnector Association="PCP5Model.FK_Complaints_ToStatus" ManuallyRouted="false" />
+        <AssociationConnector Association="PCP5Model.FK_Complaints_ToUC" ManuallyRouted="false" />
+        <AssociationConnector Association="PCP5Model.FK_Feedback_ToComplaint" ManuallyRouted="false" />
+        <AssociationConnector Association="PCP5Model.FK_PendingComplaints_ToTable" ManuallyRouted="false" />
+        <AssociationConnector Association="PCP5Model.FK_SupportingComplaints_ToComplaints" ManuallyRouted="false" />
+        <AssociationConnector Association="PCP5Model.FK_Voting_ToComplaints" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="PCP5Model.Role" Width="1.5" PointX="0.875" PointY="4.125" />
+        <AssociationConnector Association="PCP5Model.FK_Account_ToRoles" />
+        <EntityTypeShape EntityType="PCP5Model.Announcement1" Width="1.5" PointX="10.25" PointY="12.25" />
+        <AssociationConnector Association="PCP5Model.FK_Announcement_ToAccount" />
+        <AssociationConnector Association="PCP5Model.FK_Announcement_ToForwardedBy" />
+        <AssociationConnector Association="PCP5Model.FK_Announcement_ToCategory" />
+        <AssociationConnector Association="PCP5Model.FK_Announcement_ToStatus" />
+        <AssociationConnector Association="PCP5Model.FK_Announcement_ToUCArea" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

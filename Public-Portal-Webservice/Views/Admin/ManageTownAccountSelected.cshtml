@@ -1,0 +1,277 @@
+﻿@model Public_Portal_Webservice.Models.viewModel.vmPCP
+
+@{
+    ViewBag.Title = "Town Dashboard";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:270px;margin-top:1px" id="mySidebar">
+    <br>
+    <div class="w3-container w3-row">
+
+        <div class="w3-col s8 w3-bar">
+            <span><strong>Admin</strong></span><br>
+            <span><strong></strong></span><br>
+        </div>
+    </div>
+    <hr>
+
+    <div class="w3-bar-block">
+        <a class="w3-button w3-padding-large w3-blue w3-margin-bottom" href="@Url.Action("AdminPanel", "Admin")"><span class="glyphicon glyphicon-chevron-left "></span>Back to main panel</a>
+
+    </div>
+    <div class="w3-container">
+        <h3>Towns</h3>
+    </div>
+
+    <div class="w3-bar-block">
+        @foreach (var town in Model.towns)
+        {
+            if (town.town_name.ToString().Equals(ViewBag.TownSelected))
+            {
+                <a href="@Url.Action("ManageTownAccountSelected", "Admin",new {T_id=town.town_id })" class="w3-bar-item w3-button w3-indigo w3-padding w3-text-white"><i class="fa fa-th-large fa-fw w3-margin-right"></i>@town.town_name</a>
+
+            }
+            else
+            {
+                <a href="@Url.Action("ManageTownAccountSelected", "Admin",new {T_id=town.town_id })" class="w3-bar-item w3-button  w3-padding w3-text-red"><i class="fa fa-th-large fa-fw w3-margin-right"></i>@town.town_name</a>
+            }
+
+        }
+
+    </div>
+</nav>
+
+<!-- Overlay effect when opening sidebar on <asp:scriptmanager runat="server" />all screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin:10px 10px 20px 280px">
+
+    <div class="w3-container">
+
+        <ul class="tabs">
+            <li class="tab-link current" data-tab="tab-1"><Strong>@ViewBag.UCSelected Town Nazims</Strong></li>
+            <li class="tab-link" data-tab="tab-2"> <span class="glyphicon glyphicon-user"></span><Strong> Create new nazim</Strong></li>
+        </ul>
+
+        <div id="tab-1" class="tab-content current">
+            <div><h5 style="color:red"> @ViewBag.msg </h5></div>
+            <h5 class="w3-right">accounts,@ViewBag.TotalMembers  </h5>
+
+
+
+            <div class="w3-container">
+                <table class=" w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
+
+                    <tr class="w3-theme-d3">
+                        <th>
+                            Member
+                        </th>
+                        <th>
+                            action
+                        </th>
+                    </tr>
+                    @foreach (var users in Model.accounts)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(Model => users.Full_name)
+                            </td>
+                            <td>
+
+                                <a href="@Url.Action("AccountDelete", "Admin",new {account_id=users.Account_id,type="nazim",T_id=Model.town.town_id })" class="w3-bar-item w3-button w3-blue w3-padding w3-text-white"><span class="glyphicon glyphicon-trash"></span> Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </table><br>
+
+            </div>
+        </div>
+
+
+        <div id="tab-2" class="tab-content">
+
+            @using (Html.BeginForm("AddTownAccount", "Admin", new { T_id = Model.town.town_id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+
+
+
+                <div class="w3-container">
+                    <div class="row">
+                        <div class="col-sm-4 col-sm-offset-4" style="text-align:center">
+                            <h2>Nazim Registration</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <h4 style="color:red">@ViewBag.msg</h4>
+                        <div class="col-25">
+                            <label for="fname">Full Name</label>
+                        </div>
+                        <div class="col-75">
+                            @Html.EditorFor(Model => Model.accountReg.Full_name, new { htmlAttributes = new { style = "max-width: 90%;", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.accountReg.Full_name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-25">
+                            <label for="fname">Username</label>
+                        </div>
+                        <div class="col-75">
+                            @Html.EditorFor(model => model.accountReg.username, new { htmlAttributes = new { style = "max-width: 90%;", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.accountReg.username, "", new { @class = "text-danger" })
+
+                            @Html.ValidationMessage("UserExist", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-25">
+                            <label for="fname">Password</label>
+                        </div>
+                        <div class="col-75">
+                            @Html.EditorFor(model => model.accountReg.password, new { htmlAttributes = new { style = "max-width: 90%;", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.accountReg.password, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-25">
+                            <label for="fname">Confirm Password</label>
+                        </div>
+                        <div class="col-75">
+                            @Html.EditorFor(model => model.accountReg.confirmPassword, new { htmlAttributes = new { style = "max-width: 90%;", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.accountReg.confirmPassword, "", new { @class = "text-danger" })
+
+                            @Html.ValidationMessage("passwordNotSame", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-25">
+                            <label for="fname">Email</label>
+                        </div>
+                        <div class="col-75">
+                            @Html.EditorFor(model => model.accountReg.email_address, new { htmlAttributes = new { style = "max-width: 90%;", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.accountReg.email_address, "", new { @class = "text-danger" })
+
+                            @Html.ValidationMessage("EmailExist", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-25">
+                            <label for="fname">Phone Number</label>
+                        </div>
+                        <div class="col-75">
+                            @Html.EditorFor(model => model.accountReg.phone_number, new { htmlAttributes = new { style = "max-width: 90%;", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.accountReg.phone_number, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+
+                        <div class="col-25">
+                            <label for="fname">Address</label>
+                        </div>
+                        <div class="col-75">
+                            @Html.EditorFor(model => model.accountReg.address, new { htmlAttributes = new { style = "max-width: 90%;", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.accountReg.address, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-25">
+                            <label for="country">Gender</label>
+                        </div>
+                        <div class="col-75">
+                            @{
+                                List<SelectListItem>
+                                    listItemsGender = new List<SelectListItem>();
+                                listItemsGender.Add(new SelectListItem { Text = "male", Value = "male" });
+                                listItemsGender.Add(new SelectListItem { Text = "female", Value = "female" });
+                                listItemsGender.Add(new SelectListItem { Text = "other", Value = "other" });
+                            }
+
+
+                            @Html.DropDownListFor(model => model.accountReg.gender, listItemsGender, "--Select Gender--", new { style = "max-width:90%;", @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.accountReg.gender, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 col-sm-offset-4">
+                            <input type="submit" value="Register Account" class="w3-button w3-bar w3-blue" />
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- container -->
+            }
+
+            <!-- End page content -->
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}
+
+<script>
+    $(document).ready(function () {
+
+        $('ul.tabs li').click(function () {
+            var tab_id = $(this).attr('data-tab');
+
+            $('ul.tabs li').removeClass('current');
+            $('.tab-content').removeClass('current');
+
+            $(this).addClass('current');
+            $("#" + tab_id).addClass('current');
+        })
+
+    })
+
+    var mySidebar = document.getElementById("mySidebar");
+
+    // Get the DIV with overlay effect
+    var overlayBg = document.getElementById("myOverlay");
+
+    // Toggle between showing and hiding the sidebar, and add overlay effect
+    function w3_open() {
+        if (mySidebar.style.display === 'block') {
+            mySidebar.style.display = 'none';
+            overlayBg.style.display = "none";
+        } else {
+            mySidebar.style.display = 'block';
+            overlayBg.style.display = "block";
+        }
+    }
+
+    // Close the sidebar with the close button
+    function w3_close() {
+        mySidebar.style.display = "none";
+        overlayBg.style.display = "none";
+    }
+
+
+
+
+    //////map
+
+
+
+</script>
+
+

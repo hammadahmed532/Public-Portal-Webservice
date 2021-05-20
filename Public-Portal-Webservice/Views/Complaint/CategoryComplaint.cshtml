@@ -1,0 +1,341 @@
+﻿@model Public_Portal_Webservice.Models.viewModel.vmPCP
+@{
+    ViewBag.Title = "Town Complaints";
+    Layout = "~/Views/Shared/_LayoutWithSection.cshtml";
+}
+
+@*<!-- !PAGE CONTENT! -->
+        <div class="w3-main" style="margin-left:290px">
+
+            <!-- Header -->
+            <header id="portfolio">
+
+                <div class="w3-container">
+                    <h1>
+                        <b>
+                            @ViewBag.categorySelected Complaints of @ViewBag.TownName
+                        </b>
+                    </h1>
+                    <div class="w3-section  w3-padding-16">
+                        <span class="w3-margin-right">Categories:</span>
+                        @foreach (var cat in Model.categories)
+                        {
+                            if (cat.Category1.ToString().Equals(ViewBag.categorySelected))
+                            {
+                                <a href="~/Complaint/CategoryComplaint?cat=@cat.category_id" class="w3-button w3-blue w3-hide-small">@cat.Category1</a>
+
+                            }
+                            else
+                            {
+                                <a href="~/Complaint/CategoryComplaint?cat=@cat.category_id" class="w3-button w3-white w3-hide-small">@cat.Category1</a>
+                            }
+                        }
+                    </div>
+                </div>
+            </header>
+
+            <!-- First Photo Grid-->
+            <!-- First Photo Grid-->
+            <div class="w3-row-padding w3-topbar w3-padding-16">
+
+
+                <div class="w3-right w3-large">total @ViewBag.Count Complaints</div>
+                @if (ViewBag.Count == 0)
+                {
+                    <div class="w3-left w3-large ">No Complaints To Show</div>
+                }
+                else
+                {
+                    <a href="~/Complaint/SeverityLevelComplaintCategory/" class="w3-button w3-white w3-left">Sort By Highest Severity</a>
+
+                }
+                <br /><br /><br />
+
+
+                @foreach (var com in Model.comps)
+                {
+                    string status = "abcd";
+                    string color = "red";
+                    if (com.stage == 1)
+                    { status = "Status: Waiting for approval"; }
+                    else if (com.stage == 2)
+                    {
+                        status = "Status: Waiting for approval of budget";
+                        color = "yellow";
+                    }
+                    else if (com.stage == 3)
+                    {
+                        color = "light-green";
+                        status = "Status:Waiting to start progress";
+                    }
+                    else if (com.stage == 4)
+                    {
+                        color = "green";
+                        status = "Complaint at 40% completion";
+                    }
+                    else if (com.stage == 5)
+                    {
+                        color = "light-blue";
+                        status = "Complaint at 70% completion";
+                    }
+                    else if (com.stage == 6)
+                    {
+                        color = "blue";
+                        status = "Complaint Resolved";
+                    }
+
+
+                    <div class="w3-third w3-container w3-margin-bottom w3-hide-small" style="width:25%;">
+                        <a href="~/Complaint/SingleComplaint?Complaint_ID=@com.complaint_Id"> <img src="@Url.Content(com.image1)" style="width:100%" class="w3-hover-opacity"></a>
+                        <div class="w3-container w3-@color">
+                            <p><b>@com.c_title</b></p>
+                            <p>status: @status</p>
+                        </div>
+                    </div>
+                }
+
+            </div>
+    </div>*@
+<!-- End page content -->
+
+<header class="w3-container w3-center w3-padding-32" style="position:relative;margin-top:20px">
+    <div style="position:absolute;top:0;left:0;right:0;bottom:0;background-image:url('@Url.Content("~/Image/khi-cover.jpg")');filter: blur(2px);z-index:-1;"></div>
+    <h1 style="color:white"><b>@ViewBag.header</b></h1>
+    <p style="color:white">total @Model.comps.Count() complaints   <a href="@Url.Action("SeverCheckAndRedirect", "Complaint",new { page_type=ViewBag.SevereType})"><span class="w3-tag w3-large w3-blue">Order by severe first</span></a></p>
+
+</header>
+
+
+<!-- Grid -->
+<div class="w3-row">
+
+
+
+    <!-- Introduction menu -->
+    <div class="w3-col l3">
+        <div class="w3-card w3-margin">
+            <div class="">
+                @if ("yes".Equals(ViewBag.hasTownId))
+                {
+                    <a href="@Url.Action("TownWiseComplaint", "Complaint", new { T_ID = Model.town.town_id})" class="w3-container w3-padding w3-button w3-block   w3-large" style="background-color:#929fba;color:white">
+
+                        <span class="glyphicon glyphicon-chevron-left "> </span>  @Model.town.town_name Town Complaints
+
+                    </a>
+
+
+                }
+                else
+                {
+                    <a href="@Url.Action("Index", "Complaint")" class="w3-container w3-padding w3-button w3-block   w3-large" style="background-color:#929fba;color:white">
+                        <span class="glyphicon glyphicon-chevron-left "> </span> back to map
+                    </a>
+                }
+            </div>
+        </div>
+        <!-- About Card -->
+        <div class="w3-card w3-margin w3-margin-top">
+            <div class="w3-container w3-padding " style="background-color:#929fba;color:white">
+                <h4>UC Areas of @ViewBag.TownName</h4>
+            </div>
+            <div class="w3-container w3-white">
+                @foreach (var uc in Model.ucs)
+                {
+                    if (uc.UCName.ToString().Equals(ViewBag.UCSelected))
+                    {
+                        <a href="@Url.Action("UCComplaint", "Complaint",new { UC=uc.ID})" style="text-decoration:none" class="w3-button w3-block  w3-left-align w3-large w3-large w3-black"><span class="fa fa-th-large fa-fw w3-margin-right"></span>@uc.UCName</a>
+
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("UCComplaint", "Complaint",new { UC=uc.ID})" style="text-decoration:none" class="w3-button w3-block  w3-left-align "><span class="fa fa-th-large fa-fw w3-margin-right"></span>@uc.UCName</a>
+
+                    }
+
+                }
+            </div>
+        </div><hr>
+
+
+
+
+        <!-- Posts -->
+        <div class="w3-card w3-margin">
+            <div class="w3-container w3-padding " style="background-color:#929fba;color:white">
+                <h4>Severe Complaints of @ViewBag.TownName Town </h4>
+            </div>
+            <ul class="w3-ul w3-hoverable w3-white">
+                @foreach (var severeComps in Model.severeComps)
+                {
+                    <li class="w3-padding-16">
+                        <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = severeComps.complaint_Id })">
+                            <img src="@Url.Content(severeComps.image1)" alt="Image" class="w3-left w3-margin-right" style="width:50px">
+                            <span class="w3-large">@severeComps.c_title</span><br>
+                            <span>Status: @severeComps.Status.Status_first</span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+        <hr>
+
+        <!-- Labels / tags -->
+        <div class="w3-card w3-margin">
+            <div class="w3-container w3-padding" style="background-color:#929fba;color:white">
+                <h4>categories</h4>
+            </div>
+            <div class="w3-container w3-white">
+                <br />
+                <p>
+                    @foreach (var cat in Model.categories)
+                    {
+                        if (cat.Category1.ToString().Equals(ViewBag.categorySelected))
+                        {
+                            <a href="@Url.Action("CategoryComplaint", "Complaint", new { cat = @cat.category_id })" class="w3-tag w3-margin-bottom w3-large w3-red">@cat.Category1</a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("CategoryComplaint", "Complaint", new { cat = @cat.category_id })" class="w3-tag w3-light-grey w3-medium w3-margin-bottom">@cat.Category1</a>
+                        }
+
+                    }
+                </p>
+            </div>
+        </div>
+
+        <!-- END Introduction Menu -->
+    </div>
+    <!-- Blog entries -->
+
+
+    <div class="w3-col l9">
+
+        @{ int cou = Model.comps.Count(); }
+        @if (cou == 1)
+        {
+
+            <div class=" w3-col m7" style="margin-top:20px;">
+
+
+                @foreach (var comps in Model.comps)
+                {
+                    <div class="w3-col l7 s12">
+
+                        <div class="w3-card-4 w3-margin w3-white">
+
+
+                            <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comps.complaint_Id,url=HttpContext.Current.Request.Url })"><img src="@Url.Content(comps.image1)" alt="Nature" style="width:100%;height:200px;" /></a>
+
+
+                            <div class="w3-container">
+
+                                <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comps.complaint_Id,url=HttpContext.Current.Request.Url })"><h3><b>@comps.c_title</b></h3></a>
+                                <h5 style="color:purple;">
+                                    @comps.Status.Status_first, @if (comps.date_last_modified != null)
+                                    {<span class="w3-opacity">@comps.date_last_modified.ToShortDateString()</span> }
+                                else
+                                {<span class="w3-opacity"> @comps.date_creation.ToShortDateString()</span>}
+                                </h5>
+
+                                <hr />
+                            </div>
+
+                            <div class="w3-container">
+                                <p>
+
+                                    @comps.description.Substring(0, 59)
+                                </p>
+                                <div class="w3-row">
+                                    <div class="w3-col m4 s12">
+                                        <p><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comps.complaint_Id,url=HttpContext.Current.Request.Url })" class="w3-button w3-padding-large w3-white w3-border"><b>READ MORE »</b></a></p>
+                                    </div>
+                                    <div class=" w3-col " style="background-color:lightgrey;color:black">
+                                        <p><span class="w3-padding-large w3-right w3-small">Supporting complaints:@comps.SupportingComplaints.Count</span></p>
+
+                                    </div><br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        else if (cou > 1)
+        {
+
+            <div class="table-responsive">
+                <br />
+                <div class="row ">
+                    <div class="col-lg-12 w3-right ">
+                        @using (Html.BeginForm("TitleComplaint", "Complaint", FormMethod.Get, new { enctype = "multipart/form-data" }))
+                        {
+                            <div class="has-feedback" style="z-index:0">
+                                @Html.EditorFor(Model => Model.com.c_title, new { htmlAttributes = new { style = "max-width: 100%;", @class = "form-control", placeholder = "Search by complaint title" } })
+                                <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <table class="table">
+
+
+                    @{ int counter = 0;}
+
+                    @foreach (var comps in Model.comps)
+                    {
+                        counter++;
+                        if (counter % 4 == 0)
+                        {
+                            <tr></tr>
+                        }
+                        else
+                        {
+                            <td style="width:50px;">
+                                <div class="w3-col l12 s12">
+
+                                    <div class="w3-card-4 w3-margin w3-white">
+                                        <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comps.complaint_Id,url=HttpContext.Current.Request.Url })"><img src="@Url.Content(comps.image1)" alt="Nature" style="width:100%;height:200px;"></a>
+                                        <div class="w3-container">
+                                            <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comps.complaint_Id,url=HttpContext.Current.Request.Url })"><h3><b>@comps.c_title</b></h3></a>
+                                            <h5 style="color:purple;">
+                                                @comps.Status.Status_first, @if (comps.date_last_modified != null)
+                                                {<span class="w3-opacity">@comps.date_last_modified.ToShortDateString()</span> }
+                                            else
+                                            {<span class="w3-opacity"> @comps.date_creation.ToShortDateString()</span>}
+                                            </h5>
+
+                                            <hr />
+                                        </div>
+                                        <div class="w3-container">
+                                            <p>
+
+                                                @comps.description.Substring(0, 50) ...
+                                            </p>
+                                            <div class="w3-row">
+                                                <div class="w3-col m4 s12">
+                                                    <p><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comps.complaint_Id,url=HttpContext.Current.Request.Url })" class="w3-button w3-padding-large w3-white w3-border"><b>READ MORE »</b></a></p>
+                                                </div>
+                                                <div class=" w3-col " style="background-color:lightgrey;color:black">
+                                                    <p><span class="w3-padding-large w3-right w3-small">Supporting complaints:@comps.SupportingComplaints.Count</span></p>
+
+                                                </div><br />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
+                        }
+
+                    }
+
+                </table>
+
+
+
+                <!-- END GRID -->
+            </div>
+        }
+    </div>
+</div>

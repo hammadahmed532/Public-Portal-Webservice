@@ -1,0 +1,492 @@
+﻿@using System.Web.UI.WebControls;
+
+@model Public_Portal_Webservice.Models.viewModel.vmPCP
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="google" content="notranslate">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>@ViewBag.Title - Public Complaint Portal</title>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <link rel="stylesheet" href="~/Content/w3.css" />
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="~/Content/leaflet/leaflet.css" />
+    <script src="~/Content/leaflet/leaflet.js"></script>
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3pro.css">
+    <script type="text/javascript" src="~/Content/maps/karachi-towns.js"></script>
+
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">
+    <link rel="stylesheet" href="~/Content/leaflet/leaflet.awesome-markers.css">
+    <script src="~/Content/leaflet/leaflet.awesome-markers.js"></script>
+
+
+</head>
+<body class="w3-light-grey">
+
+    <div class="w3-top" style="background-color:#696F6C;color:white">
+        <div class="w3-bar w3-theme-d2 w3-left-align w3-medium">
+            <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-theme-d2" href="javascript:void(0);" onclick="openNav()"><i class="fa fa-bars"></i></a>
+            @if (Request.IsAuthenticated)
+            {
+                <a href="@Url.Action("AccountCheckAndRedirect", "Account")" class="w3-bar-item w3-button w3-padding-large ">Dashboard</a>
+            }
+            @if (User.IsInRole("5"))
+            {
+                if ("Mine".Equals(ViewBag.pageMaporTownorAnnouncements))
+                {
+                    <a href="@Url.Action("ViewMyComplaints", "Complaint")" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white " @*style="border-bottom: 6px solid currentColor;border-bottom-color: white;"*@><span style="border-bottom: 5px solid currentColor;border-bottom-color: white;padding-bottom:5px">My Complaints</span></a>
+                }
+                else
+                {
+                    <a href="@Url.Action("ViewMyComplaints", "Complaint")" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="News">My Complaints</a>
+                }
+            }
+            @if (User.IsInRole("3"))
+            {
+                if ("MyAnnouncements".Equals(ViewBag.pageMaporTownorAnnouncements))
+                {
+                    <a href="@Url.Action("ViewMyAnnouncements", "Complaint")" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white " @*style="border-bottom: 6px solid currentColor;border-bottom-color: white;"*@><span style="border-bottom: 5px solid currentColor;border-bottom-color: white;padding-bottom:5px">My Announcements</span></a>
+                }
+                else
+                {
+                    <a href="@Url.Action("ViewMyAnnouncements", "Complaint")" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="News">My Announcements</a>
+                }
+            }
+            @if (User.IsInRole("5") || User.IsInRole("4") || User.IsInRole("3"))
+            {
+                if ("MyArea".Equals(ViewBag.pageMaporTownorAnnouncements))
+                {
+                    <a href="@Url.Action("MyAreaComplaints", "Complaint")" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white " @*style="border-bottom: 6px solid currentColor;border-bottom-color: white;"*@><span style="border-bottom: 5px solid currentColor;border-bottom-color: white;padding-bottom:5px">My UC Complaints</span></a>
+                }
+                else
+                {
+                    <a href="@Url.Action("MyAreaComplaints", "Complaint")" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="News">My UC Complaints</a>
+                }
+            }
+            else if (Request.IsAuthenticated)
+            {
+                if ("MyArea".Equals(ViewBag.pageMaporTownorAnnouncements))
+                {
+                    <a href="@Url.Action("MyAreaComplaints", "Complaint")" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white " @*style="border-bottom: 6px solid currentColor;border-bottom-color: white;"*@><span style="border-bottom: 5px solid currentColor;border-bottom-color: white;padding-bottom:5px">My Town Complaints</span></a>
+                }
+                else
+                {
+                    <a href="@Url.Action("MyAreaComplaints", "Complaint")" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="News">My Town Complaints</a>
+                }
+
+            }
+            @if ("Town".Equals(ViewBag.pageMaporTownorAnnouncements))
+            {
+                <a href="@Url.Action("Index", "Complaint")" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white " @*style="border-bottom: 6px solid currentColor;border-bottom-color: white;"*@><span style="border-bottom: 5px solid currentColor;border-bottom-color: white;padding-bottom:5px">All Town Complaints</span></a>
+            }
+            else
+            {
+                <a href="@Url.Action("Index", "Complaint")" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white " title="News">All Town Complaints</a>
+            }
+
+            @if ("Map".Equals(ViewBag.pageMaporTownorAnnouncements))
+            {
+                <a href="@Url.Action("Map", "Complaint",new { Town_id=0})" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white " @*style="border-bottom: 6px solid currentColor;border-bottom-color: white;"*@><span style="border-bottom: 5px solid currentColor;border-bottom-color: white;padding-bottom:5px">Map Town Complaints</span></a>
+            }
+            else
+            {
+                <a href="@Url.Action("Map", "Complaint",new { Town_id=0})" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white " title="News">Map Town Complaints</a>
+            }
+            @if ("Announcements".Equals(ViewBag.pageMaporTownorAnnouncements))
+            {
+                <a href="@Url.Action("TownWiseAnnouncements", "Complaint",new { Town_id=0})" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white " @*style="border-bottom: 6px solid currentColor;border-bottom-color: white;"*@><span style="border-bottom: 5px solid currentColor;border-bottom-color: white;padding-bottom:5px">Announcements</span></a> }
+            else
+            {
+                <a href="@Url.Action("TownWiseAnnouncements", "Complaint",new { Town_id=0})" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="News">Announcements</a>
+            }
+
+            @if (!Request.IsAuthenticated)
+            {
+                <div class="w3-bar-item w3-medium  w3-hide-small w3-padding-small w3-right form-inline">
+                    @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <span>username</span>
+                        @Html.EditorFor(model => model.login.username, new { htmlAttributes = new { @class = "form-control" } })
+
+                        <span>password</span>
+                        @Html.EditorFor(model => model.login.password, new { htmlAttributes = new { @class = "form-control" } })
+                        <input type="submit" value="Login" class="w3-button w3-blue" />
+                        <p class="w3-small">
+                            <a href="@Url.Action("ForgotPassword","Account")">Forgot password?</a><span style="padding-left:190px"><a href="@Url.Action("Registration","Account")">Register new account</a></span>
+
+                        </p>
+
+                    }
+                </div>
+
+            }
+
+            else if (User.IsInRole("5"))
+            {
+                <div class="w3-dropdown-hover w3-hide-small w3-right" style="padding-right:30px">
+                    <button class="w3-padding-large w3-button" title="More">
+                        @HttpContext.Current.User.Identity.Name
+
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                        <a href="@Url.Action("RegisterNewComplaint", "Complaint")" class="w3-bar-item w3-button">Register New Complaint</a>
+                        <a href="@Url.Action("Logout", "Account")" class="w3-bar-item w3-button">Logout</a>
+                    </div>
+                </div>
+                <div class="w3-dropdown-hover w3-hide-small w3-right">
+                    <button class="w3-button w3-padding-large" title="Notifications"><i class="fa fa-bell"></i><span class="w3-badge w3-right w3-small w3-green">@Model.notificationComplaints.Count()</span></button>
+                    <div class="w3-dropdown-content w3-card-4 w3-bar-block w3-small  ">
+                        <table class="w3-striped">
+                            @foreach (var comm in Model.notificationComplaints)
+                            {
+                                <tr>
+                                    <td>
+                                        <a href="@Url.Action("SingleComplaint","Complaint",new { Complaint_ID=comm.complaint_Id })" class="w3-bar-item w3-button">@comm.c_title, Status updated</a>
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+
+            }
+            else if (User.IsInRole("3"))
+            {
+
+
+                <div class="w3-dropdown-hover w3-hide-small w3-right" style="padding-right:30px">
+                    <button class="w3-padding-large w3-button" title="More">
+                        @HttpContext.Current.User.Identity.Name
+
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                        <a href="@Url.Action("RegisterNewAnnouncement", "Complaint")" class="w3-bar-item w3-button">Register New Announcement</a>
+                        <a href="@Url.Action("Logout", "Account")" class="w3-bar-item w3-button">Logout</a>
+                    </div>
+                </div>
+
+            }
+            else
+            {
+
+
+
+                <div class="w3-dropdown-hover w3-hide-small w3-right " style="padding-right:30px">
+                    <button class="w3-padding-large w3-button " title="More">
+
+                        @if (User.IsInRole("1"))
+                        {<span>@Model.acc.Town.town_name Town Nazim, @HttpContext.Current.User.Identity.Name </span> }
+                    else if (User.IsInRole("3"))
+                    { <span>@Model.acc.UCArea.UCName UC nazim, @HttpContext.Current.User.Identity.Name</span>}
+                else if (User.IsInRole("2"))
+                { <span>@Model.acc.Town.town_name Coordinator, @HttpContext.Current.User.Identity.Name</span>}
+            else if (User.IsInRole("4"))
+            { <span>@Model.acc.UCArea.UCName UC Field Officer, @HttpContext.Current.User.Identity.Name</span>}
+        else if (User.IsInRole("0"))
+        { <span>Admin</span>}
+
+
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                        <a href="@Url.Action("AccountCheckAndRedirect", "Account")" class="w3-bar-item w3-button">Dashboard</a>
+                        <a href="@Url.Action("Logout", "Account")" class="w3-bar-item w3-button">Logout</a>
+                    </div>
+                </div>
+
+            }
+
+        </div>
+    </div>
+
+    <!-- Navbar on small screens -->
+    <div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
+        @if (Request.IsAuthenticated)
+        {
+            <a href="@Url.Action("AccountCheckAndRedirect", "Account")" class="w3-bar-item w3-button w3-padding-large">Dashboard</a>
+        }
+        @if (User.IsInRole("5"))
+        {
+            <a href="@Url.Action("ViewMyComplaints", "Complaint")" class="w3-bar-item w3-button w3-padding-large" title="News">My Complaints</a>
+        }
+        @if (User.IsInRole("5") || User.IsInRole("4") || User.IsInRole("3"))
+        {
+            <a href="@Url.Action("MyAreaComplaints", "Complaint")" class="w3-bar-item w3-button w3-padding-large" title="News">My UC Complaints</a>
+        }
+        else if (Request.IsAuthenticated)
+        {
+            <a href="@Url.Action("MyAreaComplaints", "Complaint")" class="w3-bar-item w3-button w3-padding-large" title="News">My Town Complaints</a>
+
+        }
+        <a href="@Url.Action("Index", "Complaint")" class="w3-bar-item w3-button w3-padding-large" title="News">All Town Complaints</a>
+        <a href="@Url.Action("Map", "Complaint")" class="w3-bar-item w3-button w3-padding-large" title="News">Map Town Complaints</a>
+
+        @if (User.IsInRole("1"))
+        {
+            <a href="@Url.Action("TNManageAreaComplaints", "TownAccount", new { orderby = "severe", cat = "all" })" class="w3-bar-item w3-button w3-padding-large"> Manage complaints</a>
+
+            <a href="@Url.Action("ManageUCAccounts", "TownAccount")" class="w3-bar-item w3-button w3-padding-large"> Manage UC nazim accounts</a>
+            <a href="@Url.Action("ManageFOAccounts", "TownAccount")" class="w3-bar-item w3-button w3-padding-large"> Manage Field officer accounts</a>
+            <a href="@Url.Action("TownAccountSetting", "TownAccount")" class="w3-bar-item w3-button w3-padding-large"> Settings</a><br><br>
+
+            <a href="@Url.Action("TNManageAreaComplaints", "TownAccount", new { orderby = "severe", cat = "all" })" class="w3-bar-item w3-button w3-padding-large">Manage area complaints </a>
+
+        }
+        else if (User.IsInRole("2"))
+        {
+            @*<a href="@Url.Action("MyAreaComplaints", "Complaint")" class="w3-bar-item w3-button w3-padding-large">My area complaints</a>*@
+            <a href="@Url.Action("CHManageAreaComplaints", "CHAccount", new { orderby = "severe", cat = "all" })" class="w3-bar-item w3-button w3-padding-large">Manage area complaints </a>
+
+
+        }
+        else if (User.IsInRole("3"))
+        {
+            @* <a href="@Url.Action("MyAreaComplaints", "Complaint")" class="w3-bar-item w3-button w3-padding-large">My area complaints</a>*@
+            <a href="@Url.Action("UCManageAreaComplaints", "UCAccount",new { orderby="severe",cat="all"})" class="w3-bar-item w3-button w3-padding-large">Manage area complaints </a>
+
+        }
+        else if (User.IsInRole("4"))
+        {
+            @*<a href="@Url.Action("MyAreaComplaints", "Complaint")" class="w3-bar-item w3-button w3-padding-large">My area complaints</a>*@
+            <a href="@Url.Action("FOManageAreaComplaints", "FOAccount", new { orderby = "severe"})" class="w3-bar-item w3-button w3-padding-large">Manage area complaints </a>
+
+        }
+        @if (!Request.IsAuthenticated)
+        {
+            <a href="@Url.Action("Login", "Account")" class="w3-bar-item w3-button w3-padding-large">Login</a>
+
+        }
+        else
+        {
+            <a href="@Url.Action("Logout", "Account")" class="w3-bar-item w3-button w3-padding-large">Logout</a>
+
+        }
+
+    </div>
+
+
+
+    <!-- Page Container -->
+    @*<div class="w3-content" style="max-width:1400px">
+            <!-- The Grid -->
+            <div class="w3-row">
+                <!-- Left Column -->
+                <div class="w3-col m3" style="max-width:300px;">
+                    @if (Request.IsAuthenticated)
+                    {
+
+                        <!-- Profile -->
+                        <div class="w3-card w3-round w3-white">
+                            <div class="w3-container">
+                                @{
+                                    String gender = Model.acc.gender;
+                                    gender = gender.ToLower() + ".png";
+
+
+
+                                    <h4 class="w3-center">@Model.acc.Full_name</h4>
+                                    <p class="w3-center"><img src="~/Image/ProfileImages/@gender" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
+                                }
+                                <hr>
+
+                                <p><i class="fa fa-home fa-fw w3-margin-right w3-text-theme"></i>@Model.acc.UCArea.UCName UC Resident</p>
+
+                            </div>
+                        </div>
+                        <br>
+                    }
+
+                    <!-- Accordion -->
+                    @if (User.IsInRole("public"))
+                    {
+                        <div class="w3-card w3-round">
+                            <div class="w3-white">
+                                <a href="@Url.Action("ViewMyComplaints", "Complaint")" style="text-decoration:none" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-circle-o-notch fa-fw w3-margin-right"></i> My complaints</a>
+
+                                <a href="@Url.Action("MyAreaComplaints", "Complaint")" style="text-decoration:none" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-circle-o-notch fa-fw w3-margin-right"></i> My area complaints</a>
+                            </div>
+                        </div>
+                    }
+                    else if (!Request.IsAuthenticated)
+                    {
+
+
+                    }
+                    else
+                    {
+                        <div class="w3-card w3-round">
+                            <div class="w3-white">
+                                <a href="@Url.Action("MyAreaComplaints", "Complaint")" style="text-decoration:none" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-circle-o-notch fa-fw w3-margin-right"></i> My area complaints</a>
+                            </div>
+                        </div>
+
+                    }
+                    <br>
+
+                    <!-- Interests -->
+                    <div class="w3-card w3-round ">
+                        <div class="w3-theme-l5">
+
+                            <h3 class="w3-center w3-block w3-theme-d4 w3-left-align">Union Councils of @ViewBag.TownName town</b></h3>
+                            @foreach (var uc in Model.ucs)
+                            {
+                                if (uc.UCName.ToString().Equals(ViewBag.UCSelected))
+                                {
+                                    <a href="@Url.Action("UCComplaint", "Complaint",new { UC=uc.ID})" style="text-decoration:none" class="w3-button w3-block w3-theme-d3 w3-left-align w3-large"><span class="fa fa-th-large fa-fw w3-margin-right"></span>@uc.UCName</a>
+
+                                }
+                                else
+                                {
+                                    @*<a href="~/Complaint/UCComplaint?UC=@uc.ID" style="text-decoration:none" class="w3-button w3-block w3-theme-l5 w3-left-align"><span class="fa fa-th-large fa-fw w3-margin-right"></span>@uc.UCName</a>
+                                    <a href="@Url.Action("UCComplaint", "Complaint",new { UC=uc.ID})" style="text-decoration:none" class="w3-button w3-block w3-theme-l1 w3-left-align"><span class="fa fa-th-large fa-fw w3-margin-right"></span>@uc.UCName</a>
+
+                                }
+                            }
+
+                        </div>
+                    </div>
+                    <br>
+
+
+
+                    <!-- End Left Column -->
+                </div>
+
+
+                @* Right column
+                <div class="w3-col m1 w3-right">
+
+
+                    <div class="w3-middle">
+                        @if ("yes".Equals(ViewBag.hasTownId))
+                        {
+                            <div class="">
+                                <a class="w3-button w3-xlarge w3-circle" href="@Url.Action("TownWiseComplaint", "Complaint", new { T_ID = Model.town.town_id})">
+
+                                    <span class="glyphicon glyphicon-chevron-left "> </span>  @Model.town.town_name Town Complaints
+
+                                </a>
+                            </div>
+
+                        }
+                        else
+                        {
+                            <a class="w3-button  w3-circle w3-theme-d3" href="@Url.Action("Index", "Complaint")">
+                                <h4><span class="glyphicon glyphicon-chevron-left "> </span> MAP</h4>
+                            </a>
+                        }
+
+                    </div>
+                    <br>
+                    <br>
+
+                    <div class="w3-container">
+
+                        <div class="w3-dropdown-hover w3-hide-small w3-right w3-theme-l1">
+                            <button class="w3-padding-large w3-button" title="More">
+                                Categories
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                            <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                                @foreach (var cat in Model.categories)
+                                {
+
+                                    <a href="@Url.Action("CategoryComplaint", "Complaint", new { cat = @cat.category_id })" class="w3-bar-item w3-button">@cat.Category1</a>
+
+
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+
+
+                    <br>
+                </div>
+
+
+
+
+                @RenderBody()
+            </div>
+        </div>*@
+
+
+
+
+
+
+
+    <div class="w3-content" style="max-width:1500px">
+
+        <!-- Header -->
+
+
+        @RenderBody()
+
+        <!-- END w3-content -->
+    </div>
+
+    <!-- Footer -->
+    <footer class="w3-container w3-blue-grey w3-padding-32 w3-margin-top">
+        @*<button class="w3-left w3-button w3-black w3-disabled w3-padding-large w3-margin-bottom">Previous</button>
+        <button class="w3-left w3-button w3-black w3-padding-large w3-margin-bottom">Next »</button>*@
+
+        <p>The Karachi Portal</p>
+    </footer>
+</body>
+</html>
+
+
+
+
+
+
+
+<script>
+
+    // Accordion
+    function myFunction(id) {
+        var x = document.getElementById(id);
+        if (x.className.indexOf("w3-show") == -1) {
+            x.className += " w3-show";
+            x.previousElementSibling.className += " w3-theme-d1";
+        } else {
+            x.className = x.className.replace("w3-show", "");
+            x.previousElementSibling.className =
+                x.previousElementSibling.className.replace(" w3-theme-d1", "");
+        }
+    }
+
+    // Used to toggle the menu on smaller screens when clicking on the menu button
+    function openNav() {
+        var x = document.getElementById("navDemo");
+        if (x.className.indexOf("w3-show") == -1) {
+            x.className += " w3-show";
+        } else {
+            x.className = x.className.replace(" w3-show", "");
+        }
+    }
+</script>
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@RenderSection("scripts", required: false)
+</body>
+</html>

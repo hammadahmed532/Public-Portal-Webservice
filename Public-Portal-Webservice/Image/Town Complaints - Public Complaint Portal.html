@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<!-- saved from url=(0051)http://localhost:53325/PublicAccount/AccountProfile -->
+<html lang="en" style="" class=" js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="google" content="notranslate">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Town Complaints - Public Complaint Portal</title>
+
+    <link href="./Town Complaints - Public Complaint Portal_files/bootstrap.css" rel="stylesheet">
+<link href="./Town Complaints - Public Complaint Portal_files/site.css" rel="stylesheet">
+
+    <script src="./Town Complaints - Public Complaint Portal_files/modernizr-2.8.3.js.download"></script>
+
+
+    <link rel="stylesheet" href="./Town Complaints - Public Complaint Portal_files/w3.css">
+    <link rel="stylesheet" href="./Town Complaints - Public Complaint Portal_files/css">
+    <link rel="stylesheet" href="./Town Complaints - Public Complaint Portal_files/font-awesome.min.css">
+
+    <script src="./Town Complaints - Public Complaint Portal_files/jquery.min.js.download"></script>
+    <script src="./Town Complaints - Public Complaint Portal_files/js">
+    </script>
+    <link rel="stylesheet" href="./Town Complaints - Public Complaint Portal_files/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin="">
+    <script src="./Town Complaints - Public Complaint Portal_files/leaflet.js.download" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==" crossorigin=""></script>
+    <script type="text/javascript" src="./Town Complaints - Public Complaint Portal_files/karachi-towns.js.download"></script>
+
+<script type="text/javascript" charset="UTF-8" src="./Town Complaints - Public Complaint Portal_files/common.js.download"></script><script type="text/javascript" charset="UTF-8" src="./Town Complaints - Public Complaint Portal_files/util.js.download"></script><script type="text/javascript" charset="UTF-8" src="./Town Complaints - Public Complaint Portal_files/AuthenticationService.Authenticate"></script></head>
+<body>
+
+    <!-- Navbar -->
+    <div class="w3-top">
+        <div class="w3-bar w3-dark-grey w3-card">
+            <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+            <a href="http://localhost:53325/Complaint/Index" class="w3-bar-item w3-button w3-padding-large">Home</a>
+            <a href="http://localhost:53325/Complaint/OurMission" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Our Mission</a>
+
+                <a href="http://localhost:53325/Complaint/ViewMyComplaints" class="w3-bar-item w3-button w3-padding-large w3-hide-small">
+                    View My Complaints
+
+                </a>
+                <div class="w3-dropdown-hover w3-hide-small w3-right" style="padding-right:30px">
+                    <button class="w3-padding-large w3-button" title="More">
+                        hammad123
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+
+                    <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                        <a href="http://localhost:53325/Complaint/ViewMyComplaints" class="w3-bar-item w3-button">Veiw My Complaints</a>
+                        <a href="http://localhost:53325/PublicAccount/AccountProfile" class="w3-bar-item w3-button">Edit Profile</a>
+                        <a href="http://localhost:53325/Complaint/RegisterNewComplaint/" class="w3-bar-item w3-button">Register New Complaint</a>
+                        <a href="http://localhost:53325/PublicAccount/Logout/" class="w3-bar-item w3-button">Logout</a>
+                    </div>
+
+
+                </div>
+        </div>
+    </div>
+
+    <!-- Navbar on small screens (remove the onclick attribute if you want the navbar to always show on top of the content when clicking on the links) -->
+    <div id="navDemo" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
+        <a href="http://localhost:53325/PublicAccount/AccountProfile#band" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">BAND</a>
+        <a href="http://localhost:53325/PublicAccount/AccountProfile#tour" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">TOUR</a>
+        <a href="http://localhost:53325/PublicAccount/AccountProfile#contact" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">CONTACT</a>
+        <a href="http://localhost:53325/PublicAccount/AccountProfile#" class="w3-bar-item w3-button w3-padding-large" onclick="myFunction()">MERCH</a>
+    </div>
+
+    <!-- Page content -->
+  
+    
+
+
+<div class="w3-light-grey w3-content" style="max-width:1600px">
+
+    <!-- Sidebar/menu -->
+    <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;text-align:center" id="mySidebar">
+        <br>
+        <div class="w3-container">
+            <a href="http://localhost:53325/PublicAccount/AccountProfile#" onclick="w3_close()" class="w3-hide-large w3-right w3-jumbo w3-padding w3-hover-grey" title="close menu">
+                <i class="fa fa-remove"></i>
+            </a>
+                <img src="./Town Complaints - Public Complaint Portal_files/male.png" style="height:150px; width:190px;" class="w3-round">
+
+
+            <br>
+            <hr>
+            <strong>
+                <a href="http://localhost:53325/Complaint/ViewMyComplaints" style="color:#e0474c;font:bolder">My Complaints</a><br>
+
+                <a href="http://localhost:53325/Complaint/RegisterNewComplaint" style="color:#e0474c;font:bold">New Complaint</a>
+            </strong>
+            
+        </div>
+        <div class="">
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="list-group ">
+                            <a href="http://localhost:53325/PublicAccount/AccountProfile#" class="list-group-item list-group-item-action active">Account Bio</a>
+                            <a href="http://localhost:53325/PublicAccount/AccountProfileSecurity" class="list-group-item list-group-item-action">Security</a>
+                            <a href="http://localhost:53325/Complaint/ViewMyComplaints" class="list-group-item list-group-item-action">My Complaints</a>
+                            <a href="http://localhost:53325/PublicAccount/AccountProfile#" class="list-group-item list-group-item-action">My SubComplaints</a>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- !PAGE CONTENT! -->
+    <div class="w3-main" style="margin-left:300px">
+
+        <!-- Header -->
+        <header id="portfolio">
+
+            <div class="w3-container">
+                <h2 style="text-align:center">HAMMAD KHATRI</h2>
+
+            </div>
+        </header>
+    </div>
+
+
+    <div>
+
+        <div class="w3-main">
+            <div id="editLocation" style="margin-top:10px;">
+                <a href="http://localhost:53325/PublicAccount/AccountProfile#" class="btn btn-info btn-lg">
+                    <span class="glyphicon glyphicon-edit"></span> Click to Edit Education
+                </a>
+            </div>
+            <div id="divEditLocation" style="display: none;">
+<form action="http://localhost:53325/PublicAccount/EditAccountProfession" enctype="multipart/form-data" method="post"><input name="__RequestVerificationToken" type="hidden" value="4h_iV9XmnsbGjPGTqHVzGWEnEws4QfPg9IlA9BuLVUlqQeqatCZZrj3TxiaqGsXvPNOwIJLlImo0lP7Y0jvzWtWKICN-m0N4FO_caPX9TZI1">                    <div class="form-group" style="margin-top:10px;">
+                        <label class="control-label " for="gender">gender</label>
+
+                        <select id="gender" name="gender"><option value="">-- Select Gender --</option>
+<option value="School">School</option>
+<option value="College">College</option>
+<option value="Undergraduate ">Undergraduate</option>
+<option value="postgraduate">postgraduate</option>
+<option value="PhD">PhD</option>
+</select>
+                        <span class="field-validation-valid text-danger" data-valmsg-for="gender" data-valmsg-replace="true"></span>
+
+                    </div>
+                    <input type="submit" value="Update Gender" class="btn btn-primary">
+</form>            </div>
+            <div id="editPassword" style="margin-top:10px;">
+                <a href="http://localhost:53325/PublicAccount/AccountProfile#" class="btn btn-info btn-lg">
+                    <span class="glyphicon glyphicon-edit"></span> Click to Edit Location
+                </a>
+            </div>
+            <div id="divEditPassword" style="display: none;">
+<form action="http://localhost:53325/PublicAccount/EditAccountGender" enctype="multipart/form-data" method="post"><input name="__RequestVerificationToken" type="hidden" value="XmK8Q7EoffEvlOIfbFJItQpyFvFxsf0SZZOkmQdUaHVbYAleHtFhw6-uvTkM_DMQGbsbf_xCwYWk0EQFKAnlqoEyJQHTZUY0Bllc-3RnwrI1">                    <div class="form-group" style="margin-top:10px;">
+                        <label class="control-label " for="gender">gender</label>
+
+                        <span class="field-validation-valid text-danger" data-valmsg-for="gender" data-valmsg-replace="true"></span>
+
+                    </div>
+                    <input type="submit" value="Update Gender" class="btn btn-primary">
+</form>            </div>
+
+
+
+            <div id="editGender" style="margin-top:10px;">
+                <a href="http://localhost:53325/PublicAccount/AccountProfile#" class="btn btn-info btn-lg">
+                    <span class="glyphicon glyphicon-edit"></span> Click to Edit Gender
+                </a>
+            </div>
+            <div id="divEditGender" style="display: none;">
+<form action="http://localhost:53325/PublicAccount/EditAccountGender" enctype="multipart/form-data" method="post"><input name="__RequestVerificationToken" type="hidden" value="0dy1lkFdTtg_ss1gjj8dnSbCdNNjjGiAX101ShYuYv1IIIJ_TR0PkwVoJdbA813XffyCpqWITRq6sI0vCGDLEdkWgkOYIj8aJvQb43IsqJU1">                    <div class="form-group" style="margin-top:10px;">
+                        <label class="control-label " for="gender">gender</label>
+
+                        <select id="gender" name="gender"><option value="">-- Select Gender --</option>
+<option selected="selected" value="male">male</option>
+<option value="female">female</option>
+<option value="other">other</option>
+</select>
+                        <span class="field-validation-valid text-danger" data-valmsg-for="gender" data-valmsg-replace="true"></span>
+
+                    </div>
+                    <input type="submit" value="Update Gender" class="btn btn-primary">
+</form>            </div>
+        </div>
+    </div>
+
+
+ </div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $("#divEditLocation").slideUp("fast");
+        $("#divEditGender").slideUp("fast");
+        $("#divEditPassword").slideUp("fast");
+
+
+    });
+    $(document).ready(function () {
+        $("#editPassword").click(function () {
+            $("#divEditPassword").toggle();
+        });
+    });
+    $(document).ready(function () {
+        $("#editGender").click(function () {
+            $("#divEditGender").toggle();
+        });
+    });
+    $(document).ready(function () {
+        $("#editLocation").click(function () {
+            $("#divEditLocation").toggle();
+        });
+    });
+</script>
+    <!-- Footer -->
+    <footer class="w3-container w3-padding-64 w3-center w3-opacity w3-light-grey w3-xlarge">
+
+        <p class="w3-medium">Public Complaint Portal 2019</p>
+    </footer>
+
+    <script src="./Town Complaints - Public Complaint Portal_files/jquery-3.3.1.js.download"></script>
+
+    <script src="./Town Complaints - Public Complaint Portal_files/bootstrap.js.download"></script>
+
+    
+
+
+</body></html>

@@ -1,0 +1,340 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+@model Public_Portal_Webservice.Models.viewModel.vmPCP
+<div>
+    @*<header>
+            <div>
+                @if (User.IsInRole("public") || !(Request.IsAuthenticated))
+                {
+                    <a href="@Url.Action("RegisterNewComplaint","Complaint")" class="w3-button w3-blue w3-display-topmiddle" style="width:20%;margin-top:90px">Register new complaint</a>
+                    <br /><br /><h3 style="text-align:center;">Or</h3>
+                }
+
+            </div>
+            <h3 style="text-align:center;">select a town to find complaints of that area</h3>
+        </header>
+        <section>
+
+
+        </section>*@
+
+
+
+    @*/////////////////////////////////*@
+
+    <!-- Header -->
+    @if (Request.IsAuthenticated)
+    {
+        <header class="" style="max-width:98%;margin-top:10px;" id="home">
+            <div class="w3-center" style="margin-bottom:20px">
+                <h3 class=""><strong>Public Complaint Portal</strong></h3>
+            </div>
+            <div style="z-index:0">
+                <div id="map" style=" border: 1px solid #AAA;width:102%;height:450px"></div>
+            </div>
+
+
+        </header>
+    }
+    else
+    {
+        <header class="" style="max-width:98%;margin-top:50px" id="home">
+            <div class="w3-center"  style="margin-bottom:20px">
+                <h3 class=""><strong>Public Complaint Portal</strong></h3>
+            </div>
+            <div style="z-index:0">
+                <div id="map" style=" border: 1px solid #AAA;width:102%;height:450px"></div>
+            </div>
+
+
+        </header>
+    }
+
+    <!-- Page content -->
+    <div class="w3-content " style="max-width:100%">
+        <div class="w3-container w3-padding-32 w3-center">
+            <h3 class="w3-padding-16">
+                <strong>
+                    Help the Government Find Problems
+                </strong>
+            </h3>
+            <div class="">
+                <a href="@Url.Action("RegisterNewComplaint","Complaint")" class="btn btn-primary btn-lg">Register New Complaint</a>
+            </div>
+
+        </div>
+        <div class="w3-center" style="background-color:#F5FAFD;max-width:100%;text-align:center;
+  background: #eee;
+  padding-bottom:10px;
+  position: relative;
+  text-align:center;">
+            <div class=" w3-text-black" style="
+  height: 100px;
+  width: 100px;
+  display:inline-block;">
+                <h4>@Model.TotalComplaints</h4>
+                <h4 style="color:orange"> <strong>Total Registered Complaints</strong></h4>
+            </div>
+            <div class=" w3-text-black" style="
+  height: 100px;
+  width: 100px;
+  display:inline-block;
+  margin-left:250px;">
+                <h4>@Model.totalResolvedComplaints</h4>
+                <h4 style="color:orange"><strong>Total Resolved Complaints</strong></h4>
+
+            </div>
+        </div>
+        <!-- Project Section -->
+        <div class="w3-container w3-padding-32" id="projects">
+            <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16"><strong>Recent Announcements</strong></h3>
+        </div>
+
+        <div class="w3-row-padding w3-content" style="max-width:100%">
+            <div class="w3-col l3 m6 w3-margin-bottom">
+                <div class="w3-display-container">
+                    <div class="w3-display-topleft w3-black w3-padding">Gadap Town</div>
+                    <a href="@Url.Action("TownWiseComplaint", "Complaint", new { T_ID = "3" })"><img src="~/Image/areaPhotos/gadap-town.jpg" alt="House" style="width:100%"></a>
+                </div>
+            </div>
+            <div class="w3-col l3 m6 w3-margin-bottom">
+                <div class="w3-display-container">
+                    <div class="w3-display-topleft w3-black w3-padding">Kemari Town</div>
+                    <a href="@Url.Action("TownWiseComplaint", "Complaint", new { T_ID = "7" })"><img src="~/Image/areaPhotos/kemari-town.jpg" alt="House" style="width:100%"></a>
+                </div>
+            </div>
+            <div class="w3-col l3 m6 w3-margin-bottom">
+                <div class="w3-display-container">
+                    <div class="w3-display-topleft w3-black w3-padding">Landhi Town</div>
+                    <a href="@Url.Action("TownWiseComplaint", "Complaint", new { T_ID = "9" })"><img src="~/Image/areaPhotos/landhi-town.jpg" alt="House" style="width:100%"></a>
+                </div>
+            </div>
+            <div class="w3-col l3 m6 w3-margin-bottom">
+                <div class="w3-display-container">
+                    <div class="w3-display-topleft w3-black w3-padding">Shah Faisal Town</div>
+                    <a href="@Url.Action("TownWiseComplaint", "Complaint", new { T_ID = "17" })"><img src="~/Image/areaPhotos/shah-faisal-town.jpg" alt="House" style="width:100%"></a>
+                </div>
+            </div>
+        </div>
+
+        @*<div class="w3-row-padding">
+                <div class="w3-col l3 m6 w3-margin-bottom">
+                    <div class="w3-display-container">
+                        <div class="w3-display-topleft w3-black w3-padding">Saddar Town</div>
+                        <a href="@Url.Action("TownWiseComplaint", "Complaint", new { T_ID = "16" })"><img src="~/Image/areaPhotos/saddar-town.jpg" alt="House" style="width:99%"></a>
+                    </div>
+                </div>
+                <div class="w3-col l3 m6 w3-margin-bottom">
+                    <div class="w3-display-container">
+                        <div class="w3-display-topleft w3-black w3-padding">Korangi Town</div>
+                        <a href="@Url.Action("TownWiseComplaint", "Complaint", new { T_ID = "8" })"> <img src="~/Image/areaPhotos/korangi-town.jpg" alt="House" style="width:99%"></a>
+                    </div>
+                </div>
+                <div class="w3-col l3 m6 w3-margin-bottom">
+                    <div class="w3-display-container">
+                        <div class="w3-display-topleft w3-black w3-padding">Gulshan Town</div>
+                        <a href="@Url.Action("TownWiseComplaint", "Complaint", new { T_ID = "5" })"><img src="~/Image/areaPhotos/gulshan-town.jpg" alt="House" style="width:99%"></a>
+                    </div>
+                </div>
+                <div class="w3-col l3 m6 w3-margin-bottom">
+                    <div class="w3-display-container ">
+                        <div class="w3-display-topleft w3-black w3-padding">North Nazimabad Town</div>
+                        <a href="@Url.Action("TownWiseComplaint", "Complaint", new { T_ID = "14" })"><img src="~/Image/areaPhotos/north-nazimabad-town.jpg" alt="House" style="width:99%"></a>
+                    </div>
+                </div>
+            </div>*@
+
+        <!-- About Section -->
+        <div class="w3-container w3-padding-32" id="projects">
+            <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16"><strong>Complaint Portal</strong></h3>
+            <p class="w3-center">
+                Platform for public and union Council to provide limelight to certain Municipal issues of their respective areas. It can also be used to positively highlight performance of respective authorities.
+                The complaints posted by public will be transferred to concerned union Councils on their portal. Town Nazim will be the head and will monitor all the activities
+            </p>
+        </div>
+
+        <div class="w3-row-padding ">
+            <div class="w3-container w3-padding-32" id="projects">
+                <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16"><strong>Recently resolved complaints</strong></h3>
+            </div>
+
+            @foreach (var com in Model.comps)
+            {
+                <div class="w3-col l3 m6 w3-margin-bottom">
+                    <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = com.complaint_Id })">
+                        <img src="@Url.Content(com.Complaint_Det_Remarks.Where(a => a.Complaint_id.Equals(com.complaint_Id)).FirstOrDefault().updated_Image1)" alt="John" style="width:100%;height:250px;position: relative;
+  -moz-box-shadow: 1px 2px 4px rgba(0, 0, 0,0.5);
+  -webkit-box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+  padding: 10px;
+  background: white;">
+                    </a>
+                    <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = com.complaint_Id })"><h3>@com.c_title</h3></a>
+                    <p class="w3-opacity">@com.UCArea.UCName</p>
+                    <p>@com.description.Substring(0, 47)</p>
+                    <p><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = com.complaint_Id })" class="w3-button w3-light-gray w3-block">Read more</a></p>
+                </div>
+            }
+
+        </div>
+
+
+        <!-- End page content -->
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="w3-center w3-black w3-padding-16"></footer>
+
+<script type="text/javascript">
+
+
+    //navigator.geolocation.getCurrentPosition(function (location) {
+    //    var latlng = new L.LatLng(location.coords.latitude, location.coords.longitude);
+
+    //    var mymap = L.map('mapid').setView(latlng, 13)
+    //    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+    //        maxZoom: 18,
+    //        id: 'mapbox.streets',
+    //        accessToken: 'pk.eyJ1IjoiYmJyb29rMTU0IiwiYSI6ImNpcXN3dnJrdDAwMGNmd250bjhvZXpnbWsifQ.Nf9Zkfchos577IanoKMoYQ'
+    //    }).addTo(mymap);
+
+    //    var marker = L.marker(latlng).addTo(mymap);
+    //});
+
+
+
+    navigator.geolocation.getCurrentPosition(function (location) {
+        var redMarker = L.AwesomeMarkers.icon({
+            icon: 'home',
+            markerColor: 'green'
+        });
+
+    var latlng = new L.LatLng(location.coords.latitude, location.coords.longitude);
+
+    var map = L.map('map').setView([24.90774421744719, 67.13831672668458], 11);
+
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaGFzZWVia2hhdHJpIiwiYSI6ImNqbzA5czVpazJ1cmszcW50OGNrdnB5Z2UifQ.3b1kGAPFs2sBLcO8UuAXNw', {
+        maxZoom: 18,
+        id: 'mapbox.streets'
+   //     id: 'mapbox.light'
+    }).addTo(map);
+
+        //var marker = L.marker(latlng, {
+        //    draggable: true
+        //}).addTo(map);
+        //var marker = L.marker(latlng).addTo(map);
+
+       
+
+        var marker = L.marker((latlng), { icon: redMarker }).addTo(map).bindPopup('<h5>You are here</h5>').openPopup();
+    
+
+
+    // control that shows state info on hover
+    var info = L.control();
+
+    info.onAdd = function (map) {
+        this._div = L.DomUtil.create('div', 'info');
+        this.update();
+        return this._div;
+    };
+
+    info.update = function (props) {
+        this._div.innerHTML = '<h1><strong>' + (props ? props.name + '</strong></h1><br />' + props.density
+            : 'Hover over a Town');
+    };
+
+    info.addTo(map);
+
+
+
+    // get color depending on population density value
+    function getColor(d) {
+        return d == 1 ? '#E9967A' :
+            d == 2 ? '#DC143C' :
+                d == 3 ? '#FFA07A' :
+                    d == 4 ? '#FF4500' :
+                        d == 5 ? '#FFD700' :
+                            d == 6 ? '#FFA500' :
+                                d == 7 ? '#FF7A7A' :
+                                    d == 8 ? '#7CFC00' :
+                                        d == 9 ? '#32CD32' :
+                                            d == 10 ? '#006400' :
+                                                d == 11 ? '#00FA9A' :
+                                                    d == 12 ? '#00FFFF' :
+                                                        d == 13 ? '#008080' :
+                                                            d == 14 ? '#0000FF' :
+                                                                d == 15 ? '#7B68EE' :
+                                                                    d == 16 ? '#EE82EE' :
+                                                                        d == 17 ? '#800080' :
+                                                                            d == 18 ? '#8A2BE2' :
+                                                                                'red';
+    }
+
+    function style(feature) {
+        return {
+            weight: 3,
+            opacity: 1,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: 0.5,
+            fillColor: getColor(feature.properties.density)
+        };
+    }
+
+    function highlightFeature(e) {
+        var layer = e.target;
+
+        layer.setStyle({
+            weight: 5,
+            color: '#666',
+            dashArray: '',
+            fillOpacity: 0.7
+        });
+
+        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            layer.bringToFront();
+        }
+
+        info.update(layer.feature.properties);
+    }
+
+    var geojson;
+
+    function resetHighlight(e) {
+        geojson.resetStyle(e.target);
+        info.update();
+    }
+
+
+    function zoomToFeature(e) {
+        var link = '@Url.Action("TownWiseComplaint", "Complaint", new { T_ID = "town_id" })';
+        window.location.href = link.replace('town_id' , e.target.feature.id);
+
+    }
+
+
+
+    function onEachFeature(feature, layer) {
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlight,
+            click: zoomToFeature
+        });
+    }
+
+    geojson = L.geoJson(townsData, {
+        style: style,
+        onEachFeature: onEachFeature
+    }).addTo(map);
+
+
+
+    var legend = L.control({ position: 'bottomleft' });
+    });
+</script>
+

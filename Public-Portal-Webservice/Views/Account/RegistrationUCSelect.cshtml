@@ -1,0 +1,403 @@
+﻿@{
+
+    ViewBag.Title = "Account Registration";
+    Layout = "~/Views/Shared/_LayoutRegisterAccPublic.cshtml";
+}
+@model Public_Portal_Webservice.Models.viewModel.vmPCP
+
+@*<div class="w3-row">
+    <div class="w3-container">
+        <div class="w3-half w3-container ">
+            <img src="~/Content/complaintPictures/karachi-cover4.jpg" width="100%" />
+        </div>
+        <div class="w3-half w3-container">
+
+            @using (Html.BeginForm("RegistrationUCSelect", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+
+            {
+
+                @Html.AntiForgeryToken()
+
+                <div class="row">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <h4 style="color:red">@ViewBag.msg</h4>
+                    <div class="col-25">
+                        <label for="fname">Full Name</label>
+                    </div>
+                    <div class="col-75">
+                        @Html.EditorFor(Model => Model.accountReg.Full_name, new { htmlAttributes = new { style = "max-width: 90%;", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.accountReg.Full_name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-25">
+                        <label for="fname">Username</label>
+                    </div>
+                    <div class="col-75">
+                        @Html.EditorFor(model => model.accountReg.username, new { htmlAttributes = new { style = "max-width: 90%;", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.accountReg.username, "", new { @class = "text-danger" })
+
+                        @Html.ValidationMessage("UserExist", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-25">
+                        <label for="fname">Password</label>
+                    </div>
+                    <div class="col-75">
+                        @Html.EditorFor(model => model.accountReg.password, new { htmlAttributes = new { style = "max-width: 90%;", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.accountReg.password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-25">
+                        <label for="fname">Confirm Password</label>
+                    </div>
+                    <div class="col-75">
+                        @Html.EditorFor(model => model.accountReg.confirmPassword, new { htmlAttributes = new { style = "max-width: 90%;", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.accountReg.confirmPassword, "", new { @class = "text-danger" })
+
+                        @Html.ValidationMessage("passwordNotSame", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-25">
+                        <label for="fname">Email</label>
+                    </div>
+                    <div class="col-75">
+                        @Html.EditorFor(model => model.accountReg.email_address, new { htmlAttributes = new { style = "max-width: 90%;", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.accountReg.email_address, "", new { @class = "text-danger" })
+
+                        @Html.ValidationMessage("EmailExist", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-25">
+                        <label for="fname">Phone Number</label>
+                    </div>
+                    <div class="col-75">
+                        @Html.EditorFor(model => model.accountReg.phone_number, new { htmlAttributes = new { style = "max-width: 90%;", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.accountReg.phone_number, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col-25">
+                        <label for="fname">Address</label>
+                    </div>
+                    <div class="col-75">
+                        @Html.EditorFor(model => model.accountReg.address, new { htmlAttributes = new { style = "max-width: 90%;", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.accountReg.address, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-25">
+                        <label for="lname">Education</label>
+                    </div>
+                    <div class="col-75">
+                        @{
+                            List<SelectListItem>
+                                listItemsProfession = new List<SelectListItem>
+                                    ();
+                            listItemsProfession.Add(new SelectListItem { Text = "School", Value = "School" });
+                            listItemsProfession.Add(new SelectListItem { Text = "College", Value = "College" });
+                            listItemsProfession.Add(new SelectListItem { Text = "Graduate", Value = "Graduate " });
+                            listItemsProfession.Add(new SelectListItem { Text = "Postgraduate", Value = "Postgraduate" });
+                            listItemsProfession.Add(new SelectListItem { Text = "PhD", Value = "PhD" });
+
+                        }
+                        @Html.DropDownListFor(model => model.acc.profession, listItemsProfession, "Select Education", new { style = "max-width:90%;", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.acc.profession, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-25">
+                        <label for="country">Gender</label>
+                    </div>
+                    <div class="col-75">
+                        @{
+                            List<SelectListItem>
+                                listItemsGender = new List<SelectListItem>
+                                    ();
+                            listItemsGender.Add(new SelectListItem { Text = "male", Value = "male" });
+                            listItemsGender.Add(new SelectListItem { Text = "female", Value = "female" });
+                            listItemsGender.Add(new SelectListItem { Text = "other", Value = "other" });
+                        }
+
+
+                        @Html.DropDownListFor(model => model.accountReg.gender, listItemsGender, "--Select Gender--", new { style = "max-width:90%;", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.accountReg.gender, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-25">
+
+                        <label>Select UC area</label>
+                    </div>
+                    @{
+                        List<SelectListItem> listItemsUC = new List<SelectListItem>();
+
+                        foreach (var item in Model.ucs)
+                        {
+
+                            listItemsUC.Add(new SelectListItem { Text = item.UCName, Value = item.ID.ToString() });
+
+                        }
+                    }
+
+                    <div class="col-75">
+
+                        @Html.DropDownListFor(Model => Model.acc.UC_Area_id, listItemsUC, "-- Select UC --", new { style = "max-width:90%;", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-25">
+                        <label></label>
+                    </div>
+                    <div class="col-75">
+                        <h4 class="col-md-10">Drag the marker to the problem location, and submit form </h4>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-25">
+                        <label></label>
+                    </div>
+
+                    <div class="col-75">
+                        <div id="registrationMap" style="height: 300px;width:90%; border: 1px solid #AAA;"></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-25">
+
+                        <label>Longitude</label>
+                    </div>
+
+                    <div class="col-75">
+
+                        @Html.EditorFor(Model => Model.acc.map_long, new { htmlAttributes = new { style = "max-width: 90%;", @readonly = "readonly", @class = "form-control", @id = "longitude" } })
+                        @Html.ValidationMessageFor(model => model.acc.map_long, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-25">
+                        <label>Latitude</label>
+                    </div>
+
+                    <div class="col-75">
+
+                        @Html.EditorFor(Model => Model.acc.map_lat, new { htmlAttributes = new { style = "max-width: 90%;", @readonly = "readonly", @class = "form-control", @id = "latitude" } })
+                        @Html.ValidationMessageFor(model => model.acc.map_lat, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+
+                <br />
+                <div class="row">
+                    <div class="col-25">
+                        <label></label>
+                    </div>
+                    <div class="col-75">
+
+                        <input type="submit" value="Register Account" class="w3-btn w3-block  w3-blue w3-margin-bottom ">
+                    </div>
+
+                    <div>
+
+                    </div>
+
+                </div>
+
+            }
+        </div>
+
+    </div>
+    </div>*@
+
+
+
+<div class="body"></div>
+<div class="grad"></div>
+<div class="header">
+    <div>Account<span>Registeration </span></div>
+</div>
+<br>
+<div class="login">
+    <h4 style="color:red">@ViewBag.msg</h4>
+
+    <div class="w3-container w3-white ">
+
+        @using (Html.BeginForm("RegistrationUCSelect", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div style="margin-top:30px">
+                <div class="form-group">
+                    @Html.EditorFor(Model => Model.accountReg.Full_name, new { htmlAttributes = new { style = "max-width: 100%;", @class = "form-control", placeholder = "full name" } })
+                    @Html.ValidationMessageFor(model => model.accountReg.Full_name, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="form-group">
+                    @Html.EditorFor(model => model.accountReg.username, new { htmlAttributes = new { style = "max-width: 100%;", @class = "form-control", placeholder = "username" } })
+                    @Html.ValidationMessageFor(model => model.accountReg.username, "", new { @class = "text-danger" })
+
+                    @Html.ValidationMessage("UserExist", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.EditorFor(model => model.accountReg.password, new { htmlAttributes = new { style = "max-width: 100%;", @class = "form-control", placeholder = "password" } })
+                    @Html.ValidationMessageFor(model => model.accountReg.password, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="form-group">
+                    @Html.EditorFor(model => model.accountReg.confirmPassword, new { htmlAttributes = new { style = "max-width: 100%;", @class = "form-control", placeholder = "Confirm password" } })
+                    @Html.ValidationMessageFor(model => model.accountReg.confirmPassword, "", new { @class = "text-danger" })
+
+                    @Html.ValidationMessage("passwordNotSame", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.EditorFor(model => model.accountReg.email_address, new { htmlAttributes = new { style = "max-width: 100%;", @class = "form-control", placeholder = "Email " } })
+                    @Html.ValidationMessageFor(model => model.accountReg.email_address, "", new { @class = "text-danger" })
+
+                    @Html.ValidationMessage("EmailExist", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.EditorFor(model => model.accountReg.phone_number, new { htmlAttributes = new { style = "max-width: 100%;", @class = "form-control", placeholder = "Phone number" } })
+                    @Html.ValidationMessageFor(model => model.accountReg.phone_number, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.EditorFor(model => model.accountReg.address, new { htmlAttributes = new { style = "max-width: 100%;", @class = "form-control", placeholder = "Residential address" } })
+                    @Html.ValidationMessageFor(model => model.accountReg.address, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="form-group">
+                    @{
+                        List<SelectListItem>
+                            listItemsGender = new List<SelectListItem>
+                                ();
+                        listItemsGender.Add(new SelectListItem { Text = "male", Value = "male" });
+                        listItemsGender.Add(new SelectListItem { Text = "female", Value = "female" });
+                        listItemsGender.Add(new SelectListItem { Text = "other", Value = "other" });
+                    }
+
+
+                    @Html.DropDownListFor(model => model.accountReg.gender, listItemsGender, "--Select Gender--", new { style = "max-width:100%;", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.accountReg.gender, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="form-group">
+                    @{
+                        List<SelectListItem>
+                            listItemsProfession = new List<SelectListItem>
+                                ();
+                        listItemsProfession.Add(new SelectListItem { Text = "School", Value = "School" });
+                        listItemsProfession.Add(new SelectListItem { Text = "College", Value = "College" });
+                        listItemsProfession.Add(new SelectListItem { Text = "Graduate", Value = "Graduate " });
+                        listItemsProfession.Add(new SelectListItem { Text = "Postgraduate", Value = "Postgraduate" });
+                        listItemsProfession.Add(new SelectListItem { Text = "PhD", Value = "PhD" });
+
+                    }
+                    @Html.DropDownListFor(model => model.acc.profession, listItemsProfession, "Select Education", new { style = "max-width:100%;", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.acc.profession, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="form-group">
+                    @*@{
+                        List<SelectListItem> listItemsUC = new List<SelectListItem>();
+
+                        foreach (var item in Model.ucs)
+                        {
+
+                            listItemsUC.Add(new SelectListItem { Text = item.UCName, Value = item.ID.ToString() });
+
+                        }
+                    }
+
+
+                    @Html.DropDownListFor(Model => Model.acc.UC_Area_id, listItemsUC, "-- Select UC --", new { style = "max-width:100%;", @class = "form-control" })*@
+
+                </div>
+
+                <div>
+                    <div id="registrationMap" style="height: 300px;width:100%; border: 1px solid #AAA;z-index:0"></div>
+
+                </div>
+
+                <div class="form-group">
+
+                    @Html.EditorFor(Model => Model.acc.map_long, new { htmlAttributes = new { style = "max-width: 90%;", @readonly = "readonly", @class = "form-control", @id = "longitude" } })
+                    @Html.ValidationMessageFor(model => model.acc.map_long, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+
+                    @Html.EditorFor(Model => Model.acc.map_lat, new { htmlAttributes = new { style = "max-width: 90%;", @readonly = "readonly", @class = "form-control", @id = "latitude" } })
+                    @Html.ValidationMessageFor(model => model.acc.map_lat, "", new { @class = "text-danger" })
+
+                </div>
+                <br />
+                <input type="submit" class="btn btn-primary btn-raised btn-block" value="Register" style="max-width:100%" />
+            </div>
+        }
+
+    </div>
+
+</div>
+
+
+@section Scripts{
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+    }
+
+<script>
+    
+    navigator.geolocation.getCurrentPosition(function (location) {
+        document.getElementById('latitude').value = location.coords.latitude;
+        document.getElementById('longitude').value = location.coords.longitude;
+        var GreenMarker = L.AwesomeMarkers.icon({
+            icon: 'home',
+            markerColor: 'green'
+        });
+        var latlng = new L.LatLng(location.coords.latitude, location.coords.longitude);
+
+        var map = L.map('registrationMap').setView(latlng, 15);
+
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaGFzZWVia2hhdHJpIiwiYSI6ImNqbzA5czVpazJ1cmszcW50OGNrdnB5Z2UifQ.3b1kGAPFs2sBLcO8UuAXNw', {
+            maxZoom: 18,
+            id: 'mapbox.streets'
+            //     id: 'mapbox.light'
+        }).addTo(map);
+
+        //var marker = L.marker((latlng), { icon: GreenMarker }).addTo(map).bindPopup('<h5>You are here</h5>').openPopup();
+
+        var marker = L.marker(latlng, {
+            draggable: true,
+                icon: GreenMarker
+        }).addTo(map);
+
+        marker.on('dragend', function (e) {
+            document.getElementById('latitude').value = marker.getLatLng().lat;
+            document.getElementById('longitude').value = marker.getLatLng().lng;
+        });
+    });
+
+    ////////////////////////////////////////
+
+</script>

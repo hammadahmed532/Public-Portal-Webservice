@@ -1,0 +1,602 @@
+﻿body {
+    padding-top: 50px;
+    /*background-color: #F9F9F9;*/
+    /*background-color: #e2e2e2;*/
+    font-family: "Raleway", sans-serif;
+}
+
+#lbll {
+    text-align: left;
+}
+
+@media only screen and (max-width: 480px) {
+    /* horizontal scrollbar for tables if mobile screen */
+    .tablemobile {
+        overflow-x: auto;
+        display: block;
+    }
+}
+
+
+/* Form Progress */
+.progress {
+    width: 1000px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+    .progress .circle,
+    .progress .bar {
+        display: inline-block;
+        background: #fff;
+        width: 40px;
+        height: 40px;
+        border-radius: 40px;
+        border: 1px solid #d5d5da;
+    }
+
+    .progress .bar {
+        position: relative;
+        width: 80px;
+        height: 6px;
+        top: -33px;
+        margin-left: -5px;
+        margin-right: -5px;
+        border-left: none;
+        border-right: none;
+        border-radius: 0;
+    }
+
+    .progress .circle .label {
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        line-height: 32px;
+        border-radius: 32px;
+        margin-top: 3px;
+        color: #b5b5ba;
+        font-size: 17px;
+    }
+
+    .progress .circle .title {
+        color: #b5b5ba;
+        font-size: 13px;
+        line-height: 30px;
+        margin-left: -5px;
+    }
+
+    /* Done / Active */
+    .progress .bar.done,
+    .progress .circle.done {
+        background: #eee;
+    }
+
+    .progress .bar.active {
+        background: linear-gradient(to right, #EEE 40%, #FFF 60%);
+    }
+
+    .progress .circle.done .label {
+        color: #FFF;
+        background: #8bc435;
+        box-shadow: inset 0 0 2px rgba(0,0,0,.2);
+    }
+
+    .progress .circle.done .title {
+        color: #444;
+    }
+
+    .progress .circle.active .label {
+        color: #FFF;
+        background: #0c95be;
+        box-shadow: inset 0 0 2px rgba(0,0,0,.2);
+    }
+
+    .progress .circle.active .title {
+        color: #0c95be;
+    }
+
+
+
+
+#container {
+    width: 80%;
+    position: relative;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.container:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -1px;
+    width: 2px;
+    height: 100%;
+    background: #CCD1D9;
+}
+
+.timeline-block {
+    width: -webkit-calc(50% + 8px);
+    width: -moz-calc(50% + 8px);
+    width: calc(50% + 8px);
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: flex;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -moz-box-pack: justify;
+    justify-content: space-between;
+    clear: both;
+}
+
+.timeline-block-right {
+    float: right;
+}
+
+.timeline-block-left {
+    float: left;
+    direction: rtl
+}
+
+.marker {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid #F5F7FA;
+    background: #b8b8b8;
+    margin-top: 10px;
+    z-index: 9999;
+    text-align: center;
+    position: relative;
+    left: 4px;
+}
+
+    .marker.active {
+        width: 40px;
+        height: 37px;
+        background: #5bd040;
+        left: 0px;
+    }
+
+.timeline-content {
+    width: 95%;
+    padding: 0 15px;
+    color: #666
+}
+
+i.fa.fa-check {
+    display: none;
+}
+
+    i.fa.fa-check.active {
+        display: block !important;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        margin: auto;
+        height: 50%;
+        color: #fff;
+    }
+
+.timeline-content h3 {
+    margin-top: 8px;
+    margin-bottom: 5px;
+    font-size: 20px;
+    font-weight: 500
+}
+
+.timeline-content span {
+    font-size: 15px;
+    color: #a4a4a4;
+}
+
+.timeline-content p {
+    font-size: 14px;
+    line-height: 1.5em;
+    word-spacing: 1px;
+    color: #888;
+}
+
+
+
+.container:before {
+    left: 19px;
+    width: 2px;
+}
+
+.timeline-block {
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.timeline-block-right {
+    float: none;
+}
+
+.timeline-block-left {
+    float: none;
+    direction: ltr;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.StatBox {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+#box2 {
+    color: white;
+    width: 50%;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+input,
+select,
+textarea {
+    max-width: 380px;
+}
+
+#box3 {
+    color: white;
+    width: auto;
+}
+
+hr {
+    display: block;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 3px;
+}
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 1px;
+    padding-right: 1px;
+}
+
+.profileBox {
+    float: left;
+    padding-top: 20px;
+}
+
+#navbarFilter {
+    margin: auto;
+    width: 80%;
+    color: white;
+}
+
+    #navbarFilter li {
+        border-left: 2px solid hidden;
+        background-color: lightgray;
+    }
+
+ul.complaintsub li {
+    margin: 10px 10px 10px 10px;
+    padding: 10px 10px 10px 10px;
+    float: left;
+    list-style: none;
+    width: 25%;
+}
+
+#topnav {
+    background-color: #DC143C;
+    font-family: Verdana;
+}
+
+#oneone :hover {
+    background-color: #A5A5A5;
+}
+
+#topnav li:hover {
+    background: #A5A5A5;
+}
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+.underline {
+    border-bottom: 2px solid currentColor;
+}
+
+.underline--blue {
+    border-bottom-color: blue;
+}
+#tabs_main {
+    float: right;
+}
+
+#map {
+    z-index: 1;
+    height: 400px; /* The height is 400 pixels */
+    /*width: 96%;*/ /* The width is the width of the web page */
+    /*margin-left: 20px;*/
+    position: relative;
+}
+#ExploreMap {
+    z-index: 0;
+    /*width: 96%;*/ /* The width is the width of the web page */
+    /*margin-left: 20px;*/
+    position: relative;
+}
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+div#restBody {
+    background-color: #F9F9F9;
+}
+
+
+section {
+    display: -webkit-flex;
+    display: flex;
+}
+
+/* Style the navigation menu */
+nav {
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    background: #ccc;
+    padding: 20px;
+}
+
+    /* Style the list inside the menu */
+    nav ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+/* Style the content */
+article {
+    -webkit-flex: 3;
+    -ms-flex: 3;
+    flex: 6;
+    background-color: #f1f1f1;
+    padding: 10px;
+}
+
+@media (max-width: 600px) {
+    section {
+        -webkit-flex-direction: column;
+        flex-direction: column;
+    }
+}
+
+.meter {
+    height: 10px; /* Can be anything */
+    position: relative;
+    background-color: lightgray;
+    -moz-border-radius: 25px;
+    -webkit-border-radius: 25px;
+    border-radius: 25px;
+    padding: 5px;
+    box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);
+}
+
+
+.dropbtn {
+    background-color: grey;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.itemInsideDropdown {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+    .itemInsideDropdown:hover {
+        background-color: #ddd;
+    }
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+    .dropdown-content a:hover {
+        background-color: #ddd;
+    }
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: gainsboro;
+}
+
+
+
+
+
+
+ul.tabs {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+}
+
+    ul.tabs li {
+        background: none;
+        color: #222;
+        display: inline-block;
+        padding: 10px 15px;
+        cursor: pointer;
+    }
+
+        ul.tabs li.current {
+            background: #D6E4E4;
+            color: #222;
+        }
+
+.tab-content {
+    display: none;
+    background: #D6E4E4;
+    padding: 5px;
+}
+
+    .tab-content.current {
+        display: inherit;
+    }
+
+
+
+
+/**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/
+
+
+
+/**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/
+
+
+/**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/
+
+
+/**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/
+
+
+/**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/
+
+
+/**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/
+
+
+
+
+/**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/
+/**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/
+
+
+/**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/
+
+
+/**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/
+
+
+/**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/
+
+
+
+/**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/
+
+/**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/
+
+/**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/
+
+/**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/
+
+
+
+/**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/ /**/
+
+
+* {
+    box-sizing: border-box;
+}
+
+input[type=text], select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+label {
+    padding: 12px 12px 12px 0;
+    display: inline-block;
+}
+
+
+input[type=submit]:hover {
+    background-color: #45a049;
+}
+
+.container {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+}
+
+.col-25 {
+    float: left;
+    width: 25%;
+    margin-top: 6px;
+}
+
+.col-75 {
+    float: left;
+    width: 75%;
+    margin-top: 6px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+    .col-25, .col-75, input[type=submit] {
+        width: 100%;
+        margin-top: 0;
+    }
+}

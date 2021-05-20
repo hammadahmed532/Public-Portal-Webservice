@@ -1,0 +1,538 @@
+﻿@model Public_Portal_Webservice.Models.viewModel.vmPCP
+
+@{
+    ViewBag.Title = "Complaint handling";
+    Layout = "~/Views/Shared/_LayoutAccountPage.cshtml";
+}
+
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:270px;margin-top:1px" id="mySidebar">
+    <br>
+    <div class="w3-container w3-row">
+        <div class="w3-col s4">
+            @{
+                String gender = Model.acc.gender;
+                gender = gender.ToLower() + ".png";
+
+            }
+
+            <img src="~/Image/ProfileImages/@gender" class="w3-circle w3-margin-right" style="width:46px">
+        </div>
+        <div class="w3-col s8 w3-bar">
+            <strong>
+                <span>@Model.acc.Full_name,</span><br>
+                <span>@Model.acc.Town.town_name Town Nazim</span>
+            </strong><br>
+            <a href="#" class="w3-bar-item w3-button"><i class="fa fa-user"></i></a>
+            <a href="#" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
+        </div>
+    </div>
+    <hr>
+    <div class="w3-container">
+    </div>
+
+
+
+    <div class="w3-bar-block">
+        <div class="w3-bar-block">
+            <a class="w3-button w3-bar-item w3-padding-large w3-margin-bottom w3-blue" href="@Url.Action("TownPanelOverview", "TownAccount")"><span class="glyphicon glyphicon-chevron-left "></span>Back to main panel</a>
+
+        </div>
+        <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
+        <p href="#" class="w3-bar-item  w3-padding w3-large">  Categories</p>
+
+        <a href="@Url.Action("TNManageAreaComplaints", "TownAccount", new { orderby = "severe", cat = "all" })" class="w3-bar-item w3-button w3-padding ">Resolved (@ViewBag.Resolved)</a>
+        <a href="@Url.Action("TNBudgeted", "TownAccount", new { orderby = "severe", cat = "all" })" class="w3-bar-item w3-button w3-padding ">Budgeted (@ViewBag.Budgeted)</a>
+        <a href="@Url.Action("TNRejected", "TownAccount", new { orderby = "severe", cat = "all" })" class="w3-bar-item w3-button w3-padding">Rejected (@ViewBag.Rejected)</a>
+        <a href="@Url.Action("TNAlreadyResolved", "TownAccount", new { orderby = "severe", cat = "all" })" class="w3-bar-item w3-button w3-padding">Already Resolved (@ViewBag.AlreadyResolved)</a>
+        <a href="@Url.Action("TNForwarded", "TownAccount", new { orderby = "severe", cat = "all" })" class="w3-bar-item w3-button w3-padding">Forwarded (@ViewBag.Forwarded)</a>
+        <a href="@Url.Action("ReviewComplaintActivities", "TownAccount", new { orderby = "severe", cat = "all" })" class="w3-bar-item w3-button w3-padding">Review Activites (@ViewBag.ReviewActivites)</a>
+        <a href="@Url.Action("BudgetBasket", "TownAccount", new { orderby = "severe", cat = "all" })" class="w3-bar-item w3-button w3-padding w3-blue">Approved Budget(@ViewBag.BudgetBasket)</a>
+        <a href="@Url.Action("PublicFeedback", "TownAccount",new { cat = "all" })" class="w3-bar-item w3-button w3-padding ">Public Feedbacks @ViewBag.Feedback</a>
+
+    </div>
+</nav>
+
+
+<!-- Overlay effect when opening sidebar on <asp:scriptmanager runat="server" />all screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main " style="margin:10px 10px 20px 280px">
+
+    <div class="w3-container">
+
+        <ul class="tabs">
+            <li class="tab-link current" data-tab="tab-1"><Strong>Pending</Strong></li>
+            <li class="tab-link" data-tab="tab-2"> <Strong> Approved </Strong></li>
+            <li class="tab-link" data-tab="tab-3"><strong>Rejected</strong></li>
+        </ul>
+
+        <div id="tab-1" class="tab-content current">
+
+
+
+
+
+            @*
+                    <div class="w3-col m12 ">
+
+
+                <h5 style="color:red">@TempData["msg"].ToString()</h5>
+
+            <div class="w3-section w3-bottombar w3-padding-16">
+                <span class="w3-margin-right">Filter by:</span>
+                @if ("all".Equals(ViewBag.cat))
+                {
+                    <a href="@Url.Action("BudgetBasket", "TownAccount", new { orderby = "severe", cat = "all" })" class="w3-button w3-black">ALL</a>
+                }
+                else
+                { <a href="@Url.Action("BudgetBasket", "TownAccount", new { orderby = "severe", cat = "all" })" class="w3-button w3-white">ALL</a>
+                }
+                @foreach (var cat in Model.categories)
+                {
+                    if (cat.Category1.Equals(ViewBag.cat))
+                    {
+                        <a href="@Url.Action("BudgetBasket", "TownAccount", new {orderby="severe", cat = cat.Category1 })" class="w3-button w3-black">@cat.Category1</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("BudgetBasket", "TownAccount", new { orderby="severe",cat = cat.Category1 })" class="w3-button w3-white">@cat.Category1</a>
+                    }
+                }
+            </div>
+
+            @if (Model.comps.Count() != 0)
+            {
+
+                <div class="w3-dropdown-hover ">
+                    <button class=" w3-button w3-blue" title="More">
+                        Sorted by @ViewBag.status
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="w3-dropdown-content w3-bar-block w3-card-4" style="text-decoration:none;">
+                        @if ("severe-first".Equals(ViewBag.status))
+                        {
+                            <a href="@Url.Action("BudgetBasket", "TownAccount", new { orderby = "recent",cat=ViewBag.cat })" class="w3-button w3-bar-item" style="text-decoration:none;">Sort by recieved-last</a>
+                            <a href="@Url.Action("BudgetBasket", "TownAccount", new { orderby = "received",cat=ViewBag.cat })" class="w3-button w3-bar-item" style="text-decoration:none;">Sort by recieved-first</a>
+
+                        }
+                        else if ("received-last".Equals(ViewBag.status))
+                        {
+                            <a href="@Url.Action("BudgetBasket", "TownAccount",new { orderby="severe",cat=ViewBag.cat})" class="w3-button w3-bar-item" style="text-decoration:none;">Sort by highest severity-first</a>
+                            <a href="@Url.Action("BudgetBasket", "TownAccount", new { orderby = "received",cat=ViewBag.cat })" class="w3-button w3-bar-item" style="text-decoration:none;">Sort by recieved-first</a>
+
+                        }
+                        else if ("received-first".Equals(ViewBag.status))
+                        {
+
+                            <a href="@Url.Action("BudgetBasket", "TownAccount", new { orderby = "recent",cat=ViewBag.cat })" class="w3-button w3-bar-item" style="text-decoration:none;">Sort by recieved-last</a>
+                            <a href="@Url.Action("BudgetBasket", "TownAccount",new { orderby="severe",cat=ViewBag.cat})" class="w3-button w3-bar-item" style="text-decoration:none;">Sort by highest severity-first</a>
+
+                        }
+                    </div>
+                </div>
+
+
+
+                <div class="w3-right w3-large">Complaints, @Model.comps.Count() </div>
+            }
+
+            else
+            {
+                <div class="w3-left w3-large ">No Complaints To Show</div>
+
+            }
+        </div>*@
+            <div class="w3-container w3-mobile">
+
+                @{ var pending = Model.comps.Where(a => a.stage_id == 21).ToList();}
+                @foreach (var ucs in Model.ucs)
+                {
+
+                    var check = pending.Where(a => a.UC_area_id == ucs.ID).FirstOrDefault();
+
+                    if (check != null)
+                    {
+
+                        <h3>
+                            @Html.DisplayFor(Model => ucs.UCName)
+                        </h3>
+
+
+                        if (pending.Count() != 0)
+                        {
+
+                            <div class="w3-left w3-right ">@Model.comps.Count(), complaints</div>
+                        }
+                        else
+                        {
+                            <div class="w3-left w3-right ">No Complaints To Show</div>
+
+                        }
+                        <div class=" w3-col m12 " style="margin-top:20px;">
+
+
+
+                            <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white w3-mobile">
+
+                                <tr>
+                                    <th>title</th>
+                                    <th>category</th>
+                                    <th>photo</th>
+                                    <th>Expected Amount</th>
+                                    <th>Date forwarded</th>
+                                    <th>Accept</th>
+                                    <th>Reject</th>
+                                </tr>
+                                @foreach (var comppp in pending.Where(a => a.UC_area_id == ucs.ID))
+                                {
+
+                                    <tr>
+                                        <td style="max-width:200px">
+                                            <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comppp.complaint_Id,url=HttpContext.Current.Request.Url })">@Html.DisplayFor(Model => comppp.c_title)</a>
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(Model => comppp.Category.Category1)
+                                        </td>
+
+                                        <td>
+                                            <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comppp.complaint_Id,url=HttpContext.Current.Request.Url })"> <img class="updatedImage" src="@Url.Content(comppp.image1)" style="height:120px;width:190px" /></a>
+                                        </td>
+                                        <td>@Html.DisplayFor(Model => comppp.Expected_amount)</td>
+
+                                        @{ var det_comp = comppp.Complaint_Det_Remarks.FirstOrDefault();}
+                                        <td>
+                                            @comppp.date_last_modified.ToShortDateString()
+                                        </td>
+                                        <td>
+                                            <input type="radio" name="@comppp.complaint_Id" value="A" />
+                                        </td>
+                                        <td>
+                                            <input id="RejectedOne" type="radio" name="@comppp.complaint_Id" value="R" />
+
+                                        </td>
+                                    </tr>
+                                    <tr><td colspan="8"><strong>UC Nazim Remarks: </strong>@Html.DisplayFor(Model => det_comp.Remarks_Member)</td></tr>
+
+                                    <tr><td colspan="8"><div id=@comppp.complaint_Id></div></td></tr>
+
+
+                                }
+                            </table><br>
+
+
+                        </div>
+                    }
+                }
+                @if (pending.Count() != 0)
+                {
+                    <div class="w3-left">
+                        <span>for the year</span>
+                        <select id="budgetYear">
+
+                            <option value="2021">2020-2021</option>
+
+                            <option value="2022">2021-2022</option>
+                            <option value="2023">2022-2023</option>
+                            <option value="2024">2023-2024</option>
+                        </select>
+                    </div>
+                    <div class="w3-right">
+                        <br />
+                        <input type="button" id="btnGetValue" value="Submit" class="w3-button w3-block w3-blue w3-right" />
+                    </div>
+                }
+                else
+                {
+                    <div class="w3-left w3-right ">No Complaints To Show</div>
+
+                }
+
+            </div>
+
+
+        </div>
+        <div id="tab-2" class="tab-content ">
+
+            <div class="w3-container w3-mobile">
+
+
+                @{ var approved = Model.comps.Where(a => a.stage_id == 25).ToList();}
+
+                @foreach (var ucs in Model.ucs)
+                {
+
+                    var check = approved.Where(a => a.UC_area_id == ucs.ID).FirstOrDefault();
+
+                    if (check != null)
+                    {
+
+                        <h3>
+                            @Html.DisplayFor(Model => ucs.UCName)
+                        </h3>
+
+
+                        if (approved.Count() != 0)
+                        {
+
+                            <div class="w3-left w3-right ">@approved.Count(), complaints</div>
+                        }
+                        else
+                        {
+                            <div class="w3-left w3-right ">No Complaints To Show</div>
+
+                        }
+                        <div class=" w3-col m12 " style="margin-top:20px;">
+
+
+                            <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white w3-mobile">
+
+                                <tr>
+                                    <th>Title</th>
+                                    <th>category</th>
+                                    <th>photo</th>
+                                    <th>Expected amount</th>
+                                    <th>Date forwarded</th>
+                                    <th>Year</th>
+
+                                </tr>
+                                @foreach (var comppp in approved.Where(a => a.UC_area_id == ucs.ID))
+                                {
+
+
+                                    <tr>
+                                        <td style="max-width:200px">
+                                            <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comppp.complaint_Id, url = HttpContext.Current.Request.Url })">@Html.DisplayFor(Model => comppp.c_title)</a>
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(Model => comppp.Category.Category1)
+                                        </td>
+
+                                        <td>
+                                            <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comppp.complaint_Id, url = HttpContext.Current.Request.Url })"> <img class="updatedImage" src="@Url.Content(comppp.image1)" style="height:120px;width:190px" /></a>
+                                        </td>
+
+                                        <td>@Html.DisplayFor(Model => comppp.Expected_amount)</td>
+                                        @{ var det_comp = comppp.Complaint_Det_Remarks.FirstOrDefault();}
+                                        <td>
+                                            @comppp.date_last_modified.ToShortDateString()
+                                        </td>
+                                        <td>
+                                            @det_comp.budgetYear
+                                        </td>
+
+                                    </tr>
+                                    <tr><td colspan="8"><strong>UC Nazim Remarks: </strong>@Html.DisplayFor(Model => det_comp.Remarks_Member)</td></tr>
+
+
+                                }
+                            </table><br>
+                           
+                        </div>
+                                                }
+                                            }
+                    </div>
+            <hr>
+
+        </div>
+        <div id="tab-3" class="tab-content ">
+            <div class="w3-container w3-mobile">
+
+                @{ var rejected = Model.comps.Where(a => a.stage_id == 26).ToList(); }
+                @foreach (var ucs in Model.ucs)
+                {
+
+                    var check = rejected.Where(a => a.UC_area_id == ucs.ID).FirstOrDefault();
+
+                    if (check != null)
+                    {
+
+                        <h3>
+                            @Html.DisplayFor(Model => ucs.UCName)
+                        </h3>
+
+
+                        if (rejected.Count() != 0)
+                        {
+
+                            <div class="w3-left w3-right ">@rejected.Count(), complaints</div>
+                        }
+                        else
+                        {
+                            <div class="w3-left w3-right ">No Complaints To Show</div>
+
+                        }
+                        <div class=" w3-col m12 " style="margin-top:20px;">
+
+
+
+
+                            <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white w3-mobile">
+
+                                <tr>
+                                    <th>title</th>
+                                    <th>category</th>
+                                    <th>photo</th>
+                                    <th>Expected amount</th>
+                                    <th>Date forwarded</th>
+
+                                </tr>
+                                @foreach (var comppp in rejected.Where(a => a.UC_area_id == ucs.ID))
+                                {
+
+                                    <tr>
+                                        <td style="max-width:200px">
+                                            <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comppp.complaint_Id, url = HttpContext.Current.Request.Url })">@Html.DisplayFor(Model => comppp.c_title)</a>
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(Model => comppp.Category.Category1)
+                                        </td>
+
+                                        <td>
+                                            <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comppp.complaint_Id, url = HttpContext.Current.Request.Url })"> <img class="updatedImage" src="@Url.Content(comppp.image1)" style="height:120px;width:190px" /></a>
+                                        </td>
+
+                                        <td>@Html.DisplayFor(Model => comppp.Expected_amount)</td>
+
+                                        @{ var det_comp = comppp.Complaint_Det_Remarks.FirstOrDefault();}
+                                        <td>
+                                            @comppp.date_last_modified.ToShortDateString()
+                                        </td>
+
+
+                                    </tr>
+                                    <tr><td colspan="8"><strong>Town Nazim Remarks: </strong>@Html.DisplayFor(Model => det_comp.Remarks_Nazim)</td></tr>
+
+
+                                }
+                            </table><br>
+                           
+                        </div>
+                                                }
+                                            }
+                    </div>
+            <hr>
+
+        </div>
+
+            </div>
+        </div>
+    
+
+    <script type="text/javascript">
+
+$(document).ready(function () {
+    $("input[id='RejectedOne']").click(function () {
+        var vll = this.name
+
+        $('#' + vll).replaceWith('<textarea rows="1" cols="6" placeholder="Remarks" id=' + vll + '> Remarks</textarea>');
+
+    });
+
+
+   $('#btnGetValue').click(function () {
+       var idd;
+       var selectedVal;
+       var RadioArray = [];
+       var i = 0;
+       var Remarks;
+       var budgetYear = $("#budgetYear").val();      
+       @foreach (var coms in Model.comps) {
+        <text>
+          idd=@coms.complaint_Id;
+          selectedVal = $('input[name=@coms.complaint_Id]:checked').val();
+
+       if (selectedVal == 'R') {
+           Remarks = $('textarea#' + idd).val();
+           RadioArray.push({
+               complaint_Id: idd,
+               SelectedRadio: selectedVal,
+               Remarks: Remarks,
+               budgetYear: budgetYear
+           });
+
+       } else {
+           RadioArray.push({
+               complaint_Id: idd,
+               SelectedRadio: selectedVal,
+               Remarks: "null",
+               budgetYear: budgetYear
+
+           });
+       }
+                    i++;
+                </text>
+            }
+
+
+          RadioArray = JSON.stringify({ 'RadioArray': RadioArray });
+
+
+          console.log(RadioArray);
+          $.ajax({
+              contentType: 'application/json; charset=utf-8',
+              dataType: 'json',
+              type: 'POST',
+              url: '@Url.Action("BudgetBasketAction", "TownAccount")',
+              data: RadioArray ,
+              success: function (data) {
+                          location.reload(); // then reload the page.(3)
+
+              },
+              error: function (XMLHttpRequest, textStatus, errorThrown) {
+                  //$('#msg').html('Complaints forwarded');
+                  //setTimeout(function () {// wait for 5 secs(2)
+                  location.reload();
+                  //}, 5000);
+
+              }
+          });
+
+        });
+    });
+
+    // Get the Sidebar
+    var mySidebar = document.getElementById("mySidebar");
+
+    // Get the DIV with overlay effect
+    var overlayBg = document.getElementById("myOverlay");
+
+    // Toggle between showing and hiding the sidebar, and add overlay effect
+    function w3_open() {
+        if (mySidebar.style.display === 'block') {
+            mySidebar.style.display = 'none';
+            overlayBg.style.display = "none";
+        } else {
+            mySidebar.style.display = 'block';
+            overlayBg.style.display = "block";
+        }
+    }
+
+    // Close the sidebar with the close button
+    function w3_close() {
+        mySidebar.style.display = "none";
+        overlayBg.style.display = "none";
+    }
+
+
+
+        $(document).ready(function () {
+
+            $('ul.tabs li').click(function () {
+                var tab_id = $(this).attr('data-tab');
+
+                $('ul.tabs li').removeClass('current');
+                $('.tab-content').removeClass('current');
+
+                $(this).addClass('current');
+                $("#" + tab_id).addClass('current');
+            })
+
+        })
+    //////map
+
+    </script>
+
+

@@ -1,0 +1,673 @@
+﻿@model Public_Portal_Webservice.Models.viewModel.vmPCP
+@{
+    ViewBag.Title = "UC Announcements";
+    Layout = "~/Views/Shared/_LayoutWithSection.cshtml";
+}
+
+<header class="w3-container w3-center w3-padding-32" style="position:relative;margin-top:20px">
+    <div style="position:absolute;top:0;left:0;right:0;bottom:0;background-image:url('@Url.Content("~/Image/khi-cover.jpg")');filter: blur(2px);z-index:-1;"></div>
+    <h1 style="color:white"><b>@ViewBag.header</b></h1>
+    <p style="color:white">total @Model.annoucementsMultiple.Count() Announcements  @*<a href="@Url.Action("SeverityLevelComplaint", "Complaint" )"><span class="w3-tag w3-large w3-blue">Order by severe first</span></a>*@</p>
+
+</header>
+
+
+<!-- Grid -->
+<div class="w3-row">
+
+
+
+    <!-- Introduction menu -->
+    <div class="w3-col l3">
+
+
+        <div class="w3-card w3-margin">
+            <div class="">
+
+                <a href="@Url.Action("TownWiseAnnouncements", "Complaint",new { town_id=0})" class="w3-container w3-padding w3-button w3-block    w3-large" style="background-color:#929fba;color:white">
+                    <span class="glyphicon glyphicon-chevron-left "> </span> back to Town
+                </a>
+
+            </div>
+        </div>
+        <!-- About Card -->
+        <div class="w3-card  w3-margin">
+            <div class="w3-container w3-padding " style="background-color:#929fba;color:white">
+                <h4 class="w3-center">UC Areas of @ViewBag.TownName Town</h4>
+            </div>
+            <div class="w3-container w3-white">
+                @if (ViewBag.UCId == 0)
+                {
+                    <a href="@Url.Action("UCWiseAnnouncements", "Complaint", new { town_id =ViewBag.townId,UC_id=0 })" style="text-decoration:none" class="w3-button w3-block  w3-left-align w3-large w3-large w3-black"><span class="fa fa-th-large fa-fw w3-margin-right"></span>All</a>
+                }else
+                { <a href="@Url.Action("UCWiseAnnouncements", "Complaint", new { town_id =ViewBag.townId,UC_id=0 })" style="text-decoration:none" class="w3-button w3-block  w3-left-align w3-large w3-large "><span class="fa fa-th-large fa-fw w3-margin-right"></span>All</a>
+
+                }
+
+                @foreach (var uc in Model.ucs)
+                {
+                    if (uc.ID.Equals(ViewBag.UCId))
+                    {
+                        <a href="@Url.Action("UCWiseAnnouncements", "Complaint", new {town_id= ViewBag.townId,UC_id=uc.ID})" style="text-decoration:none" class="w3-button w3-block  w3-left-align w3-large w3-large w3-black"><span class="fa fa-th-large fa-fw w3-margin-right"></span>@uc.UCName</a>
+
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("UCWiseAnnouncements", "Complaint", new { town_id=ViewBag.townId,UC_id=uc.ID})" style="text-decoration:none" class="w3-button w3-block  w3-left-align "><span class="fa fa-th-large fa-fw w3-margin-right"></span>@uc.UCName</a>
+                    }
+
+                }
+            </div>
+        </div>
+
+
+
+
+
+
+        <!-- Labels / tags -->
+        @*<div class="w3-card w3-margin">
+                <div class="w3-container w3-padding" style="background-color:#929fba;color:white">
+                    <h4>categories</h4>
+                </div>
+                <div class="w3-container w3-white">
+                    <br />
+                    <p>
+                        @foreach (var cat in Model.categories)
+                        {
+                            if (cat.Category1.ToString().Equals(ViewBag.categorySelected))
+                            {
+                                <a href="@Url.Action("CategoryComplaint", "Complaint", new { cat = @cat.category_id })" class="w3-tag w3-margin-bottom w3-large w3-red">@cat.Category1</a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("CategoryComplaint", "Complaint", new { cat = @cat.category_id })" class="w3-tag w3-light-grey w3-medium w3-margin-bottom">@cat.Category1</a>
+                            }
+
+                        }
+                    </p>
+                </div>
+            </div>*@
+
+        <!-- END Introduction Menu -->
+    </div>
+    <div class="w3-col l9">
+
+        @{ int cou = Model.annoucementsMultiple.Count(); }
+        @if (cou == 1)
+        {
+            <div class="w3-col l12 w3-margin-top w3-container ">
+                <div class="w3-card ">
+                    <div class="w3-container w3-padding " style="background-color:#929fba;color:white">
+                        <h4>Filters</h4>
+                    </div>
+                    <div class="w3-container w3-white">
+                        <br />
+                        <span style="margin-left:00px">Categories:</span>
+
+                        <select id="Categories" style="width:190px;">
+                            <option value="0">All</option>
+
+
+                            @foreach (var cat in Model.categories)
+                            {
+                                if (cat.category_id.Equals(ViewBag.categoryId))
+                                {
+                                    <option value="@cat.category_id" selected>@cat.Category1</option>
+                                }
+                                else
+                                {
+
+                                    <option value="@cat.category_id">@cat.Category1</option>
+                                }
+
+                            }
+
+                        </select>
+                        <span style="margin-left:30px">Time Period:</span>
+                        <select id="timePeriod" style="width:190px">
+                            <option value="0">All</option>
+                            @if (3 == ViewBag.TimePeriodId)
+                            {
+                                <option value="3" selected>Last 3 months</option>
+                            }
+                            else
+                            {
+                                <option value="3">Last 3 months</option>
+                            }@if (6 == ViewBag.TimePeriodId)
+                            {
+                                <option value="6" selected>Last 6 months</option>
+                            }
+                            else
+                            {
+                                <option value="6">Last 6 months</option>
+                            }@if (9 == ViewBag.TimePeriodId)
+                            {
+                                <option value="9" selected>Last 9 months</option>
+                            }
+                            else
+                            {
+                                <option value="9">Last 9 months</option>
+                            }@if (12 == ViewBag.TimePeriodId)
+                            {
+                                <option value="12" selected>Last 12 months</option>}
+                            else
+                            {
+                                <option value="12">Last 12 months</option>}
+                            }@if (24 == ViewBag.TimePeriodId)
+                            {
+                                <option value="24" selected>Last 2 Years</option>}
+                            else
+                            {
+                                <option value="24">Last 2 Years</option>
+                            }
+                            @if (36 == ViewBag.TimePeriodId)
+                            {
+
+                                <option value="36" selected>Last 3 Year</option>
+                            }
+                            else
+                            {
+                                <option value="36">Last 3 Year</option>
+                            }
+
+
+                        </select>
+
+
+                        <hr />
+                        <div class="w3-right">
+
+                            <input type="submit" value="Clear" class="w3-button w3-large  " style="width:200px;background-color:lightgrey" id="filterClear" />
+                            <input type="submit" value="Apply" class="w3-button w3-large w3-blue " style="width:250px" id="filterApply" />
+                            <br /><br />
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class=" w3-col m8 " style="margin-top:20px;">
+
+
+                @foreach (var comps in Model.annoucementsMultiple)
+                {
+                    <div class="w3-col l7 s12">
+
+                        <div class="w3-card-4 w3-margin w3-white">
+
+
+                            <a href="@Url.Action("SingleAnnouncement", "Complaint", new { announcementId = comps.Announcement_id, url = HttpContext.Current.Request.Url })"><img src="@Url.Content(comps.image_file_1)" alt="Nature" style="width:100%;height:200px;" /></a>
+
+
+                            <div class="w3-container">
+
+                                <a href="@Url.Action("SingleAnnouncement", "Complaint", new { announcementId = comps.Announcement_id, url = HttpContext.Current.Request.Url })"><h3><b>@comps.title</b></h3></a>
+
+                                @*<div class="w3-left" style="margin-left:195px">
+
+                                    @{ var complaintColor = comps.Announcement_id.ToString() + "Color";}
+                                    <div id="@complaintColor" class="w3-padding" style="width:150%">@comps.Status.Status_first</div>
+
+                                </div>*@
+                                @if (comps.date_last_modified != null)
+                                {<span class="w3-opacity">@comps.date_last_modified.ToShortDateString()</span> }
+                            else
+                            {<span class="w3-opacity "> @comps.date_creation.ToShortDateString()</span>}
+
+                                <hr />
+                            </div>
+
+                            <div class="w3-container">
+                                <p>
+
+                                    @comps.description.Substring(0, 59)
+                                </p>
+                                <div class="w3-row">
+                                    <div class="w3-col m4 s12">
+                                        <p><a href="@Url.Action("SingleAnnouncement", "Complaint", new { announcementId = comps.Announcement_id, url = HttpContext.Current.Request.Url })" class="w3-button w3-padding-large w3-white w3-border"><b>READ MORE »</b></a></p>
+                                    </div>
+                                    @*<div class=" w3-col " style="background-color:lightgrey;color:black">
+                                            <p><span class="w3-padding-large w3-right w3-small">Supporting complaints:@comps.SupportingComplaints.Count</span></p>
+
+                                        </div>*@<br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        else if (cou > 1)
+        {
+
+            <div class="table-responsive ">
+
+                <div class="w3-col l12 w3-margin-top w3-container ">
+                    <div class="w3-card ">
+                        <div class="w3-container w3-padding " style="background-color:#929fba;color:white">
+                            <h4>Filters</h4>
+                        </div>
+                        <div class="w3-container w3-white">
+                            <br />
+                            <span style="margin-left:00px">Categories:</span>
+
+                            <select id="Categories" style="width:190px;">
+                                <option value="0">All</option>
+
+
+                                @foreach (var cat in Model.categories)
+                                {
+                                    if (cat.category_id.Equals(ViewBag.categoryId))
+                                    {
+                                        <option value="@cat.category_id" selected>@cat.Category1</option>
+                                    }
+                                    else
+                                    {
+
+                                        <option value="@cat.category_id">@cat.Category1</option>
+                                    }
+
+                                }
+
+                            </select>
+                            <span style="margin-left:30px">Time Period:</span>
+                            <select id="timePeriod" style="width:190px">
+                                <option value="0">All</option>
+                                @if (3 == ViewBag.TimePeriodId)
+                                {
+                                    <option value="3" selected>Last 3 months</option>
+                                }
+                                else
+                                {
+                                    <option value="3">Last 3 months</option>
+                                }@if (6 == ViewBag.TimePeriodId)
+                                {
+                                    <option value="6" selected>Last 6 months</option>
+                                }
+                                else
+                                {
+                                    <option value="6">Last 6 months</option>
+                                }@if (9 == ViewBag.TimePeriodId)
+                                {
+                                    <option value="9" selected>Last 9 months</option>
+                                }
+                                else
+                                {
+                                    <option value="9">Last 9 months</option>
+                                }@if (12 == ViewBag.TimePeriodId)
+                                {
+                                    <option value="12" selected>Last 12 months</option>}
+                                else
+                                {
+                                    <option value="12">Last 12 months</option>}
+                                }@if (24 == ViewBag.TimePeriodId)
+                                {
+                                    <option value="24" selected>Last 2 Years</option>}
+                                else
+                                {
+                                    <option value="24">Last 2 Years</option>
+                                }
+                                @if (36 == ViewBag.TimePeriodId)
+                                {
+
+                                    <option value="36" selected>Last 3 Year</option>
+                                }
+                                else
+                                {
+                                    <option value="36">Last 3 Year</option>
+                                }
+
+
+                            </select>
+
+                            <hr />
+                            <div class="w3-right">
+
+                                <input type="submit" value="Clear" class="w3-button w3-large  " style="width:200px;background-color:lightgrey" id="filterClear" />
+                                <input type="submit" value="Apply" class="w3-button w3-large w3-blue " style="width:250px" id="filterApply" />
+
+                                <br /><br />
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <table class="table">
+
+
+                    @{ int counter = -1;}
+
+                    @foreach (var comps in Model.annoucementsMultiple)
+                    {
+                        counter++;
+                        if (counter % 3 == 0)
+                        {
+                            <tr></tr>
+                            <td style="width:50px;">
+                                <div class="w3-col l12 s12 ">
+
+                                    <div class="w3-card-4 w3-white " style="margin:5px 5px 5px 5px">
+                                        <a href="@Url.Action("SingleAnnouncement", "Complaint", new { announcementId = comps.Announcement_id, url = HttpContext.Current.Request.Url })"><img src="@Url.Content(comps.image_file_1)" alt="Nature" style="width:100%;height:200px;"></a>
+                                        <div class="w3-container">
+                                            <a href="@Url.Action("SingleAnnouncement", "Complaint", new { announcementId = comps.Announcement_id, url = HttpContext.Current.Request.Url })"><h3><b>@comps.title</b></h3></a>
+
+                                            <div>
+                                            </div>
+                                            @*<div class="w3-left" style="margin-left:195px">
+
+                                                @{ var complaintColor = comps.Announcement_id.ToString() + "Color";}
+                                                <div id="@complaintColor" class="w3-padding" style="width:150%">@comps.Status.Status_first</div>
+
+                                            </div>*@
+                                            @if (comps.date_last_modified != null)
+                                            {<span class="w3-opacity">@comps.date_last_modified.ToShortDateString()</span> }
+                                        else
+                                        {<span class="w3-opacity "> @comps.date_creation.ToShortDateString()</span>}
+
+
+                                            <br />
+                                            <br />
+                                            <hr />
+                                        </div>
+                                        <div class="w3-container">
+                                            <p>
+
+                                                @comps.description.Substring(0, 50) ...
+                                            </p>
+                                            <div class="w3-row">
+                                                <div class="w3-col m4 s12">
+                                                    <p><a href="@Url.Action("SingleAnnouncement", "Complaint", new { announcementId = comps.Announcement_id, url = HttpContext.Current.Request.Url })" class="w3-button w3-padding-large w3-white w3-border"><b>READ MORE »</b></a></p>
+                                                </div>
+                                                @*<div class=" w3-col " style="background-color:lightgrey;color:black">
+                                                        <p><span class="w3-padding-large w3-right ">Supporting complaints:@comps.SupportingComplaints.Count</span></p>
+
+                                                    </div>*@<br />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
+                        }
+                        else
+
+                        {
+                            <td style="width:50px;">
+                                <div class="w3-col l12 s12 ">
+
+                                    <div class="w3-card-4 w3-white " style="margin:5px 5px 5px 5px">
+                                        <a href="@Url.Action("SingleAnnouncement", "Complaint", new { announcementId = comps.Announcement_id, url = HttpContext.Current.Request.Url })"><img src="@Url.Content(comps.image_file_1)" alt="Nature" style="width:100%;height:200px;"></a>
+                                        <div class="w3-container">
+                                            <a href="@Url.Action("SingleAnnouncement", "Complaint", new { announcementId = comps.Announcement_id, url = HttpContext.Current.Request.Url })"><h3><b>@comps.title</b></h3></a>
+
+                                            <div>
+                                            </div>
+                                            @*<div class="w3-left" style="margin-left:195px">
+
+                                                @{ var complaintColor = comps.Announcement_id.ToString() + "Color";}
+                                                <div id="@complaintColor" class="w3-padding" style="width:150%">@comps.Status.Status_first</div>
+
+                                            </div>*@
+                                            @if (comps.date_last_modified != null)
+                                            {<span class="w3-opacity">@comps.date_last_modified.ToShortDateString()</span> }
+                                        else
+                                        {<span class="w3-opacity "> @comps.date_creation.ToShortDateString()</span>}
+
+
+                                            <br />
+                                            <br />
+                                            <hr />
+                                        </div>
+                                        <div class="w3-container">
+                                            <p>
+
+                                                @comps.description.Substring(0, 50) ...
+                                            </p>
+                                            <div class="w3-row">
+                                                <div class="w3-col m4 s12">
+                                                    <p><a href="@Url.Action("SingleAnnouncement", "Complaint", new { announcementId = comps.Announcement_id, url = HttpContext.Current.Request.Url })" class="w3-button w3-padding-large w3-white w3-border"><b>READ MORE »</b></a></p>
+                                                </div>
+                                                @*<div class=" w3-col " style="background-color:lightgrey;color:black">
+                                                        <p><span class="w3-padding-large w3-right ">Supporting complaints:@comps.SupportingComplaints.Count</span></p>
+
+                                                    </div>*@<br />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
+                        }
+
+                    }
+
+                </table>
+
+
+
+                <!-- END GRID -->
+            </div>
+        }
+        else
+        {
+
+            <div class="w3-col l12 w3-margin-top w3-container ">
+                <div class="w3-card ">
+                    <div class="w3-container w3-padding " style="background-color:#929fba;color:white">
+                        <h4>Filters</h4>
+                    </div>
+                    <div class="w3-container w3-white">
+                        <br />
+                        <span style="margin-left:00px">Categories:</span>
+
+                        <select id="Categories" style="width:190px;">
+                            <option value="0">All</option>
+
+
+                            @foreach (var cat in Model.categories)
+                            {
+                                if (cat.category_id.Equals(ViewBag.categoryId))
+                                {
+                                    <option value="@cat.category_id" selected>@cat.Category1</option>
+                                }
+                                else
+                                {
+
+                                    <option value="@cat.category_id">@cat.Category1</option>
+                                }
+
+                            }
+
+                        </select>
+                        <span style="margin-left:30px">Time Period:</span>
+                        <select id="timePeriod" style="width:190px">
+                            <option value="0">All</option>
+                            @if (3 == ViewBag.TimePeriodId)
+                            {
+                                <option value="3" selected>Last 3 months</option>
+                            }
+                            else
+                            {
+                                <option value="3">Last 3 months</option>
+                            }@if (6 == ViewBag.TimePeriodId)
+                            {
+                                <option value="6" selected>Last 6 months</option>
+                            }
+                            else
+                            {
+                                <option value="6">Last 6 months</option>
+                            }@if (9 == ViewBag.TimePeriodId)
+                            {
+                                <option value="9" selected>Last 9 months</option>
+                            }
+                            else
+                            {
+                                <option value="9">Last 9 months</option>
+                            }@if (12 == ViewBag.TimePeriodId)
+                            {
+                                <option value="12" selected>Last 12 months</option>}
+                            else
+                            {
+                                <option value="12">Last 12 months</option>}
+                            }@if (24 == ViewBag.TimePeriodId)
+                            {
+                                <option value="24" selected>Last 2 Years</option>}
+                            else
+                            {
+                                <option value="24">Last 2 Years</option>
+                            }
+                            @if (36 == ViewBag.TimePeriodId)
+                            {
+
+                                <option value="36" selected>Last 3 Year</option>
+                            }
+                            else
+                            {
+                                <option value="36">Last 3 Year</option>
+                            }
+
+
+                        </select>
+
+
+                        <hr />
+                        <div class="w3-right">
+
+                            <input type="submit" value="Clear" class="w3-button w3-large  " style="width:200px;background-color:lightgrey" id="filterClear" />
+                            <input type="submit" value="Apply" class="w3-button w3-large w3-blue " style="width:250px" id="filterApply" />
+
+                            <br /><br />
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        }
+    </div>
+</div>
+<script>
+
+    $(document).ready(function () {
+        function CheckColorBack(complaintId, StageId) {
+            var ComplaintColorBack = "";
+            var ComplaintColorText="";
+            if (StageId == 1) {
+                ComplaintColorBack = "#C4F5BE"; ComplaintColorText = "#ffffff";
+            }
+            else if (StageId== 2) {
+                ComplaintColorBack = "#C6F1AF"; ComplaintColorText = "#ffffff";
+            }
+            else if (StageId == 3) {
+                ComplaintColorBack = "#9FF083"; ComplaintColorText = "#ffffff";
+            } else if (StageId == 4) {
+                ComplaintColorBack = "#91ED71"; ComplaintColorText = "#ffffff";
+            } else if (StageId == 5) {
+                ComplaintColorBack = "#83EF5D"; ComplaintColorText = "#000000";
+            } else if (StageId <= 9) {
+
+                ComplaintColorBack = "#00FF0C"; ComplaintColorText = "#000000";
+            } else if (StageId == 10 || StageId == 11 || StageId == 12) {
+
+                ComplaintColorBack = "#00FF0C"; ComplaintColorText = "#000000";
+            }
+            else if (StageId == 13) {
+
+                ComplaintColorBack = "#00FF0C"; ComplaintColorText = "#000000";
+            }
+            else if (StageId == 14 || StageId == 15 || StageId == 16) {
+
+                ComplaintColorBack = "#00FF0C"; ComplaintColorText = "#000000";
+            }
+            else if (StageId == 17) {
+
+                ComplaintColorBack = "#00FF0C"; ComplaintColorText = "#000000";
+            }
+            else if (StageId == 18 || StageId == 19 || StageId == 20) {
+
+                ComplaintColorBack = "#00FF0C"; ComplaintColorText = "#000000";
+            } else if (StageId == 21) {
+
+                ComplaintColorBack = "#00FF0C"; ComplaintColorText = "#000000";
+            }
+            else if (StageId == 22 || StageId == 23 || StageId == 24) {
+                //under review
+                ComplaintColorBack = "#00FF0C"; ComplaintColorText = "#000000";
+            }
+            else if (StageId == 25) {
+
+                ComplaintColorBack = "#00FF0C"; ComplaintColorText = "#000000";
+            }
+            else if (StageId == 26) {
+
+                ComplaintColorBack = "#00FF0C"; ComplaintColorText = "#000000";
+            }
+            return ComplaintColorBack;
+        }
+        @{ var ComplaintColorBack="";var ComplaintColorText="";}
+        @foreach (var comp in Model.annoucementsMultiple)
+        {
+
+                <text>
+                var complaintColor =@comp.Announcement_id
+            complaintColor = complaintColor + "Color"
+                 var colorBack = CheckColorBack(@comp.Announcement_id,@comp.stage_id);
+
+        document.getElementById(complaintColor).style.backgroundColor =colorBack;
+                document.getElementById(complaintColor).style.color = '#000000';
+
+             </text>
+            }
+
+
+        });
+
+    $("#filterApply").click(function () {
+        
+        var categoryId = $('#Categories option:selected').val();
+        var stageId = $('#stage option:selected').val();
+        var timePeriodId = $('#timePeriod option:selected').val();
+        var townId = @ViewBag.townId;
+        var UCID=@ViewBag.UCId;
+
+        var link = '@Url.Action("UCWiseAnnouncements", "Complaint", new { town_id = "towid", UC_id="UCID" ,category ="category_id", timePeriod= "time_id" })';
+        link = link.replace('towid', townId);
+        link = link.replace('UCID', UCID);
+        link = link.replace('category_id', categoryId);
+        link = link.replace('stage_id', stageId);
+        link = link.replace('time_id', timePeriodId);
+
+        link = link.replace('&amp;', '&');
+        link = link.replace('&amp;', '&');
+        link = link.replace('&amp;', '&');
+        link = link.replace('&amp;', '&');
+        link = link.replace('&amp;', '&');
+      
+        window.location.href = link;
+
+    });
+
+    $("#filterClear").click(function () {
+
+        var townId = @ViewBag.townId;
+         var UCID=@ViewBag.UCId;
+
+        var link = '@Url.Action("UCWiseAnnouncements", "Complaint", new { town_id = "towid", UC_id ="UCID"})';
+        link = link.replace('towid', townId);
+        link = link.replace('UCID', UCID);
+
+        link = link.replace('&amp;', '&');
+        link = link.replace('&amp;', '&');
+        //alert(link);
+        window.location.href = link;
+
+    })
+
+
+</script>

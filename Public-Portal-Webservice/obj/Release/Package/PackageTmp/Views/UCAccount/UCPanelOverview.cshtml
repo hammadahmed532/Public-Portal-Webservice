@@ -1,0 +1,155 @@
+﻿@model Public_Portal_Webservice.Models.viewModel.vmPCP
+
+@{
+    ViewBag.Title = "UC member Dashboard";
+    Layout = "~/Views/Shared/_LayoutAccountPage.cshtml";
+}
+
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:270px;margin-top:1px" id="mySidebar">
+    <br>
+    <div class="w3-container w3-row">
+        <div class="w3-col s4">
+            @{
+                String gender = Model.acc.gender;
+                gender = gender.ToLower() + ".png";
+
+            }
+
+            <img src="~/Image/ProfileImages/@gender" class="w3-circle w3-margin-right" style="width:46px">
+        </div>
+        <div class="w3-col s8 w3-bar">
+            <span>Welcome, <strong>@Model.acc.Full_name </strong></span><br>
+            <span><strong>@Model.acc.UCArea.UCName nazim </strong></span><br>
+            <a href="#" class="w3-bar-item w3-button"><i class="fa fa-user"></i></a>
+            <a href="#" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
+        </div>
+    </div>
+    <hr>
+    <div class="w3-container">
+        <h5>Dashboard</h5>
+    </div>
+    <div class="w3-bar-block">
+        <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
+        <a href="@Url.Action("UCPanelOverview", "UCAccount")" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-bank fa-fw"></i>  Overview</a>
+        <a href="@Url.Action("UCManageAreaComplaints", "UCAccount",new { orderby="severe",cat="all"})" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>  Manage area complaints</a>
+        <a href="@Url.Action("UCAccountSetting", "UCAccount")" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Settings</a><br><br>
+    </div>
+</nav>
+
+
+<!-- Overlay effect when opening sidebar on <asp:scriptmanager runat="server" />all screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:300px;margin-top:10px;">
+
+    <!-- Header -->
+    <header class="w3-container" style="padding-top:10px">
+        <h5><b><i class="fa fa-dashboard"></i> Dashboard</b></h5>
+    </header>
+
+    <div class="w3-row-padding w3-margin-bottom">
+        <div class="w3-col" style="width:190px">
+            <div class="w3-container w3-red w3-padding-16">
+                <div class="w3-left"><i class="fa fa-comment w3-xxxlarge"></i></div>
+                <div class="w3-right">
+                    <h3>52</h3>
+                </div>
+                <div class="w3-clear"></div>
+                <h4>Messages</h4>
+            </div>
+        </div>
+        <div class="w3-col" style="width:190px">
+            <div class="w3-container w3-blue w3-padding-16">
+                <div class="w3-left"><i class="fa fa-eye w3-xxxlarge"></i></div>
+                <div class="w3-right">
+                    <h3>99</h3>
+                </div>
+                <div class="w3-clear"></div>
+                <h4>Views</h4>
+            </div>
+        </div>
+        <div class="w3-col" style="width:190px">
+            <div class="w3-container w3-teal w3-padding-16">
+                <div class="w3-left"><i class="fa fa-share-alt w3-xxxlarge"></i></div>
+                <div class="w3-right">
+                    <h3>23</h3>
+                </div>
+                <div class="w3-clear"></div>
+                <h4>Shares</h4>
+            </div>
+        </div>
+        <div class="w3-col" style="width:190px">
+            <div class="w3-container w3-orange w3-text-white w3-padding-16">
+                <div class="w3-left"><i class="fa fa-users w3-xxxlarge"></i></div>
+                <div class="w3-right">
+                    <h3>50</h3>
+                </div>
+                <div class="w3-clear"></div>
+                <h4>Users</h4>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    <div class="w3-container">
+        <h3>General Stats</h3>
+        <p>Overall @Model.acc.Town.town_name town <strong>accounts</strong> of out karachi</p>
+        <div class="w3-grey">
+            <div class="w3-container w3-center w3-padding w3-green" style="width:@ViewBag.accountsPer%">@ViewBag.accountsPer%</div>
+        </div>
+
+        <p>Overall @Model.acc.Town.town_name town <strong>complaints</strong> of out karachi</p>
+        <div class="w3-grey">
+            <div class="w3-container w3-center w3-padding w3-orange" style="width:@ViewBag.ComplaintsPer%">@ViewBag.ComplaintsPer%</div>
+        </div>
+
+        <p>Overall <strong>resolved</strong> complaints out of @Model.acc.Town.town_name town</p>
+        <div class="w3-grey">
+            <div class="w3-container w3-center w3-padding w3-blue" style="width:@ViewBag.resolvedPer%">@ViewBag.resolvedPer%</div>
+        </div>
+
+
+    </div>
+    <hr>
+
+
+
+    <!-- End page content -->
+</div>
+
+<script type="text/javascript">
+    // Get the Sidebar
+    var mySidebar = document.getElementById("mySidebar");
+
+    // Get the DIV with overlay effect
+    var overlayBg = document.getElementById("myOverlay");
+
+    // Toggle between showing and hiding the sidebar, and add overlay effect
+    function w3_open() {
+        if (mySidebar.style.display === 'block') {
+            mySidebar.style.display = 'none';
+            overlayBg.style.display = "none";
+        } else {
+            mySidebar.style.display = 'block';
+            overlayBg.style.display = "block";
+        }
+    }
+
+    // Close the sidebar with the close button
+    function w3_close() {
+        mySidebar.style.display = "none";
+        overlayBg.style.display = "none";
+    }
+
+
+
+
+    //////map
+
+    
+</script>
+
+

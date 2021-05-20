@@ -1,0 +1,195 @@
+﻿@model Public_Portal_Webservice.Models.viewModel.vmPCP
+@{
+    ViewBag.Title = "Profile";
+    Layout = "~/Views/Shared/_LayoutAccountPage.cshtml";
+}
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="width:270px;margin-top:2px" id="mySidebar">
+    <br>
+    <div class="w3-container w3-row">
+        <div class="w3-col s4">
+
+            @{
+                String gender = Model.acc.gender;
+                gender = gender.ToLower() + ".png";
+
+            }
+
+            <img src="~/Image/ProfileImages/@gender" class="w3-circle w3-margin-right" style="width:46px">
+        </div>
+        <div class="w3-col s8 w3-bar">
+            <span>Welcome, <strong>@Model.acc.Full_name</strong></span><br>
+        </div>
+    </div>
+    <hr>
+    
+    <div class="">
+        <h5>Dashboard</h5>
+    </div>
+    <div class="w3-bar-block">
+        <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
+        <a href="@Url.Action("AccountProfile", "PublicAccount")" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-bank fa-fw"></i> Overview</a>
+        <a href="@Url.Action("AccountProfileInfo", "PublicAccount", new { orderby = "severe", cat = "all" })" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i> Account Information</a>
+
+        <a href="@Url.Action("AccountProfileSecurity", "PublicAccount")" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i> Setting</a>
+    </div>
+   
+</nav>
+
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:300px;margin-top:20px;">
+
+    <!-- Header -->
+    <header class="w3-container" style="padding-top:22px">
+        <h5><b><i class="fa fa-dashboard"></i> My Dashboard</b></h5>
+    </header>
+
+    <div class="w3-row-padding w3-margin-bottom">
+
+        <div class="w3-quarter">
+            <a href="@Url.Action("ViewMyComplaints","Complaint")">
+
+
+                <div class="w3-container w3-red w3-padding-16">
+                    <div class="w3-left"><i class="fa fa-comment w3-xxxlarge"></i></div>
+                    <div class="w3-right">
+                        <h3>
+                            @ViewBag.ComplaintCount
+                        </h3>
+                    </div>
+                    <div class="w3-clear"></div>
+                    <h4>My Complaints</h4>
+                </div>
+            </a>
+
+        </div>
+        <div class="w3-quarter">
+            <a href="#">
+                <div class="w3-container w3-red w3-padding-16">
+                    <div class="w3-left"><i class="fa fa-comment w3-xxxlarge"></i></div>
+                    <div class="w3-right">
+                        <h3>
+                            @ViewBag.SupCompCount
+                        </h3>
+                    </div>
+                    <div class="w3-clear"></div>
+                    <h4>My Supporting Complaints</h4>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="w3-container">
+
+        <h4>my complaints<span class="w3-right">@Model.comps.Count()</span></h4>
+        <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
+
+            <tr>
+                <th>ID </th>
+                <th>Complaint</th>
+                <th>Status</th>
+            </tr>
+            @foreach (var comps in Model.comps)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(Model => comps.complaint_Id)
+                    </td>
+                    <td width="500px">
+                        @Html.DisplayFor(Model => comps.c_title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(Model => comps.Status.stage_description)
+                    </td>
+                </tr>
+            }
+        </table><br>
+        <a href="~/TownAccount/manageUCAccounts" class="w3-button w3-dark-grey"><i class="fa fa-arrow-right"></i> View All</a>
+    </div>
+    <hr />
+    <div class="w3-container">
+        <h4>my supporting complaints <span class="w3-right">@Model.supcomps.Count()</span></h4>
+        <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
+
+            <tr>
+                <th>ID </th>
+                <th>Title</th>
+                <th>Status</th>
+            </tr>
+            @foreach (var comps in Model.supcomps)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(Model => comps.Complaint_id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(Model => comps.Complaint.c_title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(Model => comps.Complaint.Status.stage_description)
+                    </td>
+                </tr>
+            }
+        </table><br>
+        <a href="~/TownAccount/manageUCAccounts" class="w3-button w3-dark-grey"><i class="fa fa-arrow-right"></i> View All</a>
+    </div>
+
+    <hr />
+    <div class="w3-container">
+        <h4>added votes to <span class="w3-right">@Model.votes.Count()</span></h4>
+        <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
+
+            <tr>
+                <th>ID </th>
+                <th>Title</th>
+                <th>Status</th>
+            </tr>
+            @foreach (var comps in Model.votes)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(Model => comps.complaint_id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(Model => comps.Complaint.c_title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(Model => comps.Complaint.Status.stage_description)
+                    </td>
+                </tr>
+            }
+        </table><br>
+        <a href="~/TownAccount/manageUCAccounts" class="w3-button w3-dark-grey"><i class="fa fa-arrow-right"></i> View All</a>
+    </div>
+
+
+    <br>
+</div>
+
+<script>
+    // Get the Sidebar
+    var mySidebar = document.getElementById("mySidebar");
+
+    // Get the DIV with overlay effect
+    var overlayBg = document.getElementById("myOverlay");
+
+    // Toggle between showing and hiding the sidebar, and add overlay effect
+    function w3_open() {
+        if (mySidebar.style.display === 'block') {
+            mySidebar.style.display = 'none';
+            overlayBg.style.display = "none";
+        } else {
+            mySidebar.style.display = 'block';
+            overlayBg.style.display = "block";
+        }
+    }
+
+    // Close the sidebar with the close button
+    function w3_close() {
+        mySidebar.style.display = "none";
+        overlayBg.style.display = "none";
+    }
+</script>

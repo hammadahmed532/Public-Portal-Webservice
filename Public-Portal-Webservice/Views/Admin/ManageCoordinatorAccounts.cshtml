@@ -1,0 +1,115 @@
+﻿@model Public_Portal_Webservice.Models.viewModel.vmPCP
+
+@{
+    ViewBag.Title = "Town Dashboard";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:260px;margin-top:3px" id="mySidebar">
+    <br>
+    <div class="w3-container w3-row">
+
+        <div class="w3-col s8 w3-bar">
+            <span><strong>Admin</strong></span><br>
+            <span><strong></strong></span><br>
+        </div>
+    </div>
+    <hr>
+
+    <div class="w3-bar-block">
+        <a class="w3-button w3-padding-large w3-blue w3-margin-bottom" href="@Url.Action("AdminPanel", "Admin")"><span class="glyphicon glyphicon-chevron-left "></span>Back to main panel</a>
+
+    </div>
+    <div class="w3-container">
+        <h3>Towns</h3>
+    </div>
+
+    <div class="w3-bar-block">
+        @foreach (var town in Model.towns)
+        {
+            if (town.town_name.ToString().Equals(ViewBag.TownSelected))
+            {
+                <a href="@Url.Action("ManageCoordinatorAccountSelected", "Admin",new {T_id=town.town_id })" class="w3-bar-item w3-button w3-indigo w3-padding w3-text-white"><i class="fa fa-th-large fa-fw w3-margin-right"></i>@town.town_name</a>
+
+            }
+            else
+            {
+                <a href="@Url.Action("ManageCoordinatorAccountSelected", "Admin",new {T_id=town.town_id })" class="w3-bar-item w3-button  w3-padding w3-text-red"><i class="fa fa-th-large fa-fw w3-margin-right"></i>@town.town_name</a>
+            }
+
+        }
+
+    </div>
+</nav>
+
+<!-- Overlay effect when opening sidebar on <asp:scriptmanager runat="server" />all screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:270px;margin-top:10px;">
+
+    <header class="w3-container" style="padding-top:10px">
+        <h5><b><i class="fa fa-dashboard"></i> All town coordinator accounts</b></h5>
+    </header>
+    <h5 class="w3-right">accounts,@Model.accounts.Count()</h5>
+
+    <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
+
+        <tr class="w3-theme-d3">
+            <th>Area</th>
+            <th>
+                Member
+            </th>
+        </tr>
+        @foreach (var users in Model.accounts)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(Model => users.Town.town_name)
+                </td>
+                <td>
+                    @Html.DisplayFor(Model => users.Full_name)
+                </td>
+            </tr>
+        }
+    </table><br>
+
+    <!-- End page content -->
+</div>
+
+<script type="text/javascript">
+    // Get the Sidebar
+    var mySidebar = document.getElementById("mySidebar");
+
+    // Get the DIV with overlay effect
+    var overlayBg = document.getElementById("myOverlay");
+
+    // Toggle between showing and hiding the sidebar, and add overlay effect
+    function w3_open() {
+        if (mySidebar.style.display === 'block') {
+            mySidebar.style.display = 'none';
+            overlayBg.style.display = "none";
+        } else {
+            mySidebar.style.display = 'block';
+            overlayBg.style.display = "block";
+        }
+    }
+
+    // Close the sidebar with the close button
+    function w3_close() {
+        mySidebar.style.display = "none";
+        overlayBg.style.display = "none";
+    }
+
+
+
+
+    //////map
+
+
+
+</script>
+
+

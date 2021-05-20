@@ -1,0 +1,566 @@
+﻿@model Public_Portal_Webservice.Models.viewModel.vmPCP
+@{
+    ViewBag.Title = "Map Complaints";
+    Layout = "~/Views/Shared/_LayoutWithSection.cshtml";
+}
+
+
+<header class="w3-container w3-center w3-padding-32" style="position:relative;margin-top:20px">
+    <div style="position:absolute;top:0;left:0;right:0;bottom:0;background-image:url('@Url.Content("~/Image/khi-cover.jpg")');filter: blur(2px);z-index:-1;"></div>
+    <h1 style="color:white"><b>@ViewBag.header</b></h1>
+    <p style="color:white">total @ViewBag.count complaints </p>
+
+</header>
+
+
+<!-- Grid -->
+<div class="w3-row">
+
+
+
+    <!-- Introduction menu -->
+    <div class="w3-col l3">
+
+
+      
+        <!-- About Card -->
+        <div class="w3-card  w3-margin">
+            <div class="w3-container w3-padding " style="background-color:#929fba;color:white">
+                <h4 class="w3-center">Towns</h4>
+            </div>
+            <div class="w3-container w3-white">
+                
+                @if (ViewBag.townId == 0)
+                {
+                    <a href="@Url.Action("Map", "Complaint", new { Town_id = 0})" style="text-decoration:none" class="w3-button w3-block w3-black  w3-left-align "><span class="fa fa-th-large fa-fw w3-margin-right"></span>All</a>
+                }
+                else
+                { <a href="@Url.Action("Map", "Complaint", new { Town_id = 0})" style="text-decoration:none" class="w3-button w3-block  w3-left-align "><span class="fa fa-th-large fa-fw w3-margin-right"></span>All</a>
+
+                }
+                @foreach (var townn in Model.towns)
+                {
+
+                    if (townn.town_id.Equals(ViewBag.townId))
+                    {
+                        <a href="@Url.Action("Map", "Complaint", new { Town_id = townn.town_id})" style="text-decoration:none" class="w3-button w3-block  w3-left-align w3-large w3-large w3-black"><span class="fa fa-th-large fa-fw w3-margin-right"></span>@townn.town_name</a>
+
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Map", "Complaint", new { Town_id = townn.town_id})" style="text-decoration:none" class="w3-button w3-block  w3-left-align "><span class="fa fa-th-large fa-fw w3-margin-right"></span>@townn.town_name</a>
+
+                    }
+
+                }
+            </div>
+        </div>
+
+
+
+        
+        
+     
+
+        <!-- END Introduction Menu -->
+    </div>
+    <div class="w3-col l9 w3-margin-top w3-container">
+        <div class="w3-card ">
+            <div class="w3-container w3-padding" style="background-color:#929fba;color:white">
+                <h4>Filters</h4>
+            </div>
+            
+            <div class="w3-container w3-white">
+                <br />
+
+                <span style="margin-left:65px">UC:</span>
+
+                <select id="UCList" style="width:190px;">
+                    <option value="0">All</option>
+                    @if (Model.ucs != null)
+                    {
+
+                        foreach (var uc in Model.ucs)
+                        {
+                            if (uc.ID.Equals(ViewBag.UCId))
+                            {
+                                <option value="@uc.ID" selected>@uc.UCName</option>
+                            }
+                            else
+                            {
+
+                                <option value="@uc.ID">@uc.UCName</option>
+                            }
+                        }
+                    }
+
+                </select>
+                <span style="margin-left:30px">Categories:</span>
+
+                <select id="category" style="width:190px;">
+                    <option value="0">All</option>
+                    @foreach (var cat in Model.categories)
+                    {
+                        if (cat.category_id.Equals(ViewBag.categoryId))
+                        {
+                            <option value="@cat.category_id" selected>@cat.Category1</option>
+                        }
+                        else
+                        {
+
+                            <option value="@cat.category_id">@cat.Category1</option>
+                        }
+                    }
+
+                </select>
+                <span style="margin-left:30px">Status:</span>
+                <select id="stage" style="width:250px;">
+                    <option value="0">All</option>
+                    @if (1 == ViewBag.stageId)
+                    {
+                        <option value="1" selected>--Registered</option>
+                    }
+                    else
+                    {
+
+                        <option value="1">--Registered</option>
+                    }
+                    @if (2 == ViewBag.stageId)
+                    {
+
+                        <option value="2" selected>--Forwarded to concerned department</option>
+                    }
+                    else
+                    {
+                        <option value="2">--Forwarded to concerned department</option>
+
+                    }
+                    @if (3 == ViewBag.stageId)
+                    {
+                        <option value="3" selected>--Under Verification</option>
+                    }
+                    else
+                    {
+                        <option value="3">--Under Verification</option>
+                    }
+                    @if (4 == ViewBag.stageId)
+                    {
+                        <option value="4" selected>--Work Initiated</option>
+                    }
+                    else
+                    {
+                        <option value="4">--Work Initiated</option>
+
+                    }@if (5 == ViewBag.stageId)
+                    {
+                        <option value="5" selected>--near completion</option>
+                    }
+                    else
+                    {
+                        <option value="5">--near completion</option>
+
+                    }@if (9 == ViewBag.stageId)
+                    {
+                        <option value="9" selected>--Resolved</option>
+                    }
+                    else
+                    {
+                        <option value="9">--Resolved</option>
+                    }@if (40 == ViewBag.stageId)
+                    {
+                        <option value="40" selected>Already Resolved</option>
+                    }
+                    else
+                    {
+                        <option value="40">Already Resolved</option>
+
+                    }@if (10 == ViewBag.stageId)
+                    {
+                        <option value="10" selected>--Forwarded for Review</option>
+                    }
+                    else
+                    {
+                        <option value="10">--Forwarded for Review</option>
+
+                    }@if (13 == ViewBag.stageId)
+                    {
+                        <option value="13" selected>--Already Resolved</option>
+                    }
+                    else
+                    {
+                        <option value="13">--Already Resolved</option>
+                    }@if (50 == ViewBag.stageId)
+                    {
+                        <option value="50" selected>Budget</option>
+                    }
+                    else
+                    {
+                        <option value="50">Budget</option>
+                    }@if (18 == ViewBag.stageId)
+                    {
+                        <option value="18" selected>--Forwarded for Review</option>
+                    }
+                    else
+                    {
+                        <option value="18">--Forwarded for Review</option>
+                    }@if (21 == ViewBag.stageId)
+                    {
+                        <option value="21" selected>--Pending for next year budget</option>
+                    }
+                    else
+                    {
+                        <option value="21">--Pending for next year budget</option>
+
+                    }@if (60 == ViewBag.stageId)
+                    {
+                        <option value="60" selected>Bogus</option>
+
+                    }
+                    else
+                    {
+                        <option value="60">Bogus</option>
+                    }@if (14 == ViewBag.stageId)
+                    {
+
+                        <option value="14" selected>--Forwarded for Review</option>
+                    }
+                    else
+                    {
+                        <option value="14">--Forwarded for Review</option>
+
+                    }@if (17 == ViewBag.stageId)
+                    {
+                        <option value="17" selected>--Bogus complaint</option>
+                    }
+                    else
+                    {
+                        <option value="17">--Bogus complaint</option>
+                    }
+
+                </select>
+                <br />
+                <br />
+                <span style="">Time Period:</span>
+                <select id="timePeriod" style="width:190px">
+                    <option value="0">All</option>
+                    @if (3 == ViewBag.TimePeriodId)
+                    {
+                        <option value="3" selected>Last 3 months</option>
+                    }
+                    else
+                    {
+                        <option value="3">Last 3 months</option>
+                    }@if (6 == ViewBag.TimePeriodId)
+                    {
+                        <option value="6" selected>Last 6 months</option>
+                    }
+                    else
+                    {
+                        <option value="6">Last 6 months</option>
+                    }@if (9 == ViewBag.TimePeriodId)
+                    {
+                        <option value="9" selected>Last 9 months</option>
+                    }
+                    else
+                    {
+                        <option value="9">Last 9 months</option>
+                    }@if (12 == ViewBag.TimePeriodId)
+                    {
+                        <option value="12" selected>Last 12 months</option>}
+                    else
+                    {
+                        <option value="12">Last 12 months</option>}
+                    }@if (24 == ViewBag.TimePeriodId)
+                    {
+                        <option value="24" selected>Last 2 Years</option>}
+                    else
+                    {
+                        <option value="24">Last 2 Years</option>
+                    }
+                    @if (36 == ViewBag.TimePeriodId)
+                    {
+
+                        <option value="36" selected>Last 3 Year</option>
+                    }
+                    else
+                    {
+                        <option value="36">Last 3 Year</option>
+                    }
+
+
+                </select>
+
+                <hr />
+                <div class="w3-right">
+                    <input type="submit" value="Clear" class="w3-button w3-large  w3-hover-grey" style="width:200px;background-color:lightgrey;" id="filterClear" />
+                    <input type="submit" value="Apply" class="w3-button w3-large w3-blue w3-hover-border-dark-grey" style="width:250px" id="filterApply" />
+
+                    <br />
+                    <br />
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div id="parentMapContainter" style="z-index:0">
+
+            <div id="ExploreMap" style=" border: 1px solid #AAA;width:100%;height:750px;"></div>
+
+        </div>
+    </div>
+</div>
+<script>
+    var redMarker = L.AwesomeMarkers.icon({
+        icon: 'home',
+        markerColor:'pink'
+    });
+    var violetMarker = L.AwesomeMarkers.icon({
+        icon: 'home',
+        markerColor: 'violet'
+    });
+    var blueMarker = L.AwesomeMarkers.icon({
+        icon: 'home',
+        markerColor: 'blue'
+    });
+    var orangeMarker = L.AwesomeMarkers.icon({
+        icon: 'home',
+        markerColor: 'orange'
+    });
+    var yellowMarker = L.AwesomeMarkers.icon({
+        icon: 'home',
+        markerColor: 'yellow'
+    });
+    var purpleMarker = L.AwesomeMarkers.icon({
+        icon: 'home',
+        markerColor: 'purple'
+    });
+    var greyMarker = L.AwesomeMarkers.icon({
+        icon: 'home',
+        markerColor: 'gray'
+    });
+    var cadetblueMarker = L.AwesomeMarkers.icon({
+        icon: 'home',
+        markerColor: 'cadetblue'
+    });
+
+        var map = L.map('ExploreMap').setView([24.828564, 67.029205], 13);
+
+      @foreach (var coms in Model.comps) {
+        <text>
+    @*if (@coms.map_long== null ||@coms.map_lat== null) {
+    }else {*@
+            //var marker = L.marker([@coms.map_lat, @coms.map_long]).bindPopup('<h2><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = coms.complaint_Id, url = HttpContext.Current.Request.Url })">@coms.c_title</a></h2>').addTo(map); 
+        //}
+    
+    if (@coms.category_id== 1) {
+        var marker = L.marker(([@coms.map_lat, @coms.map_long]), { icon: redMarker }).addTo(map).bindPopup('<h2><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = coms.complaint_Id, url = HttpContext.Current.Request.Url })">@coms.c_title</a></h2>');
+
+    } else if (@coms.category_id== 2) {
+        var marker = L.marker(([@coms.map_lat, @coms.map_long]), { icon: violetMarker }).addTo(map).bindPopup('<h2><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = coms.complaint_Id, url = HttpContext.Current.Request.Url })">@coms.c_title</a></h2>');
+
+    } else if (@coms.category_id== 3) {
+        var marker = L.marker(([@coms.map_lat, @coms.map_long]), { icon: yellowMarker }).addTo(map).bindPopup('<h2><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = coms.complaint_Id, url = HttpContext.Current.Request.Url })">@coms.c_title</a></h2>');
+
+    } else if (@coms.category_id== 4) {
+        var marker = L.marker(([@coms.map_lat, @coms.map_long]), { icon: orangeMarker }).addTo(map).bindPopup('<h2><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = coms.complaint_Id, url = HttpContext.Current.Request.Url })">@coms.c_title</a></h2>');
+
+    } else if (@coms.category_id== 5) {
+        var marker = L.marker(([@coms.map_lat, @coms.map_long]), { icon: blueMarker }).addTo(map).bindPopup('<h2><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = coms.complaint_Id, url = HttpContext.Current.Request.Url })">@coms.c_title</a></h2>');
+
+    } else if (@coms.category_id== 6) {
+        var marker = L.marker(([@coms.map_lat, @coms.map_long]), { icon: purpleMarker }).addTo(map).bindPopup('<h2><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = coms.complaint_Id, url = HttpContext.Current.Request.Url })">@coms.c_title</a></h2>');
+
+    } else if (@coms.category_id== 7) {
+        var marker = L.marker(([@coms.map_lat, @coms.map_long]), { icon: cadetblueMarker }).addTo(map).bindPopup('<h2><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = coms.complaint_Id, url = HttpContext.Current.Request.Url })">@coms.c_title</a></h2>');
+
+    } else if (@coms.category_id== 8) {
+        var marker = L.marker(([@coms.map_lat, @coms.map_long]), { icon: greyMarker }).addTo(map).bindPopup('<h2><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = coms.complaint_Id, url = HttpContext.Current.Request.Url })">@coms.c_title</a></h2>');
+
+    }
+   
+    
+        </text>
+    }
+
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaGFzZWVia2hhdHJpIiwiYSI6ImNqbzA5czVpazJ1cmszcW50OGNrdnB5Z2UifQ.3b1kGAPFs2sBLcO8UuAXNw', {
+        maxZoom: 18,
+        id: 'mapbox.streets'
+    }).addTo(map);
+
+
+
+    @*$('#drop').change(
+
+        function () {
+            var RadioArray = [];
+
+            var SelectedStageId = $('#drop option:selected').val();
+            if (SelectedStageId == 0) {
+                
+               ExploreMap.remove();
+
+                $('<div id="ExploreMap" style=" border: 1px solid #AAA; width: 100 %; height: 750px;"></div>').appendTo("#parentMapContainter");
+                  var map = L.map('ExploreMap').setView([24.828564, 67.029205], 13);
+
+                     @foreach (var coms in Model.comps) {
+                         <text>
+                            var marker = L.marker([@coms.map_lat, @coms.map_long]).bindPopup('<h2><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = coms.complaint_Id, url = HttpContext.Current.Request.Url })">@coms.c_title</a></h2>').addTo(map);
+                        </text>
+                     }
+
+                    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaGFzZWVia2hhdHJpIiwiYSI6ImNqbzA5czVpazJ1cmszcW50OGNrdnB5Z2UifQ.3b1kGAPFs2sBLcO8UuAXNw', {
+                        maxZoom: 18,
+                        id: 'mapbox.streets'
+                    }).addTo(map);
+            } else {
+
+                @foreach (var coms in Model.comps)
+                {
+
+                    <text>
+                if (SelectedStageId == 5) {
+                    if (@coms.stage_id== 5 ||@coms.stage_id== 6 ||@coms.stage_id== 7 ||@coms.stage_id== 8) {
+                            RadioArray.push({
+                                complaint_Id: @coms.complaint_Id,
+                                Title: '@coms.c_title',
+                                StageId: @coms.stage_id,
+                                lat:@coms.map_lat,
+                                long:@coms.map_long
+                        });                       
+                    }
+                }else if (SelectedStageId == 10) {
+                    if (@coms.stage_id== 10 ||@coms.stage_id==11 ||@coms.stage_id== 12) {
+                        RadioArray.push({
+                            complaint_Id: @coms.complaint_Id,
+                            Title: '@coms.c_title',
+                            StageId: @coms.stage_id,
+                            lat:@coms.map_lat,
+                            long:@coms.map_long
+                        });
+                    }
+                }else if (SelectedStageId == 14) {
+                    if (@coms.stage_id== 14 ||@coms.stage_id==15 ||@coms.stage_id== 16) {
+                        RadioArray.push({
+                            complaint_Id: @coms.complaint_Id,
+                            Title: '@coms.c_title',
+                            StageId: @coms.stage_id,
+                            lat:@coms.map_lat,
+                            long:@coms.map_long
+                        });
+                    }
+                }
+                    else if (SelectedStageId == 18) {
+                    if (@coms.stage_id== 18 ||@coms.stage_id==19 ||@coms.stage_id== 20) {
+                        RadioArray.push({
+                            complaint_Id: @coms.complaint_Id,
+                            Title: '@coms.c_title',
+                            StageId: @coms.stage_id,
+                            lat:@coms.map_lat,
+                            long:@coms.map_long
+                        });
+                    }
+                }
+                 else if (SelectedStageId == 40) {
+                        var type ='@coms.complaint_Type';
+                    if (type =='already resolved') {
+                            RadioArray.push({
+                                complaint_Id: @coms.complaint_Id,
+                                Title: '@coms.c_title',
+                                StageId: @coms.stage_id,
+                                lat:@coms.map_lat,
+                                long:@coms.map_long
+                            });
+                        }
+                }
+                 else if (SelectedStageId == 50) {
+                        var type ='@coms.complaint_Type';
+                    if (type =='budget') {
+                            RadioArray.push({
+                                complaint_Id: @coms.complaint_Id,
+                                Title: '@coms.c_title',
+                                StageId: @coms.stage_id,
+                                lat:@coms.map_lat,
+                                long:@coms.map_long
+                            });
+                        }
+                    }else if (SelectedStageId == 60) {
+                        var type ='@coms.complaint_Type';
+                    if (type =='bogus') {
+                            RadioArray.push({
+                                complaint_Id: @coms.complaint_Id,
+                                Title: '@coms.c_title',
+                                StageId: @coms.stage_id,
+                                lat:@coms.map_lat,
+                                long:@coms.map_long
+                            });
+                        }
+                    }
+                else {
+                    if (SelectedStageId ==@coms.stage_id) {
+                        RadioArray.push({
+                            complaint_Id: @coms.complaint_Id,
+                            Title: '@coms.c_title',
+                            StageId: @coms.stage_id,
+                            lat:@coms.map_lat,
+                            long:@coms.map_long
+                    });
+                    }
+                }
+                </text>
+                }
+                ExploreMap.remove();
+
+                $('<div id="ExploreMap" style=" border: 1px solid #AAA; width: 100 %; height: 750px;"></div>').appendTo("#parentMapContainter");
+
+                var NewwMap = L.map('ExploreMap').setView([24.828564, 67.029205], 13);
+                for (let i = 0; i < RadioArray.length; i++){
+                    var link = '@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = "complaintIdd", url = HttpContext.Current.Request.Url })';
+                    link = link.replace('complaintIdd', RadioArray[i].complaint_Id);
+
+                    var marker = L.marker([RadioArray[i].lat, RadioArray[i].long]).bindPopup('<h2><a href="' + link + '">' + RadioArray[i].Title + '</a></h2>').addTo(NewwMap);
+                }
+                L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaGFzZWVia2hhdHJpIiwiYSI6ImNqbzA5czVpazJ1cmszcW50OGNrdnB5Z2UifQ.3b1kGAPFs2sBLcO8UuAXNw', {
+                    maxZoom: 18,
+                    id: 'mapbox.streets'
+                }).addTo(NewwMap);
+
+            }
+        }
+    );*@
+
+    $("#filterApply").click(function () {
+
+        var UCId = $('#UCList option:selected').val();
+        var categoryId = $('#category option:selected').val();
+        var stageId = $('#stage option:selected').val();
+        var timePeriodId = $('#timePeriod option:selected').val();
+        var townId = @ViewBag.townId;
+
+        var link = '@Url.Action("Map", "Complaint", new { Town_id = "town_id",UC_Id="UId", category="category_id", Status= "stage_id", timePeriod= "time_id" })';
+        link = link.replace('town_id', townId);
+        link = link.replace('UId', UCId);
+        link = link.replace('category_id', categoryId);
+        link = link.replace('stage_id', stageId);
+        link = link.replace('time_id', timePeriodId);
+
+        link = link.replace('&amp;', '&');
+        link = link.replace('&amp;', '&');
+        link = link.replace('&amp;', '&');
+        link = link.replace('&amp;', '&');
+      // alert(link);
+        window.location.href = link;
+        
+    }); 
+
+     $("#filterClear").click(function () {
+
+        var townId = @ViewBag.townId;
+
+        var link = '@Url.Action("Map", "Complaint", new { Town_id = "town_id"})';
+        link = link.replace('town_id', townId);
+
+        link = link.replace('&amp;', '&');
+       // alert(link);
+        window.location.href = link;
+
+    })
+</script>

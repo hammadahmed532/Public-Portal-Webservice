@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="PCP5ModelStoreContainer" CdmEntityContainer="PCP5Entities">
+    <EntitySetMapping Name="Accounts">
+      <EntityTypeMapping TypeName="PCP5Model.Account">
+        <MappingFragment StoreEntitySet="Account">
+          <ScalarProperty Name="Role" ColumnName="Role" />
+          <ScalarProperty Name="Account_id" ColumnName="Account_id" />
+          <ScalarProperty Name="Full_name" ColumnName="Full_name" />
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="isEmailVerified" ColumnName="isEmailVerified" />
+          <ScalarProperty Name="ActivationCode" ColumnName="ActivationCode" />
+          <ScalarProperty Name="phone_number" ColumnName="phone_number" />
+          <ScalarProperty Name="address" ColumnName="address" />
+          <ScalarProperty Name="map_long" ColumnName="map_long" />
+          <ScalarProperty Name="map_lat" ColumnName="map_lat" />
+          <ScalarProperty Name="email_address" ColumnName="email_address" />
+          <ScalarProperty Name="UC_Area_id" ColumnName="UC_Area_id" />
+          <ScalarProperty Name="Town_id" ColumnName="Town_id" />
+          <ScalarProperty Name="date_created" ColumnName="date_created" />
+          <ScalarProperty Name="profession" ColumnName="profession" />
+          <ScalarProperty Name="gender" ColumnName="gender" />
+          <ScalarProperty Name="department_id" ColumnName="department_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Categories">
+      <EntityTypeMapping TypeName="PCP5Model.Category">
+        <MappingFragment StoreEntitySet="Category">
+          <ScalarProperty Name="category_id" ColumnName="category_id" />
+          <ScalarProperty Name="Category1" ColumnName="Category" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Complaint_Det_Remarks">
+      <EntityTypeMapping TypeName="PCP5Model.Complaint_Det_Remarks">
+        <MappingFragment StoreEntitySet="Complaint_Det_Remarks">
+          <ScalarProperty Name="budgetYear" ColumnName="budgetYear" />
+          <ScalarProperty Name="severity_lvl" ColumnName="severity_lvl" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Complaint_id" ColumnName="Complaint_id" />
+          <ScalarProperty Name="Remarks_Field_Off" ColumnName="Remarks_Field_Off" />
+          <ScalarProperty Name="Remarks_Member" ColumnName="Remarks_Member" />
+          <ScalarProperty Name="Remarks_Coordinator" ColumnName="Remarks_Coordinator" />
+          <ScalarProperty Name="Remarks_Nazim" ColumnName="Remarks_Nazim" />
+          <ScalarProperty Name="updated_Image1" ColumnName="updated_Image1" />
+          <ScalarProperty Name="updated_Image2" ColumnName="updated_Image2" />
+          <ScalarProperty Name="updated_Image3" ColumnName="updated_Image3" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Complaints">
+      <EntityTypeMapping TypeName="PCP5Model.Complaint">
+        <MappingFragment StoreEntitySet="Complaints">
+          <ScalarProperty Name="Expected_amount" ColumnName="Expected_amount" />
+          <ScalarProperty Name="complaint_Id" ColumnName="complaint_Id" />
+          <ScalarProperty Name="c_title" ColumnName="c_title" />
+          <ScalarProperty Name="account_id" ColumnName="account_id" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="UC_area_id" ColumnName="UC_area_id" />
+          <ScalarProperty Name="map_long" ColumnName="map_long" />
+          <ScalarProperty Name="map_lat" ColumnName="map_lat" />
+          <ScalarProperty Name="date_creation" ColumnName="date_creation" />
+          <ScalarProperty Name="date_stage_2" ColumnName="date_stage_2" />
+          <ScalarProperty Name="date_stage_3" ColumnName="date_stage_3" />
+          <ScalarProperty Name="date_stage_4" ColumnName="date_stage_4" />
+          <ScalarProperty Name="date_stage_6" ColumnName="date_stage_6" />
+          <ScalarProperty Name="image1" ColumnName="image1" />
+          <ScalarProperty Name="image2" ColumnName="image2" />
+          <ScalarProperty Name="image3" ColumnName="image3" />
+          <ScalarProperty Name="stage_id" ColumnName="stage_id" />
+          <ScalarProperty Name="date_stage_5" ColumnName="date_stage_5" />
+          <ScalarProperty Name="category_id" ColumnName="category_id" />
+          <ScalarProperty Name="view_public" ColumnName="view_public" />
+          <ScalarProperty Name="admin_confirm" ColumnName="admin_confirm" />
+          <ScalarProperty Name="date_last_modified" ColumnName="date_last_modified" />
+          <ScalarProperty Name="Forwarded_By_Account_id" ColumnName="Forwarded_By_Account_id" />
+          <ScalarProperty Name="complaint_Type" ColumnName="complaint_Type" />
+          <ScalarProperty Name="is_Notified" ColumnName="is_Notified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Feedbacks">
+      <EntityTypeMapping TypeName="PCP5Model.Feedback">
+        <MappingFragment StoreEntitySet="Feedback">
+          <ScalarProperty Name="Feedback_id" ColumnName="Feedback_id" />
+          <ScalarProperty Name="complaint_id" ColumnName="complaint_id" />
+          <ScalarProperty Name="FeedbackMessage" ColumnName="FeedbackMessage" />
+          <ScalarProperty Name="Rating" ColumnName="Rating" />
+          <ScalarProperty Name="time_created" ColumnName="time_created" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PendingComplaints">
+      <EntityTypeMapping TypeName="PCP5Model.PendingComplaint">
+        <MappingFragment StoreEntitySet="PendingComplaints">
+          <ScalarProperty Name="p_id" ColumnName="p_id" />
+          <ScalarProperty Name="complaint_id" ColumnName="complaint_id" />
+          <ScalarProperty Name="severity_Lvl" ColumnName="severity_Lvl" />
+          <ScalarProperty Name="Year" ColumnName="Year" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Status">
+      <EntityTypeMapping TypeName="PCP5Model.Status">
+        <MappingFragment StoreEntitySet="Status">
+          <ScalarProperty Name="stage_id" ColumnName="stage_id" />
+          <ScalarProperty Name="stage_description" ColumnName="stage_description" />
+          <ScalarProperty Name="Status_Percent" ColumnName="Status_Percent" />
+          <ScalarProperty Name="Status_first" ColumnName="Status_first" />
+          <ScalarProperty Name="Status_Budget" ColumnName="Status_Budget" />
+          <ScalarProperty Name="Status_Bogus" ColumnName="Status_Bogus" />
+          <ScalarProperty Name="Status_Already_Done" ColumnName="Status_Already_Done" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SupportingComplaints">
+      <EntityTypeMapping TypeName="PCP5Model.SupportingComplaint">
+        <MappingFragment StoreEntitySet="SupportingComplaints">
+          <ScalarProperty Name="S_id" ColumnName="S_id" />
+          <ScalarProperty Name="Complaint_id" ColumnName="Complaint_id" />
+          <ScalarProperty Name="account_id" ColumnName="account_id" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="time_created" ColumnName="time_created" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Towns">
+      <EntityTypeMapping TypeName="PCP5Model.Town">
+        <MappingFragment StoreEntitySet="Town">
+          <ScalarProperty Name="town_id" ColumnName="town_id" />
+          <ScalarProperty Name="town_name" ColumnName="town_name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UCAreas">
+      <EntityTypeMapping TypeName="PCP5Model.UCArea">
+        <MappingFragment StoreEntitySet="UCAreas">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="UCName" ColumnName="UCName" />
+          <ScalarProperty Name="TownID" ColumnName="TownID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Votings">
+      <EntityTypeMapping TypeName="PCP5Model.Voting">
+        <MappingFragment StoreEntitySet="Voting">
+          <ScalarProperty Name="vote_id" ColumnName="vote_id" />
+          <ScalarProperty Name="complaint_id" ColumnName="complaint_id" />
+          <ScalarProperty Name="account_id" ColumnName="account_id" />
+          <ScalarProperty Name="time_created" ColumnName="time_created" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Roles">
+      <EntityTypeMapping TypeName="PCP5Model.Role">
+        <MappingFragment StoreEntitySet="Roles">
+          <ScalarProperty Name="Role_Description" ColumnName="Role_Description" />
+          <ScalarProperty Name="Role_Name" ColumnName="Role_Name" />
+          <ScalarProperty Name="Role_Id" ColumnName="Role_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Announcement1">
+      <EntityTypeMapping TypeName="PCP5Model.Announcement1">
+        <MappingFragment StoreEntitySet="Announcement">
+          <ScalarProperty Name="is_notified" ColumnName="is_notified" />
+          <ScalarProperty Name="complaint_type" ColumnName="complaint_type" />
+          <ScalarProperty Name="forwarded_by_account_id" ColumnName="forwarded_by_account_id" />
+          <ScalarProperty Name="date_last_modified" ColumnName="date_last_modified" />
+          <ScalarProperty Name="admin_confirm" ColumnName="admin_confirm" />
+          <ScalarProperty Name="category_id" ColumnName="category_id" />
+          <ScalarProperty Name="stage_id" ColumnName="stage_id" />
+          <ScalarProperty Name="image_file_3" ColumnName="image_file_3" />
+          <ScalarProperty Name="image_file_2" ColumnName="image_file_2" />
+          <ScalarProperty Name="image_file_1" ColumnName="image_file_1" />
+          <ScalarProperty Name="date_stage_6" ColumnName="date_stage_6" />
+          <ScalarProperty Name="date_stage_5" ColumnName="date_stage_5" />
+          <ScalarProperty Name="date_stage_4" ColumnName="date_stage_4" />
+          <ScalarProperty Name="date_stage_3" ColumnName="date_stage_3" />
+          <ScalarProperty Name="date_stage_2" ColumnName="date_stage_2" />
+          <ScalarProperty Name="date_creation" ColumnName="date_creation" />
+          <ScalarProperty Name="map_lat" ColumnName="map_lat" />
+          <ScalarProperty Name="map_long" ColumnName="map_long" />
+          <ScalarProperty Name="UC_Area_id" ColumnName="UC_Area_id" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="account_id" ColumnName="account_id" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="Announcement_id" ColumnName="Announcement_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

@@ -1,0 +1,271 @@
+﻿@model Public_Portal_Webservice.Models.viewModel.vmPCP
+
+@{
+    ViewBag.Title = "Register Complaint";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class=" w3-content" style="max-width:1600px">
+
+    <!-- Sidebar/menu -->
+    @*<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:290px;text-align:center" id="mySidebar">
+            <br>
+            <div class="w3-container">
+                <a href="#" onclick="w3_close()" class="w3-hide-large w3-right w3-jumbo w3-padding w3-hover-grey" title="close menu">
+                    <i class="fa fa-remove"></i>
+                </a>
+                @if (Request.IsAuthenticated)
+                {
+                    String gender = Model.acc.gender;
+                    gender = gender.ToLower() + ".png";
+
+                    <img src="~/Image/ProfileImages/@gender" class="w3-circle w3-margin-right" style="width:80px">
+
+
+
+                    <a href="~/PublicAccount/AccountProfile" style="color:#e0474c;font:bolder;text-align:center">
+                        @Model.acc.Full_name
+                    </a><br />
+                }
+
+
+                <hr />
+                <a href="@Url.Action("ViewMyComplaints", "Complaint")" class="w3-bar-item w3-button w3-padding w3-block"><i class="glyphicon glyphicon-pencil"></i> My complaints</a>
+                <hr>
+            </div>
+            <div class="w3-margin-bottom">
+                <p href="#" class="w3-bar-item  w3-padding w3-large">   @Model.acc.UCArea.UCName UC complaints</p>
+                @foreach (var comp in Model.comps)
+                {
+                    <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comp.complaint_Id,url=HttpContext.Current.Request.Url })" class="w3-bar-item w3-button w3-padding w3-blue w3-block">@comp.c_title</a><br />
+
+                }
+            </div>
+
+        </nav>*@
+
+    <!-- !PAGE CONTENT! -->
+    <div class="w3-main w3-row w3-light-gray ">
+        <div class="w3-col  w3-margin-top" style="width:22%">
+
+            @if (Request.IsAuthenticated)
+            {
+                String gender = Model.acc.gender;
+                gender = gender.ToLower() + ".png";
+                <img src="~/Image/ProfileImages/@gender" class="w3-circle" style="width:150px;text-align:center;display:block; margin: 0 auto;">
+
+                <a href="~/PublicAccount/AccountProfile" style="color:#e0474c;font:bolder;text-align:center;display:block">
+                    @Model.acc.Full_name
+                </a>
+                <br />
+            }
+
+            @*<div class="">
+                    <p href="#" class="w3-bar-item  w3-padding ">   @Model.acc.UCArea.UCName UC complaints</p>
+                    @foreach (var comp in Model.comps)
+                    {
+                        <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comp.complaint_Id,url=HttpContext.Current.Request.Url })" class="w3-bar-item w3-button w3-padding w3-blue w3-block">@comp.c_title</a><br />
+
+                    }
+                </div>*@
+
+            <div class=" w3-margin">
+                <div class="w3-container w3-padding " style="background-color:#929fba;color:white">
+                    <h4>Recent Complaint of @Model.acc.UCArea.UCName UC</h4>
+                </div>
+                <ul class="w3-ul w3-hoverable w3-white">
+                    @foreach (var severeComps in Model.comps)
+                    {
+                        <li class="w3-padding-16">
+                            <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = severeComps.complaint_Id })">
+                                <img src="@Url.Content(severeComps.image1)" alt="Image" class="w3-left w3-margin-right" style="width:90px">
+                                <span class="w3-medium">@severeComps.c_title</span><br>
+                                @{ var complaintColor = severeComps.complaint_Id.ToString() + "SevereCompColor";}
+                                <div>
+                                    <span style="color:red">
+                                        @severeComps.Status.Status_first
+                                    </span>
+                                </div>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="w3-col w3-white" style="width:70%">
+
+            <!-- Header -->
+            <header id="portfolio">
+
+                <div class="w3-container ">
+
+                    <h1>
+                        <b>
+                            New Complaint Form
+                        </b>
+                    </h1>
+
+                    @using (Html.BeginForm("RegisterNewComplaint", "Complaint", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-horizontal">
+                            <hr />
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <h5 style="color:red">
+                                <b>
+                                    @ViewBag.Message
+                                </b>
+                            </h5>
+                            <div class="form-group">
+                                <label class="control-label col-md-2" id="lbll">Enter Title</label>
+                                <div class="col-md-12">
+                                    @Html.EditorFor(model => model.compReg.c_title, new { htmlAttributes = new { style = "max-width: 90%;", @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.compReg.c_title, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2" id="lbll">Select Category</label>
+                                @{
+                                    List<SelectListItem> categories = new List<SelectListItem>();
+
+                                    foreach (var item in Model.categories)
+                                    {
+
+                                        categories.Add(new SelectListItem { Text = item.Category1, Value = item.category_id.ToString() });
+
+                                    }
+                                }
+                                <div class="col-md-12">
+
+                                    @Html.DropDownListFor(model => model.compReg.category_id, categories, "-- Select Category --", new { style = "max-width:90%;", @class = "form-control" })
+                                </div>
+
+                            </div>
+
+
+
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2" id="lbll">Images</label>
+                                <div class="col-md-12">
+
+                                    @Html.TextBoxFor(Model => Model.compReg.imageFile1, new { type = "file", required = "required image 1" })
+                                    @Html.ValidationMessageFor(model => model.compReg.imageFile1, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(Model => Model.compReg.imageFile2, new { type = "file" })
+                                    @Html.ValidationMessageFor(model => model.compReg.imageFile2, "", new { @class = "text-danger" })
+                                    @Html.TextBoxFor(Model => Model.compReg.imageFile3, new { type = "file" })
+                                    @Html.ValidationMessageFor(model => model.compReg.imageFile3, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2" id="lbll">Enter Description</label>
+                                <div class="col-md-12">
+
+                                    @Html.TextAreaFor(Model => Model.compReg.description, 7, 90, htmlAttributes: new { style = "max-width: 90%;" })<br />
+                                    @Html.ValidationMessageFor(model => model.compReg.description, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2"></label>
+                                <div class="col-md-12">
+                                    <h4 class="col-md-10">Drag the marker to the problem location, and submit form </h4>
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2"></label>
+                                <div class="col-md-12">
+                                    <div id="registrationMap" style="height: 300px;width:90%; border: 1px solid #AAA;z-index:0"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Longitude</label>
+                                <div class="col-md-12">
+
+                                    @Html.EditorFor(Model => Model.compReg.map_long, new { htmlAttributes = new { @Value = Model.acc.map_long, @readonly = "readonly", @class = "form-control", @id = "longitude", style = "max-width:90%;", } })
+                                    @Html.ValidationMessageFor(model => model.compReg.map_long, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Latitude</label>
+                                <div class="col-md-12">
+
+                                    @Html.EditorFor(Model => Model.compReg.map_lat, new { htmlAttributes = new { @Value = Model.acc.map_lat, @readonly = "readonly", @class = "form-control", @id = "latitude", style = "max-width:90%;", } })
+                                    @Html.ValidationMessageFor(model => model.compReg.map_lat, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+                            <div class="w3-row-padding">
+                            </div>
+                            @Html.ValidationMessage("ErrorExist", new { @class = "text-danger" })
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2"></label>
+
+                                <div class="col-md-12">
+                                    <input type="submit" value="Submit Complaint" class="w3-btn w3-block  w3-blue w3-margin-bottom" style="margin-top:20px" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+
+            </header>
+
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
+     
+}
+<script>
+
+
+
+
+    navigator.geolocation.getCurrentPosition(function (location) {
+        document.getElementById('latitude').value = location.coords.latitude;
+        document.getElementById('longitude').value = location.coords.longitude;
+        var GreenMarker = L.AwesomeMarkers.icon({
+            icon: 'home',
+            markerColor: 'green'
+        });
+        var latlng = new L.LatLng(location.coords.latitude, location.coords.longitude);
+
+        var map = L.map('registrationMap').setView(latlng, 15);
+
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaGFzZWVia2hhdHJpIiwiYSI6ImNqbzA5czVpazJ1cmszcW50OGNrdnB5Z2UifQ.3b1kGAPFs2sBLcO8UuAXNw', {
+            maxZoom: 18,
+            id: 'mapbox.streets'
+            //     id: 'mapbox.light'
+        }).addTo(map);
+
+        var marker = L.marker(latlng, {
+            draggable: true,
+            icon: GreenMarker
+        }).addTo(map);
+
+        marker.on('dragend', function (e) {
+            document.getElementById('latitude').value = marker.getLatLng().lat;
+            document.getElementById('longitude').value = marker.getLatLng().lng;
+        });
+    });
+
+    ////////////////////////////////////////
+
+</script>

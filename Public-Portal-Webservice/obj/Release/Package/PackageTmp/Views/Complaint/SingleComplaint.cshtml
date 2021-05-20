@@ -1,0 +1,1020 @@
+﻿@model Public_Portal_Webservice.Models.viewModel.vmPCP
+
+
+@{
+    ViewBag.Title = "Complaint details";
+    Layout = "~/Views/Shared/_LayoutSingle.cshtml";
+}
+
+@*<div class="w3-light-grey w3-content" style="max-width:1600px">
+
+     Sidebar/menu
+    <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:290px;text-align:center" id="mySidebar">
+        <br>
+        <div class="">
+            <a href="#" onclick="w3_close()" class="w3-hide-large w3-right w3-jumbo w3-padding w3-hover-grey" title="close menu">
+                <i class="fa fa-remove"></i>
+            </a>
+            @if (Request.IsAuthenticated)
+            {
+                String gender = Model.acc.gender;
+                gender = gender.ToLower() + ".png";
+
+                <img src="~/Image/ProfileImages/@gender" style="height:150px; width:190px;" class="w3-round" />
+
+                <br />
+
+
+                <a href="~/PublicAccount/AccountCheckAndRedirect" style="color:#e0474c;font:bolder;text-align:center">
+                    @Model.acc.Full_name
+                </a><br />
+
+                <hr />
+                <strong>
+                    <a href="~/Complaint/MyAreaComplaints" style="color:#e0474c;font:bolder">My Area Complaints</a><br />
+                </strong>
+            }
+            @if ("yes".Equals(ViewBag.hasTownId))
+            {
+                <a href="~/Complaint/TownWiseComplaint?T_ID=@Model.town.town_id" class="w3-button w3-padding-large w3-blue w3-margin-bottom">
+                    <span class="glyphicon glyphicon-chevron-left "> </span>@Model.town.town_name Town Complaints
+                </a>
+                <h4><b>Union Councils of @ViewBag.TownName town</b></h4>
+
+                <div class="w3-bar-block w3-margin-bottom" style="padding-bottom:20px">
+                    @foreach (var uc in Model.ucs)
+                    {
+                        if (uc.UCName.ToString().Equals(ViewBag.UCSelected))
+                        {
+                            <a href="~/Complaint/UCComplaint?UC=@uc.ID" class="w3-bar-item w3-button w3-blue w3-padding w3-text-white"><i class="fa fa-th-large fa-fw w3-margin-right"></i>@uc.UCName</a>
+
+                        }
+                        else
+                        {
+                            <a href="~/Complaint/UCComplaint?UC=@uc.ID" class="w3-bar-item w3-button  w3-padding w3-text-red"><i class="fa fa-th-large fa-fw w3-margin-right"></i>@uc.UCName</a>
+                        }
+
+                    }
+                </div>
+            }
+            else
+            {
+                <a href="~/Complaint/Index" class="w3-button w3-padding-large w3-blue w3-margin-bottom">
+                    <span class="glyphicon glyphicon-chevron-left "> </span>Town Selection/Map
+                </a>
+            }
+            <br><hr>
+        </div>
+
+    </nav>*@
+
+
+
+
+
+
+
+@*<!-- Page Container -->
+    <div class="w3-container w3-content w3-margin-top" style="max-width:2550px;">
+        <!-- The Grid -->
+        <div class="w3-row">
+            <!-- Left Column -->
+            <div class="w3-col m3" style="max-width:350px;">
+                @if (Request.IsAuthenticated)
+                {
+                    <!-- Profile -->
+                    <div class="w3-card w3-round w3-white">
+                        <div class="w3-container">
+
+                            @{
+                                String gender = Model.acc.gender;
+                                gender = gender.ToLower() + ".png";
+
+
+                                <h4 class="w3-center">@Model.acc.Full_name</h4>
+                                <p class="w3-center"><img src="~/Image/ProfileImages/@gender" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
+                            }
+                            <hr>
+                            <p><i class="fa fa-home fa-fw w3-margin-right w3-text-theme"></i>@Model.acc.UCArea.UCName UC Resident</p>
+
+                        </div>
+                    </div>
+                    <br>
+                }
+
+                <!-- Accordion -->
+                @if (User.IsInRole("public"))
+                {
+                    <div class="w3-card w3-round">
+                        <div class="w3-white">
+                            <a href="@Url.Action("ViewMyComplaints", "Complaint")" style="text-decoration:none" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-circle-o-notch fa-fw w3-margin-right"></i> My complaints</a>
+
+                            <a href="@Url.Action("MyAreaComplaints", "Complaint")" style="text-decoration:none" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-circle-o-notch fa-fw w3-margin-right"></i> My area complaints</a>
+                        </div>
+                    </div>
+                }
+                else if (!Request.IsAuthenticated)
+                {
+
+
+                }
+                else
+                {
+                    <div class="w3-card w3-round">
+                        <div class="w3-white">
+                            <a href="@Url.Action("MyAreaComplaints", "Complaint")" style="text-decoration:none" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-circle-o-notch fa-fw w3-margin-right"></i> My area complaints</a>
+                        </div>
+                    </div>
+
+                }
+                <br>
+
+                <!-- Interests -->
+                <div class="w3-card w3-round ">
+                    <div class="w3-theme-l5">
+
+                        <h4 class="w3-button w3-block w3-theme-d4 w3-left-align">Union Councils of @ViewBag.TownName town</b></h4>
+                        @foreach (var uc in Model.ucs)
+                        {
+                            if (uc.UCName.ToString().Equals(ViewBag.UCSelected))
+                            {
+                                <a href="@Url.Action("UCComplaint", "Complaint",new { UC=uc.ID})" style="text-decoration:none" class="w3-button w3-block w3-theme-d3 w3-left-align w3-large"><span class="fa fa-th-large fa-fw w3-margin-right"></span>@uc.UCName</a>
+
+                            }
+                            else
+                            {
+                                @*<a href="~/Complaint/UCComplaint?UC=@uc.ID" style="text-decoration:none" class="w3-button w3-block w3-theme-l5 w3-left-align"><span class="fa fa-th-large fa-fw w3-margin-right"></span>@uc.UCName</a>
+                                <a href="@Url.Action("UCComplaint", "Complaint",new { UC=uc.ID})" style="text-decoration:none" class="w3-button w3-block w3-theme-l1 w3-left-align"><span class="fa fa-th-large fa-fw w3-margin-right"></span>@uc.UCName</a>
+
+                            }
+                        }
+
+                    </div>
+                </div>
+                <br>
+
+
+
+                <!-- End Left Column -->
+            </div>
+
+
+
+            @* body content after sidebar
+
+            <div class="w3-col m9 w3-margin-left   ">
+
+
+                    <!-- Top menu on small screens -->
+                    <header class="w3-bar w3-top w3-hide-large w3-black w3-xlarge">
+                        <span class="w3-bar-item">@Model.com.c_title</span>
+                        <a href="javascript:void(0)" class="w3-right w3-bar-item w3-button" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+                    </header>
+
+                    <!-- Overlay effect when opening sidebar on small screens -->
+                    <div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+                    <!-- !PAGE CONTENT! -->
+                    <!-- Push down content on small screens -->
+                    <div class="w3-hide-large" style="margin-top:80px"></div>
+
+                    <!-- Slideshow Header -->
+                    <div class="w3-container" id="apartment">
+                        <h2 class="w3-text-black">@Model.com.c_title</h2> <h5 class="w3-text-red">@{var tempval = TempData["Status"]; } @TempData["Status"]  </h5>
+                        <div class="w3-display-container mySlides">
+                            <img src="@Url.Content(Model.com.image1)" style="height:600px;width:75%;margin-bottom:-6px">
+                            <div class="w3-display-bottomleft w3-container w3-black">
+                                <p>Image 1</p>
+                            </div>
+                        </div>
+                        <div class="w3-display-container mySlides">
+                            <img src="@Url.Content(Model.com.image2)" style="height:600px;width:75%;margin-bottom:-6px">
+                            <div class="w3-display-bottomleft w3-container w3-black">
+                                <p>Image 2</p>
+                            </div>
+                        </div>
+                        <div class="w3-display-container mySlides">
+                            <img src="@Url.Content(Model.com.image3)" style="height:600px;width:75%;margin-bottom:-6px">
+                            <div class="w3-display-bottomleft w3-container w3-black">
+                                <p>Image 3</p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="w3-row-padding w3-section">
+                        <div class="w3-col s3">
+                            <img class="demo w3-opacity w3-hover-opacity-off" src="@Url.Content(Model.com.image1)" style="height:225px;width:225px;cursor:pointer" onclick="currentDiv(1)" title="image 1">
+                        </div>
+                        <div class="w3-col s3">
+                            <img class="demo w3-opacity w3-hover-opacity-off" src="@Url.Content(Model.com.image2)" style="height:225px;width:225px;cursor:pointer" onclick="currentDiv(2)" title="image 2">
+                        </div>
+                        <div class="w3-col s3">
+                            <img class="demo w3-opacity w3-hover-opacity-off" src="@Url.Content(Model.com.image3)" style="height:225px;width:225px;cursor:pointer" onclick="currentDiv(3)" title="image 3">
+                        </div>
+
+                    </div>
+
+                    <div class="w3-container">
+                        <h4><strong>Status</strong></h4>
+                        <div class="w3-row w3-large">
+
+                            <div class="w3-col s6">
+
+                                @if (Model.com.stage == 1)
+                                {<h4><i class="fa fa-fw fa-clock-o"></i>Complaint Waiting for Approval</h4>
+                                    <h4><i class="fa fa-fw fa-clock-o"></i>Registered at: @Model.com.date_creation</h4>
+                                }
+                                else if (Model.com.stage == 2)
+                                {
+                                    <h4><i class="fa fa-fw fa-clock-o"></i>Waiting for Approval of Budget</h4>
+                                    <h4><i class="fa fa-fw fa-clock-o"></i>Registered at: @Model.com.date_approval_for_budget</h4>
+                                }
+                                else if (Model.com.stage == 3)
+                                { <h4><i class="fa fa-fw fa-clock-o"></i>Complaint Approved Work will start shortly</h4>
+                                    <h4><i class="fa fa-fw fa-clock-o"></i>Registered at: @Model.com.date_approval</h4>
+                                }
+                                else if (Model.com.stage == 4)
+                                { <h4><i class="fa fa-fw fa-clock-o"></i>Complaint at 40% Completion</h4>
+                                    <h4><i class="fa fa-fw fa-clock-o"></i>Registered at: @Model.com.date_progress_40</h4>
+                                }
+                                else if (Model.com.stage == 5)
+                                { <h4><i class="fa fa-fw fa-clock-o"></i>Complaint nearly resolved: 70% </h4>
+                                    <h4><i class="fa fa-fw fa-clock-o"></i>Registered at: @Model.com.date_progress_70</h4>
+                                }
+                                else if (Model.com.stage == 6)
+                                {
+                                    <h4><i class="fa fa-fw fa-clock-o"></i>Complaint Resolved</h4>
+                                    <h4><i class="fa fa-fw fa-clock-o"></i>Registered at: @Model.com.date_finished</h4>
+                                }
+
+
+                            </div>
+                        </div>
+
+
+                        <h4><strong>Location</strong></h4>
+                        <h4>
+
+                            @Model.com.UCArea.UCName UC, @ViewBag.TownName Town
+                        </h4>
+                        <h4><strong>Category</strong></h4>
+                        <h4>@Model.com.Category.Category1</h4>
+                        <hr>
+
+                        <h4><strong>Description</strong></h4>
+                        <h4>@Model.com.description</h4>
+                        <hr>
+
+
+
+
+
+                    </div>
+
+
+                    <div class=" w3-panel w3-topbar w3-bottombar w3-border-dark-grey">
+
+                        <label>
+                            Total Votes = @ViewBag.TotalVotes
+                        </label>
+
+
+                        @if ("yes".Equals(ViewBag.canAddVote))
+                        {
+                            using (Html.BeginForm("addVote", "Complaint", FormMethod.Post))
+                            {
+
+                                <button type="submit" value="submit" class="w3-button w3-white">
+                                    <span class="glyphicon glyphicon-plus-sign"></span> Add vote to increase severity
+                                </button>
+
+
+                            }
+                        }
+                        else if ("alreadyAdded".Equals(ViewBag.canAddVote))
+                        {
+                            using (Html.BeginForm("DeleteVote", "Complaint", FormMethod.Post))
+                            {
+                                <button type="submit" value="submit" class="w3-button w3-blue">
+                                    <span class="glyphicon glyphicon-minus-sign"></span> Already voted, remove vote
+                                </button>
+                            }
+                        }
+
+
+
+
+
+
+                        <br />
+
+                    </div>
+
+
+
+
+
+
+                    <!-- End page content -->
+                    <!-- Subscribe Modal -->
+                    <div id="subscribe" class="w3-modal">
+                        <div class="w3-modal-content w3-animate-zoom w3-padding-large">
+                            <div class="w3-container w3-center w3-white ">
+                                @using (Html.BeginForm("SingleComplaint", "Complaint", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                {
+                                    @Html.AntiForgeryToken()
+
+
+                                    <i onclick="document.getElementById('subscribe').style.display='none'" class="fa fa-remove w3-button w3-xlarge w3-right w3-transparent"></i>
+                                    <h2 class="w3-wide"></h2>
+                                    <p>Add to increase severity of this complaint</p>
+
+                                    <p>
+                                        @Html.TextAreaFor(Model => Model.supcomp.Description, 7, 90, htmlAttributes: new { style = "max-width: 90%;" })
+
+                                    </p>
+                                    <input type="submit" value="Submit Supporting Complaint" class="w3-button w3-padding-large w3-blue w3-margin-bottom" />
+
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w3-panel ">
+                        <div>
+                            @if ("yes".Equals(ViewBag.SupportingCompMessage))
+                            {
+                                <p><button class="w3-button w3-blue w3-third" onclick="document.getElementById('subscribe').style.display='block'">Add Supporting Complaint</button></p>
+
+                            }
+                            else
+                            {
+                                <h4><strong>@ViewBag.SupportingCompMessage</strong></h4>
+                            }
+                        </div>
+                        <br />
+                        <br />
+
+                        <div class="w3-right " style="font-size:large"> Total  Supporting Complaints @ViewBag.TotalSupComps</div>
+                        <h2 style="font:bold;">
+                            Supporting Complaints
+
+                        </h2>
+                        <table class="table">
+
+                            @{int isEven = 0;
+                                var color = "";
+                                var font = "";
+                            }
+                            @{int coun = 0; }
+                            @foreach (var comm in Model.supcomps)
+                            {
+                                if (isEven % 2 == 0)
+                                {
+                                    font = "black";
+                                    color = "#FEF6DF";
+                                }
+                                else
+                                {
+                                    font = "black";
+                                    color = "#F1F1F1";
+                                }
+                                isEven++;
+                                coun++;
+
+                                <tr>
+                                    <td style="background-color:#72BCD4;color:@font">@coun</td>
+
+                                    <th style="background-color:#72BCD4;color:@font">Anonymous Posted:</th>
+
+                                    <td style="background-color:#72BCD4;color:@font">Date:@comm.time_created.Value.ToShortDateString()</td>
+
+                                </tr>
+                                <tr>
+
+                                    <th style="background-color:#D4EAF2;color:@font">Desciption:</th>
+                                    <td style="background-color:#D4EAF2;color:@font">@comm.Description</td>
+                                    <td style="background-color:#D4EAF2;color:@font"></td>
+                                </tr>
+
+                                <tr><th></th><td></td><td></td></tr>
+                            }
+                        </table>
+
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="w3-content " style="max-width:1500px; margin-top:40px">
+    <div class="w3-container">
+        <a href="@ViewBag.returnUrl" class="w3-button w3-padding-large  w3-third w3-row-padding" style="background-color:#929fba;color:white">Back to complaints</a>
+
+    </div>
+    <br />
+
+    <!-- The Grid -->
+    <div class="w3-row-padding">
+
+        <!-- Left Column -->
+        <div class=" w3-twothird">
+            <h4 style="color:red">@ViewBag.Status</h4>
+
+            <div class="w3-white w3-text-grey w3-card-4">
+                <div class="w3-display-container">
+                    <img src="@Url.Content(Model.com.image1)" style="width:100%;height:336px;" alt="Avatar">
+                    <div class="w3-display-bottomleft w3-container w3-text-black">
+
+                    </div>
+                </div><br />
+                <div class="w3-container">
+                    <p class="w3-large"><b><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>@Model.com.UCArea.UCName UC</b></p>
+
+                    <hr>
+
+                    <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>@Model.com.Category.Category1 Category</b></p>
+                    <hr>
+                    @*<p class="w3-large w3-text-theme"><b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>Progress</b></p>*@
+
+                    @*<div class="w3-light-grey w3-round-xlarge w3-small">
+                        <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:@Model.com.Status.Status_Percent.ToString()%">@Model.com.Status.Status_Percent.ToString()%</div>
+                    </div>*@
+
+                    @if ("yes".Equals(ViewBag.canAddVote))
+                    {
+
+                        <p class="w3-large w3-text-theme"><b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>@Model.com.Votings.Count votes, <a href="@Url.Action("addVote", "Complaint", new { complaint_id = Model.com.complaint_Id })" style="color:blue">Click to increase severity </a></b></p>
+
+                    }
+                    else if ("alreadyAdded".Equals(ViewBag.canAddVote))
+                    {
+                        <p class="w3-large w3-text-theme"><b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>@Model.com.Votings.Count votes, <a href="@Url.Action("DeleteVote", "Complaint", new { complaint_id = Model.com.complaint_Id })" style="color:red">Already voted </a></b></p>
+
+                    }
+                    else
+                    { <p class="w3-large w3-text-theme"><b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>@Model.com.Votings.Count votes </b></p>
+
+                }
+
+                    <hr />
+                    @if ("yes".Equals(ViewBag.SupportingCompMessage))
+                    {
+                        <p><button class="w3-button w3-block  w3-blue-grey" onclick="document.getElementById('subscribe').style.display='block'">Add Supporting Complaint</button></p>
+
+                    }
+                    else
+                    {
+                        <h4><strong>@ViewBag.SupportingCompMessage</strong></h4>
+                    }
+
+                    <br>
+                </div>
+            </div><br>
+
+            <!-- End Left Column -->
+        </div>
+
+        <div class="w3-third">
+
+
+            <div id="container" class="w3-container ">
+
+                @if (true)
+                {
+
+                    int stage = Model.com.stage_id;
+
+
+                    <div class="timeline-block timeline-block-left ">
+                        <div class="marker active"><i class="fa fa-check active" aria-hidden="true"></i></div>
+                        <div class="timeline-content">
+                            <h3>Registered</h3>
+                            <span><strong>@Model.com.date_creation.ToShortDateString()</strong></span>
+                            <i class="fa fa-long-arrow-down" style="font-size:48px;color:black"></i>
+                            @if (stage > 1)
+                            {
+                                <span><strong>@Model.com.date_stage_2.Value.ToShortDateString()</strong></span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="timeline-block timeline-block-left ">
+                        @if (stage > 1)
+                        {
+                            <div class="marker active"><i class="fa fa-check  active" aria-hidden="true"></i></div>
+                        }
+                        else
+                        {
+                            <div class="marker "><i class="fa fa-check  " aria-hidden="true"></i></div>
+                        }
+
+                            <div class="timeline-content">
+                                <h3>Forwarded to concerned department</h3>
+                                @if (stage > 1)
+                                {
+                                    <span><strong>@Model.com.date_stage_2.Value.ToShortDateString()</strong></span>
+                                    <i class="fa fa-long-arrow-down" style="font-size:48px;color:black"></i>
+                                    if (stage > 2)
+                                    {
+                                        <span><strong>@Model.com.date_stage_3.Value.ToShortDateString()</strong></span>
+                                    }
+                                }
+                            </div>
+
+                    </div>
+
+
+                    <div class="timeline-block timeline-block-left ">
+                        @if (stage > 2)
+                        {
+                            <div class="marker active"><i class="fa fa-check  active" aria-hidden="true"></i></div>
+                        }
+                        else
+                        {
+                            <div class="marker "><i class="fa fa-check  " aria-hidden="true"></i></div>
+                        }
+                            <div class="timeline-content">
+                                <h3>Under Verification</h3>
+                                @if (stage > 2)
+                                {
+                                    <span><strong>@Model.com.date_stage_3.Value.ToShortDateString()</strong></span>
+                                    <i class="fa fa-long-arrow-down" style="font-size:48px;color:black"></i>
+                                    if (stage > 3)
+                                    {
+                                        <span><strong>@Model.com.date_stage_4.Value.ToShortDateString()</strong></span>
+                                    }
+                                }
+                            </div>
+                    </div>
+                    if (Model.com.complaint_Type.Equals("first"))
+                    {
+                        ///////////////////start////////////////////////////////
+                        <div class="timeline-block timeline-block-right active">
+                            @if (stage >= 4)
+                            {
+                                <div class="marker active"><i class="fa fa-check  active" aria-hidden="true"></i></div>
+                            }
+                            else
+                            {
+                                <div class="marker "><i class="fa fa-check  " aria-hidden="true"></i></div>
+                            }
+                                <div class="timeline-content">
+                                    <h3>Work Initiated</h3>
+                                    @if (stage >= 4)
+                                    {
+                                        <span><strong>@Model.com.date_stage_4.Value.ToShortDateString()</strong></span>
+                                        <i class="fa fa-long-arrow-down" style="font-size:48px;color:black"></i>
+                                        if (stage > 5)
+                                        {
+                                            <span><strong>@Model.com.date_stage_5.Value.ToShortDateString()</strong></span>
+                                        }
+                                    }
+                                    </div>
+                        </div>
+                        <div class="timeline-block timeline-block-right ">
+                            @if (stage > 5)
+                            {
+                                <div class="marker active"><i class="fa fa-check  active" aria-hidden="true"></i></div>
+                            }
+                            else
+                            {
+                                <div class="marker "><i class="fa fa-check  " aria-hidden="true"></i></div>
+                            }
+                                <div class="timeline-content">
+                                    <h3>near completion</h3>
+                                    @if (stage > 5)
+                                    {
+                                        <span><strong>@Model.com.date_stage_5.Value.ToShortDateString()</strong></span>
+                                        <i class="fa fa-long-arrow-down" style="font-size:48px;color:black"></i>
+                                        if (stage==9)
+                                        {
+                                            <span><strong>@Model.com.date_stage_6.Value.ToShortDateString()</strong></span>
+                                        }
+                                    }
+                                </div>
+                        </div>
+                        <div class="timeline-block timeline-block-right ">
+                            @if (stage == 9)
+                            {
+                                <div class="marker active"><i class="fa fa-check  active" aria-hidden="true"></i></div>
+                            }
+                            else
+                            {
+                                <div class="marker "><i class="fa fa-check  " aria-hidden="true"></i></div>
+                            }
+                            <div class="timeline-content">
+                                <h3>Resolved</h3>
+                                @if (stage == 9)
+                                {
+                                    <span><strong>@Model.com.date_stage_6.Value.ToShortDateString()</strong></span>
+                                }
+                            </div>
+                        </div>
+
+                        ///////////////////end////////////////////
+                    }
+                    else if (Model.com.complaint_Type.Equals("already resolved"))
+                    {
+                        //////////////////start/////////////////////////////////
+                        <div class="timeline-block timeline-block-right active">
+                            @if (stage >= 10)
+                            {
+                                <div class="marker active"><i class="fa fa-check  active" aria-hidden="true"></i></div>
+                            }
+                            else
+                            {
+                                <div class="marker "><i class="fa fa-check  " aria-hidden="true"></i></div>
+                            }
+                                <div class="timeline-content">
+                                    <h3>Forwarded for Review</h3>
+                                    @if (stage >= 10)
+                                    {
+                                        <span><strong>@Model.com.date_stage_4.Value.ToShortDateString()</strong></span>
+                                        <i class="fa fa-long-arrow-down" style="font-size:48px;color:black"></i>
+                                        if (stage ==12)
+                                        {
+                                            <span><strong>@Model.com.date_stage_5.Value.ToShortDateString()</strong></span>
+                                        }
+                                    }
+                                </div>
+                        </div>
+
+                        <div class="timeline-block timeline-block-right ">
+                            @if (stage == 12)
+                            {
+                                <div class="marker active"><i class="fa fa-check  active" aria-hidden="true"></i></div>
+                            }
+                            else
+                            {
+                                <div class="marker "><i class="fa fa-check  " aria-hidden="true"></i></div>
+                            }
+                                <div class="timeline-content">
+                                    <h3>Already Resolved</h3>
+                                    @if (stage == 12)
+                                    {
+                                        <span><strong>@Model.com.date_stage_5.Value.ToShortDateString()</strong></span>
+                                        <i class="fa fa-long-arrow-down" style="font-size:48px;color:black"></i>
+                                      
+                                    }
+                                </div>
+                        </div>
+
+                        /////////////////end//////////////////////
+
+                    }
+                    else if (Model.com.complaint_Type.Equals("budget"))
+                    {
+                        //////////////////start/////////////////////////////////
+                        <div class="timeline-block timeline-block-right active">
+                            @if (stage >= 18)
+                            {
+                                <div class="marker active"><i class="fa fa-check  active" aria-hidden="true"></i></div>
+                            }
+                            else
+                            {
+                                <div class="marker "><i class="fa fa-check  " aria-hidden="true"></i></div>
+                            }
+                                <div class="timeline-content">
+                                    <h3>Forwarded for Review</h3>
+                                    @if (stage >= 18)
+                                    {
+                                        <span><strong>@Model.com.date_stage_4.Value.ToShortDateString()</strong></span> <i class="fa fa-long-arrow-down" style="font-size:48px;color:black"></i>
+                                        if (stage == 21)
+                                        {
+                                            <span><strong>@Model.com.date_stage_5.Value.ToShortDateString()</strong></span>
+                                        }
+                                    }
+                                </div>
+                        </div>
+
+                        <div class="timeline-block timeline-block-right ">
+                            @if (stage == 21)
+                            {
+                                <div class="marker active"><i class="fa fa-check  active" aria-hidden="true"></i></div>
+                            }
+                            else
+                            {
+                                <div class="marker "><i class="fa fa-check  " aria-hidden="true"></i></div>
+                            }
+                            <div class="timeline-content">
+                                <h3>Pending for next year budget</h3>
+                                @if (stage == 21)
+                                {
+                                    <span><strong>@Model.com.date_stage_5.Value.ToShortDateString()</strong></span>
+                                }
+                            </div>
+                        </div>
+
+                        /////////////////end//////////////////////
+                    }
+                    else if (Model.com.complaint_Type.Equals("bogus"))
+                    {
+                        //////////////////start/////////////////////////////////
+                        <div class="timeline-block timeline-block-right active">
+                            @if (stage >= 14)
+                            {
+                                <div class="marker active"><i class="fa fa-check  active" aria-hidden="true"></i></div>
+                            }
+                            else
+                            {
+                                <div class="marker "><i class="fa fa-check  " aria-hidden="true"></i></div>
+                            }
+                            <div class="timeline-content">
+                                <h3>Forwarded for Review</h3>
+                                @if (stage >= 14)
+                                {
+                                    <span><strong>@Model.com.date_stage_4.Value.ToShortDateString()</strong></span>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="timeline-block timeline-block-right ">
+                            @if (stage == 17)
+                            {
+                                <div class="marker active"><i class="fa fa-check  active" aria-hidden="true"></i></div>
+                            }
+                            else
+                            {
+                                <div class="marker "><i class="fa fa-check  " aria-hidden="true"></i></div>
+                            }
+                            <div class="timeline-content">
+                                <h3>Bogus complaint</h3>
+                                @if (stage == 17)
+                                {
+                                    <span><strong>@Model.com.date_stage_5.Value.ToShortDateString()</strong></span>
+                                }
+                            </div>
+                        </div>
+
+                        /////////////////end//////////////////////
+                    }
+                }
+
+                else
+                {
+
+                    <div class="timeline-block timeline-block-left active">
+                        <div class="marker active"><i class="fa fa-check active" aria-hidden="true"></i></div>
+                        <div class="timeline-content">
+                            <h3>Registered</h3>
+                            <span><strong>@Model.com.date_creation</strong></span>
+                        </div>
+                    </div>
+                    <div class="timeline-block timeline-block-left active">
+                        <div class="marker active"><i class="fa fa-check active" aria-hidden="true"></i></div>
+                        <div class="timeline-content">
+                            <h3>Forwarded to concerned department</h3>
+                            <span><strong>@Model.com.date_stage_2</strong></span>
+                        </div>
+                    </div>
+                    <div class="timeline-block timeline-block-left active">
+                        <div class="marker active"><i class="fa fa-check active" aria-hidden="true"></i></div>
+                        <div class="timeline-content">
+                            <h3>Under Verification</h3>
+                            <span><strong>@Model.com.date_stage_3</strong></span>
+                        </div>
+                    </div>
+                    <div class="timeline-block timeline-block-right active">
+                        <div class="marker active"><i class="fa fa-check active" aria-hidden="true"></i></div>
+                        <div class="timeline-content">
+                            <h3>Work Initiated</h3>
+                            <span>Unknown</span>
+                        </div>
+                    </div>
+                    <div class="timeline-block timeline-block-right ">
+                        <div class="marker"><i class="fa fa-check" aria-hidden="true"></i></div>
+                        <div class="timeline-content">
+                            <h3>near completion</h3>
+                            <span>Unknown</span>
+                        </div>
+                    </div>
+                    <div class="timeline-block timeline-block-right ">
+                        <div class="marker"><i class="fa fa-check" aria-hidden="true"></i></div>
+                        <div class="timeline-content">
+                            <h3>Resolved</h3>
+                            <span>Unknown</span>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+
+        <div id="subscribe" class="w3-modal">
+            <div class="w3-modal-content w3-animate-zoom w3-padding-large">
+                <div class="w3-container w3-center w3-white ">
+                    @using (Html.BeginForm("SingleComplaint", "Complaint", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+
+                        <i onclick="document.getElementById('subscribe').style.display='none'" class="fa fa-remove w3-button w3-xlarge w3-right w3-transparent"></i>
+                        <h2 class="w3-wide"></h2>
+                        <p>Add to increase severity of this complaint</p>
+
+                        <p>
+                            @Html.TextAreaFor(Model => Model.supcomp.Description, 7, 90, htmlAttributes: new { style = "max-width: 90%;" })
+
+                        </p>
+                        <input type="submit" value="Submit Supporting Complaint" class="w3-button w3-padding-large w3-blue w3-margin-bottom" />
+
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="w3-row w3-twothird">
+
+            <div class="w3-container w3-card w3-white w3-margin-bottom">
+                <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>@Model.com.c_title</h2>
+                <div class="w3-container">
+                    <p>@Model.com.description</p><br>
+                </div>
+            </div>
+        </div>
+        <div class="w3-row w3-twothird">
+
+            <div class="w3-card w3-white w3-margin-bottom">
+                <div class="" >
+                    <div id="publicMap" style="height:300px;width:100%;z-index:0"></div>
+                </div>
+            </div>
+        </div>
+        <div class="w3-col" style="width:100%">
+            <div class="w3-container w3-card w3-white w3-margin-bottom">
+                <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Supporting Complaints total @Model.com.SupportingComplaints.Count</h2>
+                @foreach (var sup in Model.com.SupportingComplaints)
+                {
+                    <div class="w3-container">
+                        <h5 class="w3-opacity"><b>@sup.Account.Full_name</b></h5>
+                        <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>@sup.time_created</h6>
+                        <p>@sup.Description</p>
+                        <hr>
+                    </div>
+                }
+            </div>
+
+            <!-- End Right Column -->
+        </div>
+
+        <!-- End Grid -->
+    </div>
+
+    <!-- End Page Container -->
+</div>
+
+
+
+
+<script>
+    
+   // navigator.geolocation.getCurrentPosition(function (location) {
+        var redMarker = L.AwesomeMarkers.icon({
+            icon: 'home',
+            markerColor: 'pink'
+        });
+        var violetMarker = L.AwesomeMarkers.icon({
+            icon: 'home',
+            markerColor: 'violet'
+        });
+        var blueMarker = L.AwesomeMarkers.icon({
+            icon: 'home',
+            markerColor: 'blue'
+        });
+        var orangeMarker = L.AwesomeMarkers.icon({
+            icon: 'home',
+            markerColor: 'orange'
+        });
+        var yellowMarker = L.AwesomeMarkers.icon({
+            icon: 'home',
+            markerColor: 'yellow'
+        });
+        var purpleMarker = L.AwesomeMarkers.icon({
+            icon: 'home',
+            markerColor: 'purple'
+        });
+        var greyMarker = L.AwesomeMarkers.icon({
+            icon: 'home',
+            markerColor: 'gray'
+        });
+        var cadetblueMarker = L.AwesomeMarkers.icon({
+            icon: 'home',
+            markerColor: 'cadetblue'
+        });
+
+
+        var latlng = new L.LatLng(@Model.com.map_lat, @Model.com.map_long);
+
+        var map = L.map('publicMap').setView(latlng, 15);
+
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaGFzZWVia2hhdHJpIiwiYSI6ImNqbzA5czVpazJ1cmszcW50OGNrdnB5Z2UifQ.3b1kGAPFs2sBLcO8UuAXNw', {
+            maxZoom: 18,
+            id: 'mapbox.streets'
+        }).addTo(map);
+
+
+    if (@Model.com.category_id== 1) {
+        var marker = L.marker(([@Model.com.map_lat, @Model.com.map_long]), { icon: redMarker }).addTo(map).bindPopup('<h2><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = Model.com.complaint_Id, url = HttpContext.Current.Request.Url })">@Model.com.c_title</a></h2>');
+
+    } else if (@Model.com.category_id== 2) {
+        var marker = L.marker(([@Model.com.map_lat, @Model.com.map_long]), { icon: violetMarker }).addTo(map).bindPopup('<h2><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = Model.com.complaint_Id, url = HttpContext.Current.Request.Url })">@Model.com.c_title</a></h2>');
+
+    } else if (@Model.com.category_id== 3) {
+        var marker = L.marker(([@Model.com.map_lat, @Model.com.map_long]), { icon: yellowMarker }).addTo(map).bindPopup('<h2><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = Model.com.complaint_Id, url = HttpContext.Current.Request.Url })">@Model.com.c_title</a></h2>');
+
+    } else if (@Model.com.category_id== 4) {
+        var marker = L.marker(([@Model.com.map_lat, @Model.com.map_long]), { icon: orangeMarker }).addTo(map).bindPopup('<h2><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = Model.com.complaint_Id, url = HttpContext.Current.Request.Url })">@Model.com.c_title</a></h2>');
+
+    } else if (@Model.com.category_id== 5) {
+        var marker = L.marker(([@Model.com.map_lat, @Model.com.map_long]), { icon: blueMarker }).addTo(map).bindPopup('<h2><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = Model.com.complaint_Id, url = HttpContext.Current.Request.Url })">@Model.com.c_title</a></h2>');
+
+    } else if (@Model.com.category_id== 6) {
+        var marker = L.marker(([@Model.com.map_lat, @Model.com.map_long]), { icon: purpleMarker }).addTo(map).bindPopup('<h2><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = Model.com.complaint_Id, url = HttpContext.Current.Request.Url })">@Model.com.c_title</a></h2>');
+
+    } else if (@Model.com.category_id== 7) {
+        var marker = L.marker(([@Model.com.map_lat, @Model.com.map_long]), { icon: cadetblueMarker }).addTo(map).bindPopup('<h2><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = Model.com.complaint_Id, url = HttpContext.Current.Request.Url })">@Model.com.c_title</a></h2>');
+
+    } else if (@Model.com.category_id== 8) {
+        var marker = L.marker(([@Model.com.map_lat, @Model.com.map_long]), { icon: greyMarker }).addTo(map).bindPopup('<h2><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = Model.com.complaint_Id, url = HttpContext.Current.Request.Url })">@Model.com.c_title</a></h2>');
+
+    }
+        //var marker = L.marker(latlng, {
+        //    draggable: false
+        //}).addTo(map);
+
+    //});
+
+
+    // Script to open and close sidebar when on tablets and phones
+    function w3_open() {
+        document.getElementById("mySidebar").style.display = "block";
+        document.getElementById("myOverlay").style.display = "block";
+    }
+
+    function w3_close() {
+        document.getElementById("mySidebar").style.display = "none";
+        document.getElementById("myOverlay").style.display = "none";
+    }
+
+    // Slideshow Apartment Images
+    var slideIndex = 1;
+    showDivs(slideIndex);
+
+    function plusDivs(n) {
+        showDivs(slideIndex += n);
+    }
+
+    function currentDiv(n) {
+        showDivs(slideIndex = n);
+    }
+
+    function showDivs(n) {
+        var i;
+        var x = document.getElementsByClassName("mySlides");
+        var dots = document.getElementsByClassName("demo");
+        if (n > x.length) { slideIndex = 1 }
+        if (n < 1) { slideIndex = x.length }
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" w3-opacity-off", "");
+        }
+        x[slideIndex - 1].style.display = "block";
+        dots[slideIndex - 1].className += " w3-opacity-off";
+    }
+
+
+
+
+</script>

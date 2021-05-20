@@ -1,0 +1,1473 @@
+﻿@model Public_Portal_Webservice.Models.viewModel.vmPCP
+@{
+    ViewBag.Title = "Town wise Complaints";
+    Layout = "~/Views/Shared/_LayoutWithSection.cshtml";
+}
+
+
+<header class="w3-container w3-center w3-padding-32" style="position:relative;margin-top:20px">
+    <div style="position:absolute;top:0;left:0;right:0;bottom:0;background-image:url('@Url.Content("~/Image/khi-cover.jpg")');filter: blur(2px);z-index:-1;"></div>
+    <h1 style="color:white"><b>@ViewBag.header</b></h1>
+    <p style="color:white">total @Model.comps.Count() complaints  @*<a href="@Url.Action("SeverityLevelComplaint", "Complaint" )"><span class="w3-tag w3-large w3-blue">Order by severe first</span></a>*@</p>
+
+</header>
+
+
+<!-- Grid -->
+<div class="w3-row">
+
+
+
+    <!-- Introduction menu -->
+    <div class="w3-col l3">
+
+
+        <div class="w3-card w3-margin">
+            <div class="">
+
+                <a href="@Url.Action("Index", "Complaint")" class="w3-container w3-padding w3-button w3-block    w3-large" style="background-color:#929fba;color:white">
+                    <span class="glyphicon glyphicon-chevron-left "> </span> back to map
+                </a>
+
+            </div>
+        </div>
+        <!-- About Card -->
+        <div class="w3-card  w3-margin">
+            <div class="w3-container w3-padding " style="background-color:#929fba;color:white">
+                <h4 class="w3-center">UC Areas of @ViewBag.TownName Town</h4>
+            </div>
+            <div class="w3-container w3-white">
+                <a href="@Url.Action("TownWiseComplaint", "Complaint", new { T_ID =ViewBag.townId })" style="text-decoration:none" class="w3-button w3-block  w3-left-align w3-large w3-large w3-black"><span class="fa fa-th-large fa-fw w3-margin-right"></span>All</a>
+
+                @foreach (var uc in Model.ucs)
+                {
+                    if (uc.UCName.ToString().Equals(ViewBag.UCSelected))
+                    {
+                        <a href="@Url.Action("UCComplaint", "Complaint", new {T_ID= ViewBag.townId,UC_Id=uc.ID })" style="text-decoration:none" class="w3-button w3-block  w3-left-align w3-large w3-large w3-black"><span class="fa fa-th-large fa-fw w3-margin-right"></span>@uc.UCName</a>
+
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("UCComplaint", "Complaint", new { T_ID=ViewBag.townId,UC_Id=uc.ID })" style="text-decoration:none" class="w3-button w3-block  w3-left-align "><span class="fa fa-th-large fa-fw w3-margin-right"></span>@uc.UCName</a>
+
+                    }
+
+                }
+            </div>
+        </div>
+
+
+
+        <!-- Posts -->
+        <div class="w3-card w3-margin">
+            <div class="w3-container w3-padding " style="background-color:#929fba;color:white">
+                <h4>Severe Complaints of @ViewBag.TownName Town</h4>
+            </div>
+            <ul class="w3-ul w3-hoverable w3-white">
+                @foreach (var severeComps in Model.severeComps)
+                {
+                    <li class="w3-padding-16">
+                        <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = severeComps.complaint_Id })">
+                            <img src="@Url.Content(severeComps.image1)" alt="Image" class="w3-left w3-margin-right" style="width:50px">
+                            <span class="w3-large">@severeComps.c_title</span><br>
+                            @{ var complaintColor = severeComps.complaint_Id.ToString() + "SevereCompColor";}
+
+                            <div>
+                                <span id="@complaintColor">
+                                    @severeComps.Status.Status_first
+                                </span>
+                            </div>
+                        </a>
+                    </li>
+
+
+                }
+            </ul>
+        </div>
+
+
+
+
+        <!-- Labels / tags -->
+        @*<div class="w3-card w3-margin">
+                <div class="w3-container w3-padding" style="background-color:#929fba;color:white">
+                    <h4>categories</h4>
+                </div>
+                <div class="w3-container w3-white">
+                    <br />
+                    <p>
+                        @foreach (var cat in Model.categories)
+                        {
+                            if (cat.Category1.ToString().Equals(ViewBag.categorySelected))
+                            {
+                                <a href="@Url.Action("CategoryComplaint", "Complaint", new { cat = @cat.category_id })" class="w3-tag w3-margin-bottom w3-large w3-red">@cat.Category1</a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("CategoryComplaint", "Complaint", new { cat = @cat.category_id })" class="w3-tag w3-light-grey w3-medium w3-margin-bottom">@cat.Category1</a>
+                            }
+
+                        }
+                    </p>
+                </div>
+            </div>*@
+
+        <!-- END Introduction Menu -->
+    </div>
+    <div class="w3-col l9">
+
+        @{ int cou = Model.comps.Count(); }
+        @if (cou == 1)
+        {
+            <div class="w3-col l12 w3-margin-top w3-container ">
+                <div class="w3-card ">
+                    <div class="w3-container w3-padding " style="background-color:#929fba;color:white">
+                        <h4>Filters</h4>
+                    </div>
+                    <div class="w3-container w3-white">
+                        <br />
+                        <span style="margin-left:00px">Categories:</span>
+
+                        <select id="Categories" style="width:190px;">
+                            <option value="0">All</option>
+
+
+                            @foreach (var cat in Model.categories)
+                            {
+                                if (cat.category_id.Equals(ViewBag.categoryId))
+                                {
+                                    <option value="@cat.category_id" selected>@cat.Category1</option>
+                                }
+                                else
+                                {
+
+                                    <option value="@cat.category_id">@cat.Category1</option>
+                                }
+
+                            }
+
+                        </select>
+                        <span style="margin-left:30px">Status:</span>
+                        <select id="stage" style="width:250px;">
+                            <option value="0">All</option>
+                            @if (1 == ViewBag.stageId)
+                            {
+                                <option value="1" selected>--Registered</option>
+                            }
+                            else
+                            {
+
+                                <option value="1">--Registered</option>
+                            }
+                            @if (2 == ViewBag.stageId)
+                            {
+
+                                <option value="2" selected>--Forwarded to concerned department</option>
+                            }
+                            else
+                            {
+                                <option value="2">--Forwarded to concerned department</option>
+
+                            }
+                            @if (3 == ViewBag.stageId)
+                            {
+                                <option value="3" selected>--Under Verification</option>
+                            }
+                            else
+                            {
+                                <option value="3">--Under Verification</option>
+                            }
+                            @if (4 == ViewBag.stageId)
+                            {
+                                <option value="4" selected>--Work Initiated</option>
+                            }
+                            else
+                            {
+                                <option value="4">--Work Initiated</option>
+
+                            }@if (5 == ViewBag.stageId)
+                            {
+                                <option value="5" selected>--near completion</option>
+                            }
+                            else
+                            {
+                                <option value="5">--near completion</option>
+
+                            }@if (9 == ViewBag.stageId)
+                            {
+                                <option value="9" selected>--Resolved</option>
+                            }
+                            else
+                            {
+                                <option value="9">--Resolved</option>
+                            }@if (40 == ViewBag.stageId)
+                            {
+                                <option value="40" selected>Already Resolved</option>
+                            }
+                            else
+                            {
+                                <option value="40">Already Resolved</option>
+
+                            }@if (10 == ViewBag.stageId)
+                            {
+                                <option value="10" selected>--Forwarded for Review</option>
+                            }
+                            else
+                            {
+                                <option value="10">--Forwarded for Review</option>
+
+                            }@if (13 == ViewBag.stageId)
+                            {
+                                <option value="13" selected>--Already Resolved</option>
+                            }
+                            else
+                            {
+                                <option value="13">--Already Resolved</option>
+                            }@if (50 == ViewBag.stageId)
+                            {
+                                <option value="50" selected>Budget</option>
+                            }
+                            else
+                            {
+                                <option value="50">Budget</option>
+                            }@if (18 == ViewBag.stageId)
+                            {
+                                <option value="18" selected>--Forwarded for Review</option>
+                            }
+                            else
+                            {
+                                <option value="18">--Forwarded for Review</option>
+                            }@if (21 == ViewBag.stageId)
+                            {
+                                <option value="21" selected>--Pending for next year budget</option>
+                            }
+                            else
+                            {
+                                <option value="21">--Pending for next year budget</option>
+
+                            }@if (60 == ViewBag.stageId)
+                            {
+                                <option value="60" selected>Bogus</option>
+
+                            }
+                            else
+                            {
+                                <option value="60">Bogus</option>
+                            }@if (14 == ViewBag.stageId)
+                            {
+
+                                <option value="14" selected>--Forwarded for Review</option>
+                            }
+                            else
+                            {
+                                <option value="14">--Forwarded for Review</option>
+
+                            }@if (17 == ViewBag.stageId)
+                            {
+                                <option value="17" selected>--Bogus complaint</option>
+                            }
+                            else
+                            {
+                                <option value="17">--Bogus complaint</option>
+                            }
+
+
+                        </select>
+                        <span style="margin-left:30px">Time Period:</span>
+                        <select id="timePeriod" style="width:190px">
+                            <option value="0">All</option>
+                            @if (3 == ViewBag.TimePeriodId)
+                            {
+                                <option value="3" selected>Last 3 months</option>
+                            }
+                            else
+                            {
+                                <option value="3">Last 3 months</option>
+                            }@if (6 == ViewBag.TimePeriodId)
+                            {
+                                <option value="6" selected>Last 6 months</option>
+                            }
+                            else
+                            {
+                                <option value="6">Last 6 months</option>
+                            }@if (9 == ViewBag.TimePeriodId)
+                            {
+                                <option value="9" selected>Last 9 months</option>
+                            }
+                            else
+                            {
+                                <option value="9">Last 9 months</option>
+                            }@if (12 == ViewBag.TimePeriodId)
+                            {
+                                <option value="12" selected>Last 12 months</option>}
+                            else
+                            {
+                                <option value="12">Last 12 months</option>}
+                            }@if (24 == ViewBag.TimePeriodId)
+                            {
+                                <option value="24" selected>Last 2 Years</option>}
+                            else
+                            {
+                                <option value="24">Last 2 Years</option>
+                            }
+                            @if (36 == ViewBag.TimePeriodId)
+                            {
+
+                                <option value="36" selected>Last 3 Year</option>
+                            }
+                            else
+                            {
+                                <option value="36">Last 3 Year</option>
+                            }
+
+
+                        </select>
+                        <br /><br />
+                        <span style="margin-left:36px">Order: </span>
+                        <select id="OrderId" style="width:190px;">
+
+                            @*<option value="1" selected>Registered First</option>*@
+
+                            <option value="1">Registered First</option>
+                            @if (2 == ViewBag.OrderById)
+                            {
+                                <option value="2" selected>Registered Last</option>
+                            }
+                            else
+                            {
+                                <option value="2">Registered Last</option>
+                            }@if (3 == ViewBag.OrderById)
+                            {
+                                <option value="3" selected>Severe First</option>
+                            }
+                            else
+                            {
+                                <option value="3">Severe First</option>
+                            }@if (4 == ViewBag.OrderById)
+                            {
+                                <option value="4" selected>Severe Last</option>}
+                            else
+                            {
+                                <option value="4">Severe Last</option>}
+                            }
+                        </select>
+
+                        <hr />
+                        <div class="w3-right">
+
+                            <input type="submit" value="Clear" class="w3-button w3-large  " style="width:200px;background-color:lightgrey" id="filterClear" />
+                            <input type="submit" value="Apply" class="w3-button w3-large w3-blue " style="width:250px" id="filterApply" />
+                            <br /><br />
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class=" w3-col m6 ">
+
+
+                @foreach (var comps in Model.comps)
+                {
+                    <div class="w3-col l8 s12">
+
+                        <div class="w3-card-4 w3-margin w3-white">
+
+
+                            <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comps.complaint_Id, url = HttpContext.Current.Request.Url })"><img src="@Url.Content(comps.image1)" alt="Nature" style="width:100%;height:200px;" /></a>
+
+
+                            <div class="w3-container">
+
+                                <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comps.complaint_Id, url = HttpContext.Current.Request.Url })"><h3><b>@comps.c_title</b></h3></a>
+
+                                <div class="w3-left" style="margin-left:195px">
+
+                                    @{ var complaintColor = comps.complaint_Id.ToString() + "Color";}
+                                    <div id="@complaintColor" class="w3-padding" style="width:150%">@comps.Status.Status_first</div>
+
+                                </div>
+                                @if (comps.date_last_modified != null)
+                                {<span class="w3-opacity">@comps.date_last_modified.ToShortDateString()</span> }
+                            else
+                            {<span class="w3-opacity "> @comps.date_creation.ToShortDateString()</span>}
+
+                                <hr />
+                            </div>
+
+                            <div class="w3-container">
+                                <p>
+
+                                    @comps.description.Substring(0, 59)
+                                </p>
+                                <div class="w3-row">
+                                    <div class="w3-col m4 s12">
+                                        <p><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comps.complaint_Id, url = HttpContext.Current.Request.Url })" class="w3-button w3-padding-large w3-white w3-border"><b>READ MORE »</b></a></p>
+                                    </div>
+                                    <div class=" w3-col " style="background-color:lightgrey;color:black">
+                                        <p><span class="w3-padding-large w3-right w3-small">Supporting complaints:@comps.SupportingComplaints.Count</span></p>
+
+                                    </div><br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else if (cou == 2)
+        {
+            <div class="w3-col l12 w3-margin-top w3-container ">
+                <div class="w3-card ">
+                    <div class="w3-container w3-padding " style="background-color:#929fba;color:white">
+                        <h4>Filters</h4>
+                    </div>
+                    <div class="w3-container w3-white">
+                        <br />
+                        <span style="margin-left:00px">Categories:</span>
+
+                        <select id="Categories" style="width:190px;">
+                            <option value="0">All</option>
+
+
+                            @foreach (var cat in Model.categories)
+                            {
+                                if (cat.category_id.Equals(ViewBag.categoryId))
+                                {
+                                    <option value="@cat.category_id" selected>@cat.Category1</option>
+                                }
+                                else
+                                {
+
+                                    <option value="@cat.category_id">@cat.Category1</option>
+                                }
+
+                            }
+
+                        </select>
+                        <span style="margin-left:30px">Status:</span>
+                        <select id="stage" style="width:250px;">
+                            <option value="0">All</option>
+                            @if (1 == ViewBag.stageId)
+                            {
+                                <option value="1" selected>--Registered</option>
+                            }
+                            else
+                            {
+
+                                <option value="1">--Registered</option>
+                            }
+                            @if (2 == ViewBag.stageId)
+                            {
+
+                                <option value="2" selected>--Forwarded to concerned department</option>
+                            }
+                            else
+                            {
+                                <option value="2">--Forwarded to concerned department</option>
+
+                            }
+                            @if (3 == ViewBag.stageId)
+                            {
+                                <option value="3" selected>--Under Verification</option>
+                            }
+                            else
+                            {
+                                <option value="3">--Under Verification</option>
+                            }
+                            @if (4 == ViewBag.stageId)
+                            {
+                                <option value="4" selected>--Work Initiated</option>
+                            }
+                            else
+                            {
+                                <option value="4">--Work Initiated</option>
+
+                            }@if (5 == ViewBag.stageId)
+                            {
+                                <option value="5" selected>--near completion</option>
+                            }
+                            else
+                            {
+                                <option value="5">--near completion</option>
+
+                            }@if (9 == ViewBag.stageId)
+                            {
+                                <option value="9" selected>--Resolved</option>
+                            }
+                            else
+                            {
+                                <option value="9">--Resolved</option>
+                            }@if (40 == ViewBag.stageId)
+                            {
+                                <option value="40" selected>Already Resolved</option>
+                            }
+                            else
+                            {
+                                <option value="40">Already Resolved</option>
+
+                            }@if (10 == ViewBag.stageId)
+                            {
+                                <option value="10" selected>--Forwarded for Review</option>
+                            }
+                            else
+                            {
+                                <option value="10">--Forwarded for Review</option>
+
+                            }@if (13 == ViewBag.stageId)
+                            {
+                                <option value="13" selected>--Already Resolved</option>
+                            }
+                            else
+                            {
+                                <option value="13">--Already Resolved</option>
+                            }@if (50 == ViewBag.stageId)
+                            {
+                                <option value="50" selected>Budget</option>
+                            }
+                            else
+                            {
+                                <option value="50">Budget</option>
+                            }@if (18 == ViewBag.stageId)
+                            {
+                                <option value="18" selected>--Forwarded for Review</option>
+                            }
+                            else
+                            {
+                                <option value="18">--Forwarded for Review</option>
+                            }@if (21 == ViewBag.stageId)
+                            {
+                                <option value="21" selected>--Pending for next year budget</option>
+                            }
+                            else
+                            {
+                                <option value="21">--Pending for next year budget</option>
+
+                            }@if (60 == ViewBag.stageId)
+                            {
+                                <option value="60" selected>Bogus</option>
+
+                            }
+                            else
+                            {
+                                <option value="60">Bogus</option>
+                            }@if (14 == ViewBag.stageId)
+                            {
+
+                                <option value="14" selected>--Forwarded for Review</option>
+                            }
+                            else
+                            {
+                                <option value="14">--Forwarded for Review</option>
+
+                            }@if (17 == ViewBag.stageId)
+                            {
+                                <option value="17" selected>--Bogus complaint</option>
+                            }
+                            else
+                            {
+                                <option value="17">--Bogus complaint</option>
+                            }
+
+
+                        </select>
+                        <span style="margin-left:30px">Time Period:</span>
+                        <select id="timePeriod" style="width:190px">
+                            <option value="0">All</option>
+                            @if (3 == ViewBag.TimePeriodId)
+                            {
+                                <option value="3" selected>Last 3 months</option>
+                            }
+                            else
+                            {
+                                <option value="3">Last 3 months</option>
+                            }@if (6 == ViewBag.TimePeriodId)
+                            {
+                                <option value="6" selected>Last 6 months</option>
+                            }
+                            else
+                            {
+                                <option value="6">Last 6 months</option>
+                            }@if (9 == ViewBag.TimePeriodId)
+                            {
+                                <option value="9" selected>Last 9 months</option>
+                            }
+                            else
+                            {
+                                <option value="9">Last 9 months</option>
+                            }@if (12 == ViewBag.TimePeriodId)
+                            {
+                                <option value="12" selected>Last 12 months</option>}
+                            else
+                            {
+                                <option value="12">Last 12 months</option>}
+                            }@if (24 == ViewBag.TimePeriodId)
+                            {
+                                <option value="24" selected>Last 2 Years</option>}
+                            else
+                            {
+                                <option value="24">Last 2 Years</option>
+                            }
+                            @if (36 == ViewBag.TimePeriodId)
+                            {
+
+                                <option value="36" selected>Last 3 Year</option>
+                            }
+                            else
+                            {
+                                <option value="36">Last 3 Year</option>
+                            }
+
+
+                        </select>
+                        <br /><br />
+                        <span style="margin-left:36px">Order: </span>
+                        <select id="OrderId" style="width:190px;">
+
+                            @*<option value="1" selected>Registered First</option>*@
+
+                            <option value="1">Registered First</option>
+                            @if (2 == ViewBag.OrderById)
+                            {
+                                <option value="2" selected>Registered Last</option>
+                            }
+                            else
+                            {
+                                <option value="2">Registered Last</option>
+                            }@if (3 == ViewBag.OrderById)
+                            {
+                                <option value="3" selected>Severe First</option>
+                            }
+                            else
+                            {
+                                <option value="3">Severe First</option>
+                            }@if (4 == ViewBag.OrderById)
+                            {
+                                <option value="4" selected>Severe Last</option>}
+                            else
+                            {
+                                <option value="4">Severe Last</option>}
+                            }
+                        </select>
+
+                        <hr />
+                        <div class="w3-right">
+
+                            <input type="submit" value="Clear" class="w3-button w3-large  " style="width:200px;background-color:lightgrey" id="filterClear" />
+                            <input type="submit" value="Apply" class="w3-button w3-large w3-blue " style="width:250px" id="filterApply" />
+                            <br /><br />
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class=" w3-col m12 s12">
+
+
+                @foreach (var comps in Model.comps)
+                {
+                    <div class="w3-col l4 s12">
+
+                        <div class="w3-card-4 w3-margin w3-white">
+
+
+                            <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comps.complaint_Id, url = HttpContext.Current.Request.Url })"><img src="@Url.Content(comps.image1)" alt="Nature" style="width:100%;height:200px;" /></a>
+
+
+                            <div class="w3-container">
+
+                                <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comps.complaint_Id, url = HttpContext.Current.Request.Url })"><h3><b>@comps.c_title</b></h3></a>
+
+                                <div class="w3-left" style="margin-left:195px">
+
+                                    @{ var complaintColor = comps.complaint_Id.ToString() + "Color";}
+                                    <div id="@complaintColor" class="w3-padding" style="width:150%">@comps.Status.Status_first</div>
+
+                                </div>
+                                @if (comps.date_last_modified != null)
+                                {<span class="w3-opacity">@comps.date_last_modified.ToShortDateString()</span> }
+                            else
+                            {<span class="w3-opacity "> @comps.date_creation.ToShortDateString()</span>}
+
+                                <hr />
+                            </div>
+
+                            <div class="w3-container">
+                                <p>
+
+                                    @comps.description.Substring(0, 59)
+                                </p>
+                                <div class="w3-row">
+                                    <div class="w3-col m4 s12">
+                                        <p><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comps.complaint_Id, url = HttpContext.Current.Request.Url })" class="w3-button w3-padding-large w3-white w3-border"><b>READ MORE »</b></a></p>
+                                    </div>
+                                    <div class=" w3-col " style="background-color:lightgrey;color:black">
+                                        <p><span class="w3-padding-large w3-right w3-small">Supporting complaints:@comps.SupportingComplaints.Count</span></p>
+
+                                    </div><br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        else if (cou > 1)
+        {
+
+            <div class="table-responsive ">
+
+                <div class="w3-col l12 w3-margin-top w3-container ">
+                    <div class="w3-card ">
+                        <div class="w3-container w3-padding " style="background-color:#929fba;color:white">
+                            <h4>Filters</h4>
+                        </div>
+                        <div class="w3-container w3-white">
+                            <br />
+                            <span style="margin-left:00px">Categories:</span>
+
+                            <select id="Categories" style="width:190px;">
+                                <option value="0">All</option>
+
+
+                                @foreach (var cat in Model.categories)
+                                {
+                                    if (cat.category_id.Equals(ViewBag.categoryId))
+                                    {
+                                        <option value="@cat.category_id" selected>@cat.Category1</option>
+                                    }
+                                    else
+                                    {
+
+                                        <option value="@cat.category_id">@cat.Category1</option>
+                                    }
+
+                                }
+
+                            </select>
+                            <span style="margin-left:30px">Status:</span>
+                            <select id="stage" style="width:250px;">
+                                <option value="0">All</option>
+                                @if (1 == ViewBag.stageId)
+                                {
+                                    <option value="1" selected>--Registered</option>
+                                }
+                                else
+                                {
+
+                                    <option value="1">--Registered</option>
+                                }
+                                @if (2 == ViewBag.stageId)
+                                {
+
+                                    <option value="2" selected>--Forwarded to concerned department</option>
+                                }
+                                else
+                                {
+                                    <option value="2">--Forwarded to concerned department</option>
+
+                                }
+                                @if (3 == ViewBag.stageId)
+                                {
+                                    <option value="3" selected>--Under Verification</option>
+                                }
+                                else
+                                {
+                                    <option value="3">--Under Verification</option>
+                                }
+                                @if (4 == ViewBag.stageId)
+                                {
+                                    <option value="4" selected>--Work Initiated</option>
+                                }
+                                else
+                                {
+                                    <option value="4">--Work Initiated</option>
+
+                                }@if (5 == ViewBag.stageId)
+                                {
+                                    <option value="5" selected>--near completion</option>
+                                }
+                                else
+                                {
+                                    <option value="5">--near completion</option>
+
+                                }@if (9 == ViewBag.stageId)
+                                {
+                                    <option value="9" selected>--Resolved</option>
+                                }
+                                else
+                                {
+                                    <option value="9">--Resolved</option>
+                                }@if (40 == ViewBag.stageId)
+                                {
+                                    <option value="40" selected>Already Resolved</option>
+                                }
+                                else
+                                {
+                                    <option value="40">Already Resolved</option>
+
+                                }@if (10 == ViewBag.stageId)
+                                {
+                                    <option value="10" selected>--Forwarded for Review</option>
+                                }
+                                else
+                                {
+                                    <option value="10">--Forwarded for Review</option>
+
+                                }@if (13 == ViewBag.stageId)
+                                {
+                                    <option value="13" selected>--Already Resolved</option>
+                                }
+                                else
+                                {
+                                    <option value="13">--Already Resolved</option>
+                                }@if (50 == ViewBag.stageId)
+                                {
+                                    <option value="50" selected>Budget</option>
+                                }
+                                else
+                                {
+                                    <option value="50">Budget</option>
+                                }@if (18 == ViewBag.stageId)
+                                {
+                                    <option value="18" selected>--Forwarded for Review</option>
+                                }
+                                else
+                                {
+                                    <option value="18">--Forwarded for Review</option>
+                                }@if (21 == ViewBag.stageId)
+                                {
+                                    <option value="21" selected>--Pending for next year budget</option>
+                                }
+                                else
+                                {
+                                    <option value="21">--Pending for next year budget</option>
+
+                                }@if (60 == ViewBag.stageId)
+                                {
+                                    <option value="60" selected>Bogus</option>
+
+                                }
+                                else
+                                {
+                                    <option value="60">Bogus</option>
+                                }@if (14 == ViewBag.stageId)
+                                {
+
+                                    <option value="14" selected>--Forwarded for Review</option>
+                                }
+                                else
+                                {
+                                    <option value="14">--Forwarded for Review</option>
+
+                                }@if (17 == ViewBag.stageId)
+                                {
+                                    <option value="17" selected>--Bogus complaint</option>
+                                }
+                                else
+                                {
+                                    <option value="17">--Bogus complaint</option>
+                                }
+
+
+                            </select>
+                            <span style="margin-left:30px">Time Period:</span>
+                            <select id="timePeriod" style="width:190px">
+                                <option value="0">All</option>
+                                @if (3 == ViewBag.TimePeriodId)
+                                {
+                                    <option value="3" selected>Last 3 months</option>
+                                }
+                                else
+                                {
+                                    <option value="3">Last 3 months</option>
+                                }@if (6 == ViewBag.TimePeriodId)
+                                {
+                                    <option value="6" selected>Last 6 months</option>
+                                }
+                                else
+                                {
+                                    <option value="6">Last 6 months</option>
+                                }@if (9 == ViewBag.TimePeriodId)
+                                {
+                                    <option value="9" selected>Last 9 months</option>
+                                }
+                                else
+                                {
+                                    <option value="9">Last 9 months</option>
+                                }@if (12 == ViewBag.TimePeriodId)
+                                {
+                                    <option value="12" selected>Last 12 months</option>}
+                                else
+                                {
+                                    <option value="12">Last 12 months</option>}
+                                }@if (24 == ViewBag.TimePeriodId)
+                                {
+                                    <option value="24" selected>Last 2 Years</option>}
+                                else
+                                {
+                                    <option value="24">Last 2 Years</option>
+                                }
+                                @if (36 == ViewBag.TimePeriodId)
+                                {
+
+                                    <option value="36" selected>Last 3 Year</option>
+                                }
+                                else
+                                {
+                                    <option value="36">Last 3 Year</option>
+                                }
+
+
+                            </select>
+                            <br /><br />
+                            <span style="margin-left:36px">Order: </span>
+                            <select id="OrderId" style="width:190px;">
+
+                                @*<option value="1" selected>Registered First</option>*@
+
+                                <option value="1">Registered First</option>
+                                @if (2 == ViewBag.OrderById)
+                                {
+                                    <option value="2" selected>Registered Last</option>
+                                }
+                                else
+                                {
+                                    <option value="2">Registered Last</option>
+                                }@if (3 == ViewBag.OrderById)
+                                {
+                                    <option value="3" selected>Severe First</option>
+                                }
+                                else
+                                {
+                                    <option value="3">Severe First</option>
+                                }@if (4 == ViewBag.OrderById)
+                                {
+                                    <option value="4" selected>Severe Last</option>}
+                                else
+                                {
+                                    <option value="4">Severe Last</option>}
+                                }
+                            </select>
+
+                            <hr />
+                            <div class="w3-right">
+
+                                <input type="submit" value="Clear" class="w3-button w3-large  " style="width:200px;background-color:lightgrey" id="filterClear" />
+                                <input type="submit" value="Apply" class="w3-button w3-large w3-blue " style="width:250px" id="filterApply" />
+
+                                <br /><br />
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <table class="table">
+
+
+                    @{ int counter = -1;}
+
+                    @foreach (var comps in Model.comps)
+                    {
+                        counter++;
+                        if (counter % 3 == 0)
+                        {
+                            <tr></tr>
+                            <td style="width:50px;">
+                                <div class="w3-col l12 s12 ">
+
+                                    <div class="w3-card-4 w3-white " style="margin:5px 5px 5px 5px">
+                                        <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comps.complaint_Id, url = HttpContext.Current.Request.Url })"><img src="@Url.Content(comps.image1)" alt="Nature" style="width:100%;height:200px;"></a>
+                                        <div class="w3-container">
+                                            <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comps.complaint_Id, url = HttpContext.Current.Request.Url })"><h3><b>@comps.c_title</b></h3></a>
+
+                                            <div>
+                                            </div>
+                                            <div class="w3-left" style="margin-left:195px">
+
+                                                @{ var complaintColor = comps.complaint_Id.ToString() + "Color";}
+                                                <div id="@complaintColor" class="w3-padding" style="width:150%">@comps.Status.Status_first</div>
+
+                                            </div>
+                                            @if (comps.date_last_modified != null)
+                                            {<span class="w3-opacity">@comps.date_last_modified.ToShortDateString()</span> }
+                                        else
+                                        {<span class="w3-opacity "> @comps.date_creation.ToShortDateString()</span>}
+
+
+                                            <br />
+                                            <br />
+                                            <hr />
+                                        </div>
+                                        <div class="w3-container">
+                                            <p>
+
+                                                @comps.description.Substring(0, 50) ...
+                                            </p>
+                                            <div class="w3-row">
+                                                <div class="w3-col m4 s12">
+                                                    <p><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comps.complaint_Id, url = HttpContext.Current.Request.Url })" class="w3-button w3-padding-large w3-white w3-border"><b>READ MORE »</b></a></p>
+                                                </div>
+                                                <div class=" w3-col " style="background-color:lightgrey;color:black">
+                                                    <p><span class="w3-padding-large w3-right ">Supporting complaints:@comps.SupportingComplaints.Count</span></p>
+
+                                                </div><br />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
+                        }
+                        else
+
+                        {
+                            <td style="width:50px;">
+                                <div class="w3-col l12 s12 ">
+
+                                    <div class="w3-card-4 w3-white " style="margin:5px 5px 5px 5px">
+                                        <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comps.complaint_Id, url = HttpContext.Current.Request.Url })"><img src="@Url.Content(comps.image1)" alt="Nature" style="width:100%;height:200px;"></a>
+                                        <div class="w3-container">
+                                            <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comps.complaint_Id, url = HttpContext.Current.Request.Url })"><h3><b>@comps.c_title</b></h3></a>
+
+                                            <div>
+                                            </div>
+                                            <div class="w3-left" style="margin-left:195px">
+
+                                                @{ var complaintColor = comps.complaint_Id.ToString() + "Color";}
+                                                <div id="@complaintColor" class="w3-padding" style="width:150%">@comps.Status.Status_first</div>
+
+                                            </div>
+                                            @if (comps.date_last_modified != null)
+                                            {<span class="w3-opacity">@comps.date_last_modified.ToShortDateString()</span> }
+                                        else
+                                        {<span class="w3-opacity "> @comps.date_creation.ToShortDateString()</span>}
+
+
+                                            <br />
+                                            <br />
+                                            <hr />
+                                        </div>
+                                        <div class="w3-container">
+                                            <p>
+
+                                                @comps.description.Substring(0, 50) ...
+                                            </p>
+                                            <div class="w3-row">
+                                                <div class="w3-col m4 s12">
+                                                    <p><a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comps.complaint_Id, url = HttpContext.Current.Request.Url })" class="w3-button w3-padding-large w3-white w3-border"><b>READ MORE »</b></a></p>
+                                                </div>
+                                                <div class=" w3-col " style="background-color:lightgrey;color:black">
+                                                    <p><span class="w3-padding-large w3-right ">Supporting complaints:@comps.SupportingComplaints.Count</span></p>
+
+                                                </div><br />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
+                        }
+
+                    }
+
+                </table>
+
+
+
+                <!-- END GRID -->
+            </div>
+        }
+        else
+        {
+
+            <div class="w3-col l12 w3-margin-top w3-container ">
+                <div class="w3-card ">
+                    <div class="w3-container w3-padding " style="background-color:#929fba;color:white">
+                        <h4>Filters</h4>
+                    </div>
+                    <div class="w3-container w3-white">
+                        <br />
+                        <span style="margin-left:00px">Categories:</span>
+
+                        <select id="Categories" style="width:190px;">
+                            <option value="0">All</option>
+
+
+                            @foreach (var cat in Model.categories)
+                            {
+                                if (cat.category_id.Equals(ViewBag.categoryId))
+                                {
+                                    <option value="@cat.category_id" selected>@cat.Category1</option>
+                                }
+                                else
+                                {
+
+                                    <option value="@cat.category_id">@cat.Category1</option>
+                                }
+
+                            }
+
+                        </select>
+                        <span style="margin-left:30px">Status:</span>
+                        <select id="stage" style="width:250px;">
+                            <option value="0">All</option>
+                            @if (1 == ViewBag.stageId)
+                            {
+                                <option value="1" selected>--Registered</option>
+                            }
+                            else
+                            {
+
+                                <option value="1">--Registered</option>
+                            }
+                            @if (2 == ViewBag.stageId)
+                            {
+
+                                <option value="2" selected>--Forwarded to concerned department</option>
+                            }
+                            else
+                            {
+                                <option value="2">--Forwarded to concerned department</option>
+
+                            }
+                            @if (3 == ViewBag.stageId)
+                            {
+                                <option value="3" selected>--Under Verification</option>
+                            }
+                            else
+                            {
+                                <option value="3">--Under Verification</option>
+                            }
+                            @if (4 == ViewBag.stageId)
+                            {
+                                <option value="4" selected>--Work Initiated</option>
+                            }
+                            else
+                            {
+                                <option value="4">--Work Initiated</option>
+
+                            }@if (5 == ViewBag.stageId)
+                            {
+                                <option value="5" selected>--near completion</option>
+                            }
+                            else
+                            {
+                                <option value="5">--near completion</option>
+
+                            }@if (9 == ViewBag.stageId)
+                            {
+                                <option value="9" selected>--Resolved</option>
+                            }
+                            else
+                            {
+                                <option value="9">--Resolved</option>
+                            }@if (40 == ViewBag.stageId)
+                            {
+                                <option value="40" selected>Already Resolved</option>
+                            }
+                            else
+                            {
+                                <option value="40">Already Resolved</option>
+
+                            }@if (10 == ViewBag.stageId)
+                            {
+                                <option value="10" selected>--Forwarded for Review</option>
+                            }
+                            else
+                            {
+                                <option value="10">--Forwarded for Review</option>
+
+                            }@if (13 == ViewBag.stageId)
+                            {
+                                <option value="13" selected>--Already Resolved</option>
+                            }
+                            else
+                            {
+                                <option value="13">--Already Resolved</option>
+                            }@if (50 == ViewBag.stageId)
+                            {
+                                <option value="50" selected>Budget</option>
+                            }
+                            else
+                            {
+                                <option value="50">Budget</option>
+                            }@if (18 == ViewBag.stageId)
+                            {
+                                <option value="18" selected>--Forwarded for Review</option>
+                            }
+                            else
+                            {
+                                <option value="18">--Forwarded for Review</option>
+                            }@if (21 == ViewBag.stageId)
+                            {
+                                <option value="21" selected>--Pending for next year budget</option>
+                            }
+                            else
+                            {
+                                <option value="21">--Pending for next year budget</option>
+
+                            }@if (60 == ViewBag.stageId)
+                            {
+                                <option value="60" selected>Bogus</option>
+
+                            }
+                            else
+                            {
+                                <option value="60">Bogus</option>
+                            }@if (14 == ViewBag.stageId)
+                            {
+
+                                <option value="14" selected>--Forwarded for Review</option>
+                            }
+                            else
+                            {
+                                <option value="14">--Forwarded for Review</option>
+
+                            }@if (17 == ViewBag.stageId)
+                            {
+                                <option value="17" selected>--Bogus complaint</option>
+                            }
+                            else
+                            {
+                                <option value="17">--Bogus complaint</option>
+                            }
+
+
+                        </select>
+                        <span style="margin-left:30px">Time Period:</span>
+                        <select id="timePeriod" style="width:190px">
+                            <option value="0">All</option>
+                            @if (3 == ViewBag.TimePeriodId)
+                            {
+                                <option value="3" selected>Last 3 months</option>
+                            }
+                            else
+                            {
+                                <option value="3">Last 3 months</option>
+                            }@if (6 == ViewBag.TimePeriodId)
+                            {
+                                <option value="6" selected>Last 6 months</option>
+                            }
+                            else
+                            {
+                                <option value="6">Last 6 months</option>
+                            }@if (9 == ViewBag.TimePeriodId)
+                            {
+                                <option value="9" selected>Last 9 months</option>
+                            }
+                            else
+                            {
+                                <option value="9">Last 9 months</option>
+                            }@if (12 == ViewBag.TimePeriodId)
+                            {
+                                <option value="12" selected>Last 12 months</option>}
+                            else
+                            {
+                                <option value="12">Last 12 months</option>}
+                            }@if (24 == ViewBag.TimePeriodId)
+                            {
+                                <option value="24" selected>Last 2 Years</option>}
+                            else
+                            {
+                                <option value="24">Last 2 Years</option>
+                            }
+                            @if (36 == ViewBag.TimePeriodId)
+                            {
+
+                                <option value="36" selected>Last 3 Year</option>
+                            }
+                            else
+                            {
+                                <option value="36">Last 3 Year</option>
+                            }
+
+
+                        </select>
+                        <br /><br />
+                        <span style="margin-left:36px">Order: </span>
+                        <select id="OrderId" style="width:190px;">
+
+                            @*<option value="1" selected>Registered First</option>*@
+
+                            <option value="1">Registered First</option>
+                            @if (2 == ViewBag.OrderById)
+                            {
+                                <option value="2" selected>Registered Last</option>
+                            }
+                            else
+                            {
+                                <option value="2">Registered Last</option>
+                            }@if (3 == ViewBag.OrderById)
+                            {
+                                <option value="3" selected>Severe First</option>
+                            }
+                            else
+                            {
+                                <option value="3">Severe First</option>
+                            }@if (4 == ViewBag.OrderById)
+                            {
+                                <option value="4" selected>Severe Last</option>}
+                            else
+                            {
+                                <option value="4">Severe Last</option>}
+                            }
+                        </select>
+
+                        <hr />
+                        <div class="w3-right">
+
+                            <input type="submit" value="Clear" class="w3-button w3-large  " style="width:200px;background-color:lightgrey" id="filterClear" />
+                            <input type="submit" value="Apply" class="w3-button w3-large w3-blue " style="width:250px" id="filterApply" />
+
+                            <br /><br />
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        }
+    </div>
+</div>
+<script>
+
+    $(document).ready(function () {
+        function CheckColorBack(complaintId, StageId) {
+            var ComplaintColorBack = "";
+            var ComplaintColorText="";
+            if (StageId == 1) {
+                ComplaintColorBack = "#CCFFCC"; ComplaintColorText = "#ffffff";
+            }
+            else if (StageId== 2) {
+                ComplaintColorBack = "#99ff99"; ComplaintColorText = "#ffffff";
+            }
+            else if (StageId == 3) {
+                ComplaintColorBack = "#99ff33"; ComplaintColorText = "#ffffff";
+            } else if (StageId == 4) {
+                ComplaintColorBack = "#B2FFB2"; ComplaintColorText = "#ffffff";
+            } else if (StageId == 5) {
+                ComplaintColorBack = "#66FF66"; ComplaintColorText = "#000000";
+            } else if (StageId <= 9) {
+
+                ComplaintColorBack = "#008B00"; ComplaintColorText = "#000000";
+            } else if (StageId == 10 || StageId == 11 || StageId == 12) {
+
+                ComplaintColorBack = "#00FF0C"; ComplaintColorText = "#000000";
+            }
+            else if (StageId == 13) {
+
+                ComplaintColorBack = "#00FF0C"; ComplaintColorText = "#000000";
+            }
+            else if (StageId == 14 || StageId == 15 || StageId == 16) {
+
+                ComplaintColorBack = "#00FF0C"; ComplaintColorText = "#000000";
+            }
+            else if (StageId == 17) {
+
+                ComplaintColorBack = "#00FF0C"; ComplaintColorText = "#000000";
+            }
+            else if (StageId == 18 || StageId == 19 || StageId == 20) {
+
+                ComplaintColorBack = "#00FF0C"; ComplaintColorText = "#000000";
+            } else if (StageId == 21) {
+
+                ComplaintColorBack = "#00FF0C"; ComplaintColorText = "#000000";
+            }
+            else if (StageId == 22 || StageId == 23 || StageId == 24) {
+                //under review
+                ComplaintColorBack = "#00FF0C"; ComplaintColorText = "#000000";
+            }
+            else if (StageId == 25) {
+
+                ComplaintColorBack = "#00FF0C"; ComplaintColorText = "#000000";
+            }
+            else if (StageId == 26) {
+
+                ComplaintColorBack = "#00FF0C"; ComplaintColorText = "#000000";
+            }
+            else if (StageId == 27) {
+
+                ComplaintColorBack = "#00FF0C"; ComplaintColorText = "#000000";
+            }
+            return ComplaintColorBack;
+        }
+        @{ var ComplaintColorBack="";var ComplaintColorText="";}
+        @foreach (var comp in Model.comps)
+        {
+
+                <text>
+                var complaintColor =@comp.complaint_Id
+            complaintColor = complaintColor + "Color"
+                 var colorBack = CheckColorBack(@comp.complaint_Id,@comp.stage_id);
+
+        document.getElementById(complaintColor).style.backgroundColor =colorBack;
+                document.getElementById(complaintColor).style.color = '#000000';
+
+             </text>
+            }
+        @foreach (var sevcomp in Model.severeComps)
+        {
+
+            <text>
+        var sevcomp =@sevcomp.complaint_Id;
+        sevcomp = sevcomp + "SevereCompColor";
+
+                 var colorBack = CheckColorBack(@sevcomp.complaint_Id,@sevcomp.stage_id);
+
+        document.getElementById(sevcomp).style.backgroundColor = colorBack;
+        document.getElementById(sevcomp).style.color = "#ffffff";
+            </text>
+        }
+
+        });
+
+    $("#filterApply").click(function () {
+
+        var UCId = $('#UCList option:selected').val();
+        var categoryId = $('#Categories option:selected').val();
+        var stageId = $('#stage option:selected').val();
+        var timePeriodId = $('#timePeriod option:selected').val();
+        var OrderId = $('#OrderId option:selected').val();
+        var townId = @ViewBag.townId;
+
+        var link = '@Url.Action("TownWiseComplaint", "Complaint", new { T_ID = "town_id", category="category_id", Status= "stage_id", timePeriod= "time_id", OrderId= "Order_id" })';
+        link = link.replace('town_id', townId);
+        //link = link.replace('UId', UCId);
+        link = link.replace('category_id', categoryId);
+        link = link.replace('stage_id', stageId);
+        link = link.replace('time_id', timePeriodId);
+        link = link.replace('Order_id', OrderId);
+        
+        link = link.replace('&amp;', '&');
+        link = link.replace('&amp;', '&');
+        link = link.replace('&amp;', '&');
+        link = link.replace('&amp;', '&');
+        link = link.replace('&amp;', '&');
+      //  alert(link);
+        window.location.href = link;
+
+    });
+
+    $("#filterClear").click(function () {
+
+        var townId = @ViewBag.townId;
+
+        var link = '@Url.Action("TownWiseComplaint", "Complaint", new { T_ID = "town_id"})';
+        link = link.replace('town_id', townId);
+
+        link = link.replace('&amp;', '&');
+        //alert(link);
+        window.location.href = link;
+
+    })
+
+
+</script>

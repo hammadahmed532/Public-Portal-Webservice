@@ -1,0 +1,242 @@
+﻿@model Public_Portal_Webservice.Models.viewModel.vmPCP
+
+@{
+    ViewBag.Title = "Complaint handling";
+    Layout = "~/Views/Shared/_LayoutAccountPage.cshtml";
+}
+
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:270px;margin-top:1px" id="mySidebar">
+    <br>
+    <div class="w3-container w3-row">
+        <div class="w3-col s4">
+            @{
+                String gender = Model.acc.gender;
+                gender = gender.ToLower() + ".png";
+
+            }
+
+            <img src="~/Image/ProfileImages/@gender" class="w3-circle w3-margin-right" style="width:46px">
+        </div>
+        <div class="w3-col s8 w3-bar">
+            <strong>
+                <span>@Model.acc.Full_name,</span><br>
+                <span>@Model.acc.Town.town_name Town Nazim</span>
+            </strong><br>
+            <a href="#" class="w3-bar-item w3-button"><i class="fa fa-user"></i></a>
+            <a href="#" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
+        </div>
+    </div>
+    <hr>
+    <div class="w3-container">
+    </div>
+
+
+
+    <div class="w3-bar-block">
+        <div class="w3-bar-block">
+            <a class="w3-button w3-bar-item w3-padding-large w3-margin-bottom w3-blue" href="@Url.Action("TownPanelOverview", "TownAccount")"><span class="glyphicon glyphicon-chevron-left "></span>Back to main panel</a>
+
+        </div>
+        <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
+        <p href="#" class="w3-bar-item  w3-padding w3-large">  Categories</p>
+
+        <a href="@Url.Action("TNManageAreaComplaints", "TownAccount", new { orderby = "severe", cat = "all" })" class="w3-bar-item w3-button w3-padding ">Resolved (@ViewBag.Resolved)</a>
+        <a href="@Url.Action("TNBudgeted", "TownAccount", new { orderby = "severe", cat = "all" })" class="w3-bar-item w3-button w3-padding ">Budgeted (@ViewBag.Budgeted)</a>
+        <a href="@Url.Action("TNRejected", "TownAccount", new { orderby = "severe", cat = "all" })" class="w3-bar-item w3-button w3-padding">Rejected (@ViewBag.Rejected)</a>
+        <a href="@Url.Action("TNAlreadyResolved", "TownAccount", new { orderby = "severe", cat = "all" })" class="w3-bar-item w3-button w3-padding">Already Resolved (@ViewBag.AlreadyResolved)</a>
+        <a href="@Url.Action("TNForwarded", "TownAccount", new { orderby = "severe", cat = "all" })" class="w3-bar-item w3-button w3-padding w3-blue">Forwarded (@ViewBag.Forwarded)</a>
+        <a href="@Url.Action("ReviewComplaintActivities", "TownAccount", new { orderby = "severe", cat = "all" })" class="w3-bar-item w3-button w3-padding">Review Activites (@ViewBag.ReviewActivites)</a>
+        <a href="@Url.Action("BudgetBasket", "TownAccount", new { orderby = "severe", cat = "all" })" class="w3-bar-item w3-button w3-padding ">Approved Budget(@ViewBag.BudgetBasket)</a>
+        <a href="@Url.Action("PublicFeedback", "TownAccount",new { cat = "all" })" class="w3-bar-item w3-button w3-padding ">Public Feedbacks @ViewBag.Feedback</a>
+
+    </div>
+</nav>
+
+
+<!-- Overlay effect when opening sidebar on <asp:scriptmanager runat="server" />all screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:270px;">
+
+
+
+    <div class="w3-container w3-col m12  w3-margin-bottom ">
+
+
+        <div class="w3-col m12 ">
+
+
+
+            <div class=" w3-small">
+                <h3> Forwarded Complaints @ViewBag.status</h3>
+            </div>
+            <h4 style="color:red;">@ViewBag.msg</h4>
+
+            <div class="w3-section w3-bottombar w3-padding-16">
+                <span class="w3-margin-right">Filter by:</span>
+                @if ("all".Equals(ViewBag.cat))
+                {
+                    <a href="@Url.Action("TNForwarded", "TownAccount", new { orderby = "severe", cat = "all" })" class="w3-button w3-black">ALL</a>
+                }
+                else
+                { <a href="@Url.Action("TNForwarded", "TownAccount", new { orderby = "severe", cat = "all" })" class="w3-button w3-white">ALL</a>
+                }
+                @foreach (var cat in Model.categories)
+                {
+                    if (cat.Category1.Equals(ViewBag.cat))
+                    {
+                        <a href="@Url.Action("TNForwarded", "TownAccount", new {orderby="severe", cat = cat.Category1 })" class="w3-button w3-black">@cat.Category1</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("TNForwarded", "TownAccount", new { orderby="severe",cat = cat.Category1 })" class="w3-button w3-white">@cat.Category1</a>
+                    }
+                }
+            </div>
+
+            @if (Model.comps.Count() != 0)
+            {
+
+                <div class="w3-dropdown-hover ">
+                    <button class=" w3-button w3-blue" title="More">
+                        Sorted by @ViewBag.status
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="w3-dropdown-content w3-bar-block w3-card-4" style="text-decoration:none;">
+                        @if ("severe-first".Equals(ViewBag.status))
+                        {
+                            <a href="@Url.Action("TNForwarded", "TownAccount", new { orderby = "recent",cat=ViewBag.cat })" class="w3-button w3-bar-item" style="text-decoration:none;">Sort by recieved-last</a>
+                            <a href="@Url.Action("TNForwarded", "TownAccount", new { orderby = "received",cat=ViewBag.cat })" class="w3-button w3-bar-item" style="text-decoration:none;">Sort by recieved-first</a>
+
+                        }
+                        else if ("received-last".Equals(ViewBag.status))
+                        {
+                            <a href="@Url.Action("TNForwarded", "TownAccount",new { orderby="severe",cat=ViewBag.cat})" class="w3-button w3-bar-item" style="text-decoration:none;">Sort by highest severity-first</a>
+                            <a href="@Url.Action("TNForwarded", "TownAccount", new { orderby = "received",cat=ViewBag.cat })" class="w3-button w3-bar-item" style="text-decoration:none;">Sort by recieved-first</a>
+
+                        }
+                        else if ("received-first".Equals(ViewBag.status))
+                        {
+
+                            <a href="@Url.Action("TNForwarded", "TownAccount", new { orderby = "recent",cat=ViewBag.cat })" class="w3-button w3-bar-item" style="text-decoration:none;">Sort by recieved-last</a>
+                            <a href="@Url.Action("TNForwarded", "TownAccount",new { orderby="severe",cat=ViewBag.cat})" class="w3-button w3-bar-item" style="text-decoration:none;">Sort by highest severity-first</a>
+
+                        }
+                    </div>
+                </div>
+
+
+
+                <div class="w3-right w3-large">Complaints, @Model.comps.Count() </div>
+            }
+
+
+
+            else
+            {
+                <div class="w3-left w3-large ">No Complaints To Show</div>
+
+            }
+        </div>
+        <div class=" w3-col m12 " style="margin-top:20px;">
+
+
+            <div class="w3-container w3-mobile">
+                @foreach (var ucs in Model.ucs)
+                {
+
+                    var check = Model.comps.Where(a => a.UC_area_id == ucs.ID).FirstOrDefault();
+
+                    if (check != null)
+                    {
+
+                        <h3>
+                            @Html.DisplayFor(Model => ucs.UCName)
+                        </h3>
+
+
+
+                        <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white w3-mobile">
+
+                            <tr>
+                                <th>title</th>
+                                <th>category</th>
+                                <th>photo</th>
+                                <th>Resolution photo</th>
+                                <th>Date forwarded</th>
+
+                            </tr>
+                            @foreach (var comppp in Model.comps.Where(a => a.UC_area_id == ucs.ID))
+                            {
+                                <tr>
+                                    <td style="max-width:200px">
+                                        <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comppp.complaint_Id,url=HttpContext.Current.Request.Url })">@Html.DisplayFor(Model => comppp.c_title)</a>
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(Model => comppp.Category.Category1)
+                                    </td>
+
+                                    <td>
+                                        <a href="@Url.Action("SingleComplaint", "Complaint", new { Complaint_ID = comppp.complaint_Id,url=HttpContext.Current.Request.Url })"> <img class="updatedImage" src="@Url.Content(comppp.image1)" style="height:120px;width:190px" /></a>
+                                    </td>
+                                    <td>
+                                        @{ var det_comp = comppp.Complaint_Det_Remarks.FirstOrDefault();}
+                                        <img src="@Url.Content(det_comp.updated_Image1)" class="updatedImage" style="height:120px;width:200px" />
+                                    </td>
+                                   
+                                    <td>
+                                        @comppp.date_last_modified.ToShortDateString()
+                                    </td>
+
+                                </tr>
+                            
+                            }
+                        </table><br>
+                                                }
+                                            }
+
+
+                    </div>
+            <hr>
+
+        </div>
+
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    // Get the Sidebar
+    var mySidebar = document.getElementById("mySidebar");
+
+    // Get the DIV with overlay effect
+    var overlayBg = document.getElementById("myOverlay");
+
+    // Toggle between showing and hiding the sidebar, and add overlay effect
+    function w3_open() {
+        if (mySidebar.style.display === 'block') {
+            mySidebar.style.display = 'none';
+            overlayBg.style.display = "none";
+        } else {
+            mySidebar.style.display = 'block';
+            overlayBg.style.display = "block";
+        }
+    }
+
+    // Close the sidebar with the close button
+    function w3_close() {
+        mySidebar.style.display = "none";
+        overlayBg.style.display = "none";
+    }
+
+
+
+
+    //////map
+
+</script>
+
+

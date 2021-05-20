@@ -1,0 +1,316 @@
+﻿@model Public_Portal_Webservice.Models.viewModel.vmPCP
+
+@{
+    ViewBag.Title = "CH Dashboard";
+    Layout = "~/Views/Shared/_LayoutAccountPage.cshtml";
+}
+
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:270px;margin-top:1px" id="mySidebar">
+    <br>
+    <div class="w3-container w3-row">
+        <div class="w3-col s4">
+            @{
+                String gender = Model.acc.gender;
+                gender = gender.ToLower() + ".png";
+
+            }
+
+            <img src="~/Image/ProfileImages/@gender" class="w3-circle w3-margin-right" style="width:70px;height:70px">
+        </div><br />
+        <div class="w3-col s8 w3-bar">
+            <span>Welcome, <strong>@Model.acc.Full_name</strong></span><br>
+            <span><strong> @Model.acc.Town.town_name Coordinator</strong></span><br>
+            <a href="#" class="w3-bar-item w3-button"><i class="fa fa-user"></i></a>
+            <a href="#" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
+        </div>
+    </div>
+    <hr>
+    <div class="w3-container">
+        <h5>Dashboard</h5>
+    </div>
+    <div class="w3-bar-block">
+        <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
+        <a href="@Url.Action("CHPanelOverview", "CHAccount")" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-bank fa-fw"></i>  Overview</a>
+        <a href="@Url.Action("ChManageAreaComplaints", "CHAccount", new { orderby = "severe", cat = "all" })" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>  Manage area complaints</a>
+        <a href="@Url.Action("CHAccountSetting", "CHAccount")" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Settings</a><br><br>
+    </div>
+</nav>
+
+
+<!-- Overlay effect when opening sidebar on <asp:scriptmanager runat="server" />all screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:300px;margin-top:10px;">
+
+    <!-- Header -->
+    @*<header class="w3-container" style="padding-top:10px">
+        <h5><b><i class="fa fa-dashboard"></i> Dashboard</b></h5>
+    </header>
+
+    <div class="w3-row-padding w3-margin-bottom">
+        <div class="w3-col" style="width:190px">
+            <div class="w3-container w3-red w3-padding-16">
+                <div class="w3-left"><i class="fa fa-comment w3-xxxlarge"></i></div>
+                <div class="w3-right">
+                    <h3>52</h3>
+                </div>
+                <div class="w3-clear"></div>
+                <h4>Messages</h4>
+            </div>
+        </div>
+        <div class="w3-col" style="width:190px">
+            <div class="w3-container w3-blue w3-padding-16">
+                <div class="w3-left"><i class="fa fa-eye w3-xxxlarge"></i></div>
+                <div class="w3-right">
+                    <h3>99</h3>
+                </div>
+                <div class="w3-clear"></div>
+                <h4>Views</h4>
+            </div>
+        </div>
+        <div class="w3-col" style="width:190px">
+            <div class="w3-container w3-teal w3-padding-16">
+                <div class="w3-left"><i class="fa fa-share-alt w3-xxxlarge"></i></div>
+                <div class="w3-right">
+                    <h3>23</h3>
+                </div>
+                <div class="w3-clear"></div>
+                <h4>Shares</h4>
+            </div>
+        </div>
+        <div class="w3-col" style="width:190px">
+            <div class="w3-container w3-orange w3-text-white w3-padding-16">
+                <div class="w3-left"><i class="fa fa-users w3-xxxlarge"></i></div>
+                <div class="w3-right">
+                    <h3>50</h3>
+                </div>
+                <div class="w3-clear"></div>
+                <h4>Users</h4>
+            </div>
+        </div>
+    </div>*@
+
+    <hr>
+    <div class="w3-container">
+        <h3>General Stats</h3>
+        <p>Overall @Model.acc.Town.town_name town <strong>accounts</strong> of out karachi</p>
+        <div class="w3-grey">
+            <div class="w3-container w3-center w3-padding w3-green" style="width:@ViewBag.accountsPer%">@ViewBag.accountsPer%</div>
+        </div>
+
+        <p>Overall @Model.acc.Town.town_name town <strong>complaints</strong> of out karachi</p>
+        <div class="w3-grey">
+            <div class="w3-container w3-center w3-padding w3-orange" style="width:@ViewBag.ComplaintsPer%">@ViewBag.ComplaintsPer%</div>
+        </div>
+
+        <p>Overall <strong>resolved</strong> complaints out of @Model.acc.Town.town_name town</p>
+        <div class="w3-grey">
+            <div class="w3-container w3-center w3-padding w3-blue" style="width:@ViewBag.resolvedPer%">@ViewBag.resolvedPer%</div>
+        </div>
+
+
+    </div>
+    <hr>
+    <div class="w3-panel">
+        <div class="w3-row-padding" style="margin:0 -16px">
+            <div class="w3-third">
+                <h5>Town</h5>
+                <div id="map" class="leaflet-container leaflet-touch leaflet-retina leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom" style="border: 1px solid #AAA; height:300px;"></div>
+            </div>
+            <div class="w3-twothird">
+                <h5>Feeds</h5>
+                <table class="w3-table w3-striped w3-white">
+                    <tr>
+                        <td><i class="fa fa-user w3-text-blue w3-large"></i></td>
+                        <td>New record, over 90 views.</td>
+                        <td><i>10 mins</i></td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-bell w3-text-red w3-large"></i></td>
+                        <td>Database error.</td>
+                        <td><i>15 mins</i></td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-users w3-text-yellow w3-large"></i></td>
+                        <td>New record, over 40 users.</td>
+                        <td><i>17 mins</i></td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-comment w3-text-red w3-large"></i></td>
+                        <td>New comments.</td>
+                        <td><i>25 mins</i></td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-bookmark w3-text-blue w3-large"></i></td>
+                        <td>Check transactions.</td>
+                        <td><i>28 mins</i></td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-laptop w3-text-red w3-large"></i></td>
+                        <td>CPU overload.</td>
+                        <td><i>35 mins</i></td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-share-alt w3-text-green w3-large"></i></td>
+                        <td>New shares.</td>
+                        <td><i>39 mins</i></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- End page content -->
+</div>
+
+<script type="text/javascript">
+    // Get the Sidebar
+    var mySidebar = document.getElementById("mySidebar");
+
+    // Get the DIV with overlay effect
+    var overlayBg = document.getElementById("myOverlay");
+
+    // Toggle between showing and hiding the sidebar, and add overlay effect
+    function w3_open() {
+        if (mySidebar.style.display === 'block') {
+            mySidebar.style.display = 'none';
+            overlayBg.style.display = "none";
+        } else {
+            mySidebar.style.display = 'block';
+            overlayBg.style.display = "block";
+        }
+    }
+
+    // Close the sidebar with the close button
+    function w3_close() {
+        mySidebar.style.display = "none";
+        overlayBg.style.display = "none";
+    }
+
+
+
+
+    //////map
+
+
+
+    var map = L.map('map').setView([24.949149, 66.930278], 11.3);
+
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaGFzZWVia2hhdHJpIiwiYSI6ImNqbzA5czVpazJ1cmszcW50OGNrdnB5Z2UifQ.3b1kGAPFs2sBLcO8UuAXNw', {
+        maxZoom: 18,
+
+        id: 'mapbox.light'
+    }).addTo(map);
+
+
+   // control that shows state info on hover
+   var info = L.control();
+
+    info.onAdd = function (map) {
+            this._div = L.DomUtil.create('div', 'info');
+        this.update();
+        return this._div;
+    };
+
+    info.update = function (props) {
+            this._div.innerHTML = '<h3><strong>' + (props ? props.name + '</strong></h3><br />' + props.density
+                : 'Hover over a Town');
+        };
+
+        info.addTo(map);
+
+
+
+        // get color depending on population density value
+    function getColor(d) {
+        return d == 1 ? '#E9967A' :
+            d == 2 ? '#DC143C' :
+                d == 3 ? '#FFA07A' :
+                    d == 4 ? '#FF4500' :
+                        d == 5 ? '#FFD700' :
+                            d == 6 ? '#FFA500' :
+                                d == 7 ? '#BDB76B' :
+                                    d == 8 ? '#7CFC00' :
+                                        d == 9 ? '#32CD32' :
+                                            d == 10 ? '#006400' :
+                                                d == 11 ? '#00FA9A' :
+                                                    d == 12 ? '#00FFFF' :
+                                                        d == 13 ? '#008080' :
+                                                            d == 14 ? '#0000FF' :
+                                                                d == 15 ? '#7B68EE' :
+                                                                    d == 16 ? '#EE82EE' :
+                                                                        d == 17 ? '#800080' :
+                                                                            d == 18 ? '#8A2BE2' :
+                'red' ;
+    }
+
+    function style(feature) {
+        return {
+            weight: 3,
+        opacity: 1,
+        color: 'white',
+        dashArray: '3',
+        fillOpacity: 0.7,
+        fillColor: getColor(feature.properties.density)
+    };
+}
+
+    function highlightFeature(e) {
+        var layer = e.target;
+
+        layer.setStyle({
+            weight: 5,
+        color: '#666',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
+
+        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            layer.bringToFront();
+        }
+
+        info.update(layer.feature.properties);
+    }
+
+    var geojson;
+
+    function resetHighlight(e) {
+            geojson.resetStyle(e.target);
+        info.update();
+    }
+
+
+    function zoomToFeature(e) {
+
+
+            window.location.href = '/Complaint/TownWiseComplaint?T_ID=' + e.target.feature.id;
+
+        }
+
+
+
+    function onEachFeature(feature, layer) {
+            layer.on({
+                mouseover: highlightFeature,
+                mouseout: resetHighlight,
+                click: zoomToFeature
+            });
+        }
+
+    geojson = L.geoJson(@Model.acc.Town.town_name.ToString().ToLower(), {
+            style: style,
+        onEachFeature: onEachFeature
+    }).addTo(map);
+
+
+
+    var legend = L.control({position: 'bottomleft' });
+
+</script>
+
+

@@ -1,0 +1,65 @@
+﻿@model Public_Portal_Webservice.Models.LoginAcc
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@using (Html.BeginForm("LoginAdmin", "Admin", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container" style="vertical-align:middle">
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-4">
+                <h2>Login as Admin</h2>
+
+            </div>
+        </div>
+        <br />
+        <h4 style="color:red;" class="col-sm-4 col-sm-offset-4">
+            @ViewBag.Message
+        </h4>
+
+        <div class="row" style="vertical-align:middle">
+            <div class="col-sm-4 col-sm-offset-4">
+                <label for="fname">username</label>
+            </div>
+            <div class="col-sm-4 col-sm-offset-4">
+                @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-4">
+                <label for="lname">Password</label>
+            </div>
+            <div class="col-sm-4 col-sm-offset-4">
+                @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+            </div>
+        </div><br />
+        @*<div class="row">
+                <div class="col-sm-4 col-sm-offset-4">
+                    <label for="lname">Remember me</label>
+                </div>
+                <div class="col-sm-4 col-sm-offset-4">
+                    @Html.EditorFor(model => model.RememberMe)
+                    @Html.ValidationMessageFor(model => model.RememberMe, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-4">
+                <input type="submit" value="Login" class="w3-button w3-green w3-block">
+            </div>
+        </div>
+        <div class="row">
+        </div>
+    </div>
+}
+
+@section Scripts{
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}

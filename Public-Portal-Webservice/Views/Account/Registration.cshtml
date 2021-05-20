@@ -1,0 +1,93 @@
+﻿@*@using (Html.BeginForm("RegistrationUCSelect", "PublicAccount", FormMethod.Get))
+    {
+
+
+        <div class="container">
+            <h2>Registeration of Public Account</h2>
+            <br /><br /><br />
+
+            <div class="row">
+                <div class="col-25">
+                    <label for="country">Where do You Live Select Your Town</label>
+                </div>
+                <div class="col-75">
+                    @{
+                        List<SelectListItem> listItemsTown = new List<SelectListItem>();
+
+                        foreach (var item in Model.towns)
+                        {
+
+
+                            listItemsTown.Add(new SelectListItem { Text = item.town_name, Value = item.town_id.ToString() });
+
+                        }
+                    }
+                    @Html.DropDownList("TownSelected", listItemsTown)
+                </div>
+            </div>
+            <br /><br />
+            <div class="row">
+                <div class="col-25">
+                    <label></label>
+                </div>
+                <div class="col-75">
+
+                    <input type="submit" value="Register Account" class="w3-btn w3-block  w3-blue w3-margin-bottom ">
+                </div>
+            </div>
+            <div>
+                <div>
+                    @Html.ActionLink("Back to Login Page", "Login")
+                </div>
+            </div>
+        </div>
+    }*@
+
+
+@*//////////////////////*@
+@model Public_Portal_Webservice.Models.viewModel.vmPCP
+@{
+    ViewBag.Title = "Registration";
+    Layout = "~/Views/Shared/_LayoutBlank.cshtml";
+
+}
+<h4 style="color:red;" class="col-sm-4 col-sm-offset-4">
+    @*@TempData["Status"].ToString()*@
+</h4>
+
+<div class="body"></div>
+<div class="grad"></div>
+<div class="header">
+    <div>Account<span>Registration</span></div>
+</div>
+<br>
+<div class="login">
+
+    <h3 style="color:white">Karachi towns </h3>
+    @using (Html.BeginForm("RegistrationUCSelect", "Account", FormMethod.Get))
+    {
+        @Html.AntiForgeryToken()
+        <h5 style="color:white">Where do You Live?</h5>
+
+        {
+            List<SelectListItem> listItemsTown = new List<SelectListItem>();
+
+            foreach (var item in Model.towns)
+            {
+
+
+                listItemsTown.Add(new SelectListItem { Text = item.town_name, Value = item.town_id.ToString() });
+
+            }
+            @Html.DropDownList("TownSelected", listItemsTown)
+
+        }
+        <br>
+        <h4><a href="#" style="color:blue"></a></h4>
+        <input type="submit" value="Submit" class="btn btn-default btn-block btn-success"><br />
+        <h3>
+            <a href="@Url.Action("Login", "Account")" style="color:dodgerblue">Back to login page</a>
+        </h3>
+
+    }
+</div>

@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewBag.Title = "Account Verification";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>VerifyAccount</h2>
+
+@if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
+{
+    <div class="alert alert-danger">
+        <strong>Cannot Enter! </strong> Your account has not been verified yet. Check inbox and click on the link provided
+    </div>
+
+}
+else
+{
+    <div class="alert alert-danger">
+        <strong> Error!</strong> @ViewBag.Message
+    </div>
+}
+
+
