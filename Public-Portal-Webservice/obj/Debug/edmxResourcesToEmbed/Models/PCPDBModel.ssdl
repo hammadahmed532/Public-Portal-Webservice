@@ -1,62 +1,133 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="PCP5Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-  <EntityType Name="Account">
+<Schema Namespace="PCP5Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="PCP5ModelStoreContainer">
+    <EntitySet Name="Accounts" EntityType="PCP5Model.Store.Accounts" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Categories" EntityType="PCP5Model.Store.Categories" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Complaint_Det_Remarks" EntityType="PCP5Model.Store.Complaint_Det_Remarks" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Complaints" EntityType="PCP5Model.Store.Complaints" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Feedbacks" EntityType="PCP5Model.Store.Feedbacks" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="PendingComplaints" EntityType="PCP5Model.Store.PendingComplaints" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Status" EntityType="PCP5Model.Store.Status" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="SupportingComplaints" EntityType="PCP5Model.Store.SupportingComplaints" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Towns" EntityType="PCP5Model.Store.Towns" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UCAreas" EntityType="PCP5Model.Store.UCAreas" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Votings" EntityType="PCP5Model.Store.Votings" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Roles" EntityType="PCP5Model.Store.Roles" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Announcement1" EntityType="PCP5Model.Store.Announcement1" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_Account_ToCategory" Association="PCP5Model.Store.FK_Account_ToCategory">
+      <End Role="Category" EntitySet="Categories" />
+      <End Role="Account" EntitySet="Accounts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Account_Town" Association="PCP5Model.Store.FK_Account_Town">
+      <End Role="Town" EntitySet="Towns" />
+      <End Role="Account" EntitySet="Accounts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Accounts_ToUC" Association="PCP5Model.Store.FK_Accounts_ToUC">
+      <End Role="UCAreas" EntitySet="UCAreas" />
+      <End Role="Account" EntitySet="Accounts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Complaints_ToAccount" Association="PCP5Model.Store.FK_Complaints_ToAccount">
+      <End Role="Account" EntitySet="Accounts" />
+      <End Role="Complaints" EntitySet="Complaints" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Complaints_ToForward_Admin_id" Association="PCP5Model.Store.FK_Complaints_ToForward_Admin_id">
+      <End Role="Account" EntitySet="Accounts" />
+      <End Role="Complaints" EntitySet="Complaints" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SupportingComplaints_ToTable" Association="PCP5Model.Store.FK_SupportingComplaints_ToTable">
+      <End Role="Account" EntitySet="Accounts" />
+      <End Role="SupportingComplaints" EntitySet="SupportingComplaints" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Voting_ToAccount" Association="PCP5Model.Store.FK_Voting_ToAccount">
+      <End Role="Account" EntitySet="Accounts" />
+      <End Role="Voting" EntitySet="Votings" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Complaints_Category" Association="PCP5Model.Store.FK_Complaints_Category">
+      <End Role="Category" EntitySet="Categories" />
+      <End Role="Complaints" EntitySet="Complaints" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Complaint_Det_Remarks_ToTable" Association="PCP5Model.Store.FK_Complaint_Det_Remarks_ToTable">
+      <End Role="Complaints" EntitySet="Complaints" />
+      <End Role="Complaint_Det_Remarks" EntitySet="Complaint_Det_Remarks" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Complaints_ToStatus" Association="PCP5Model.Store.FK_Complaints_ToStatus">
+      <End Role="Status" EntitySet="Status" />
+      <End Role="Complaints" EntitySet="Complaints" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Complaints_ToUC" Association="PCP5Model.Store.FK_Complaints_ToUC">
+      <End Role="UCAreas" EntitySet="UCAreas" />
+      <End Role="Complaints" EntitySet="Complaints" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Feedback_ToComplaint" Association="PCP5Model.Store.FK_Feedback_ToComplaint">
+      <End Role="Complaints" EntitySet="Complaints" />
+      <End Role="Feedback" EntitySet="Feedbacks" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PendingComplaints_ToTable" Association="PCP5Model.Store.FK_PendingComplaints_ToTable">
+      <End Role="Complaints" EntitySet="Complaints" />
+      <End Role="PendingComplaints" EntitySet="PendingComplaints" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SupportingComplaints_ToComplaints" Association="PCP5Model.Store.FK_SupportingComplaints_ToComplaints">
+      <End Role="Complaints" EntitySet="Complaints" />
+      <End Role="SupportingComplaints" EntitySet="SupportingComplaints" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Voting_ToComplaints" Association="PCP5Model.Store.FK_Voting_ToComplaints">
+      <End Role="Complaints" EntitySet="Complaints" />
+      <End Role="Voting" EntitySet="Votings" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Account_ToRoles" Association="PCP5Model.Store.FK_Account_ToRoles">
+      <End Role="Role" EntitySet="Roles" />
+      <End Role="Account" EntitySet="Accounts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Announcement_ToAccount" Association="PCP5Model.Store.FK_Announcement_ToAccount">
+      <End Role="Account" EntitySet="Accounts" />
+      <End Role="Announcement1" EntitySet="Announcement1" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Announcement_ToForwardedBy" Association="PCP5Model.Store.FK_Announcement_ToForwardedBy">
+      <End Role="Account" EntitySet="Accounts" />
+      <End Role="Announcement1" EntitySet="Announcement1" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Announcement_ToCategory" Association="PCP5Model.Store.FK_Announcement_ToCategory">
+      <End Role="Category" EntitySet="Categories" />
+      <End Role="Announcement1" EntitySet="Announcement1" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Announcement_ToStatus" Association="PCP5Model.Store.FK_Announcement_ToStatus">
+      <End Role="Status" EntitySet="Status" />
+      <End Role="Announcement1" EntitySet="Announcement1" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Announcement_ToUCArea" Association="PCP5Model.Store.FK_Announcement_ToUCArea">
+      <End Role="UCArea" EntitySet="UCAreas" />
+      <End Role="Announcement1" EntitySet="Announcement1" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Accounts">
     <Key>
       <PropertyRef Name="Account_id" />
     </Key>
     <Property Name="Account_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Full_name" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="username" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="password" Type="nvarchar" MaxLength="50" Nullable="false" />
-    <Property Name="Role" Type="int" Nullable="false" />
-    <Property Name="isEmailVerified" Type="bit" />
-    <Property Name="ActivationCode" Type="uniqueidentifier" />
+    <Property Name="username" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="password" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="isEmailVerified" Type="bit" Nullable="true" />
+    <Property Name="ActivationCode" Type="uniqueidentifier" Nullable="true" />
     <Property Name="phone_number" Type="bigint" Nullable="false" />
     <Property Name="address" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="map_long" Type="float" />
-    <Property Name="map_lat" Type="float" />
+    <Property Name="map_long" Type="float" Nullable="true" />
+    <Property Name="map_lat" Type="float" Nullable="true" />
     <Property Name="email_address" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="UC_Area_id" Type="int" />
-    <Property Name="Town_id" Type="int" />
-    <Property Name="date_created" Type="datetime" />
-    <Property Name="profession" Type="nvarchar(max)" />
-    <Property Name="gender" Type="nvarchar(max)" />
-    <Property Name="department_id" Type="int" />
+    <Property Name="UC_Area_id" Type="int" Nullable="true" />
+    <Property Name="Town_id" Type="int" Nullable="true" />
+    <Property Name="date_created" Type="datetime" Nullable="true" />
+    <Property Name="profession" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="gender" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="department_id" Type="int" Nullable="true" />
+    <Property Name="Role" Type="int" Nullable="false" />
   </EntityType>
-  <EntityType Name="Announcement">
-    <Key>
-      <PropertyRef Name="Announcement_id" />
-    </Key>
-    <Property Name="Announcement_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="title" Type="varchar" MaxLength="50" />
-    <Property Name="account_id" Type="int" />
-    <Property Name="description" Type="varchar(max)" />
-    <Property Name="UC_Area_id" Type="int" />
-    <Property Name="map_long" Type="float" />
-    <Property Name="map_lat" Type="float" />
-    <Property Name="date_creation" Type="datetime" Nullable="false" />
-    <Property Name="date_stage_2" Type="datetime" />
-    <Property Name="date_stage_3" Type="datetime" />
-    <Property Name="date_stage_4" Type="datetime" />
-    <Property Name="date_stage_5" Type="datetime" />
-    <Property Name="date_stage_6" Type="datetime" />
-    <Property Name="image_file_1" Type="varchar(max)" />
-    <Property Name="image_file_2" Type="varchar(max)" />
-    <Property Name="image_file_3" Type="varchar(max)" />
-    <Property Name="stage_id" Type="int" />
-    <Property Name="category_id" Type="int" />
-    <Property Name="admin_confirm" Type="bit" />
-    <Property Name="date_last_modified" Type="datetime" Nullable="false" />
-    <Property Name="forwarded_by_account_id" Type="int" />
-    <Property Name="complaint_type" Type="varchar" MaxLength="50" />
-    <Property Name="is_notified" Type="bit" />
-  </EntityType>
-  <EntityType Name="Category">
+  <EntityType Name="Categories">
     <Key>
       <PropertyRef Name="category_id" />
     </Key>
     <Property Name="category_id" Type="int" Nullable="false" />
-    <Property Name="Category" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Category1" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
   <EntityType Name="Complaint_Det_Remarks">
     <Key>
@@ -64,55 +135,55 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Complaint_id" Type="int" Nullable="false" />
-    <Property Name="Remarks_Field_Off" Type="nvarchar(max)" />
-    <Property Name="Remarks_Member" Type="nvarchar(max)" />
-    <Property Name="Remarks_Coordinator" Type="nvarchar(max)" />
-    <Property Name="Remarks_Nazim" Type="nvarchar(max)" />
-    <Property Name="updated_Image1" Type="nvarchar(max)" />
-    <Property Name="updated_Image2" Type="nvarchar(max)" />
-    <Property Name="updated_Image3" Type="nvarchar(max)" />
-    <Property Name="severity_lvl" Type="int" />
-    <Property Name="budgetYear" Type="int" />
+    <Property Name="Remarks_Field_Off" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Remarks_Member" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Remarks_Coordinator" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Remarks_Nazim" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="updated_Image1" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="updated_Image2" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="updated_Image3" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="severity_lvl" Type="int" Nullable="true" />
+    <Property Name="budgetYear" Type="int" Nullable="true" />
   </EntityType>
   <EntityType Name="Complaints">
     <Key>
       <PropertyRef Name="complaint_Id" />
     </Key>
     <Property Name="complaint_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="c_title" Type="nvarchar(max)" />
-    <Property Name="account_id" Type="int" />
-    <Property Name="description" Type="nvarchar(max)" />
-    <Property Name="UC_area_id" Type="int" />
-    <Property Name="map_long" Type="float" />
-    <Property Name="map_lat" Type="float" />
+    <Property Name="c_title" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="account_id" Type="int" Nullable="true" />
+    <Property Name="description" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="UC_area_id" Type="int" Nullable="true" />
+    <Property Name="map_long" Type="float" Nullable="true" />
+    <Property Name="map_lat" Type="float" Nullable="true" />
     <Property Name="date_creation" Type="datetime" Nullable="false" />
-    <Property Name="date_stage_2" Type="datetime" />
-    <Property Name="date_stage_3" Type="datetime" />
-    <Property Name="date_stage_4" Type="datetime" />
-    <Property Name="date_stage_6" Type="datetime" />
-    <Property Name="image1" Type="nvarchar(max)" />
-    <Property Name="image2" Type="nvarchar(max)" />
-    <Property Name="image3" Type="nvarchar(max)" />
+    <Property Name="date_stage_2" Type="datetime" Nullable="true" />
+    <Property Name="date_stage_3" Type="datetime" Nullable="true" />
+    <Property Name="date_stage_4" Type="datetime" Nullable="true" />
+    <Property Name="date_stage_6" Type="datetime" Nullable="true" />
+    <Property Name="image1" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="image2" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="image3" Type="nvarchar(max)" Nullable="true" />
     <Property Name="stage_id" Type="int" Nullable="false" />
-    <Property Name="date_stage_5" Type="datetime" />
-    <Property Name="category_id" Type="int" />
-    <Property Name="view_public" Type="nvarchar" MaxLength="10" />
-    <Property Name="admin_confirm" Type="bit" />
+    <Property Name="date_stage_5" Type="datetime" Nullable="true" />
+    <Property Name="category_id" Type="int" Nullable="true" />
+    <Property Name="view_public" Type="nvarchar" Nullable="true" MaxLength="10" />
+    <Property Name="admin_confirm" Type="bit" Nullable="true" />
     <Property Name="date_last_modified" Type="datetime" Nullable="false" />
-    <Property Name="Forwarded_By_Account_id" Type="int" />
-    <Property Name="complaint_Type" Type="nvarchar(max)" />
-    <Property Name="is_Notified" Type="bit" />
-    <Property Name="Expected_amount" Type="float" />
+    <Property Name="Forwarded_By_Account_id" Type="int" Nullable="true" />
+    <Property Name="complaint_Type" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="is_Notified" Type="bit" Nullable="true" />
+    <Property Name="Expected_amount" Type="float" Nullable="true" />
   </EntityType>
-  <EntityType Name="Feedback">
+  <EntityType Name="Feedbacks">
     <Key>
       <PropertyRef Name="Feedback_id" />
     </Key>
     <Property Name="Feedback_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="complaint_id" Type="int" />
-    <Property Name="FeedbackMessage" Type="nvarchar(max)" />
-    <Property Name="Rating" Type="int" />
-    <Property Name="time_created" Type="datetime" />
+    <Property Name="complaint_id" Type="int" Nullable="true" />
+    <Property Name="FeedbackMessage" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Rating" Type="int" Nullable="true" />
+    <Property Name="time_created" Type="datetime" Nullable="true" />
   </EntityType>
   <EntityType Name="PendingComplaints">
     <Key>
@@ -120,28 +191,20 @@
     </Key>
     <Property Name="p_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="complaint_id" Type="int" Nullable="false" />
-    <Property Name="severity_Lvl" Type="int" />
-    <Property Name="Year" Type="int" />
-  </EntityType>
-  <EntityType Name="Roles">
-    <Key>
-      <PropertyRef Name="Role_Id" />
-    </Key>
-    <Property Name="Role_Id" Type="int" Nullable="false" />
-    <Property Name="Role_Name" Type="nvarchar" MaxLength="50" />
-    <Property Name="Role_Description" Type="nvarchar(max)" />
+    <Property Name="severity_Lvl" Type="int" Nullable="true" />
+    <Property Name="Year" Type="int" Nullable="true" />
   </EntityType>
   <EntityType Name="Status">
     <Key>
       <PropertyRef Name="stage_id" />
     </Key>
     <Property Name="stage_id" Type="int" Nullable="false" />
-    <Property Name="stage_description" Type="nvarchar(max)" />
-    <Property Name="Status_Percent" Type="int" />
-    <Property Name="Status_first" Type="nvarchar(max)" />
-    <Property Name="Status_Budget" Type="nvarchar(max)" />
-    <Property Name="Status_Bogus" Type="nvarchar(max)" />
-    <Property Name="Status_Already_Done" Type="nvarchar(max)" />
+    <Property Name="stage_description" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Status_Percent" Type="int" Nullable="true" />
+    <Property Name="Status_first" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Status_Budget" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Status_Bogus" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Status_Already_Done" Type="nvarchar(max)" Nullable="true" />
   </EntityType>
   <EntityType Name="SupportingComplaints">
     <Key>
@@ -151,9 +214,9 @@
     <Property Name="Complaint_id" Type="int" Nullable="false" />
     <Property Name="account_id" Type="int" Nullable="false" />
     <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="time_created" Type="datetime2" Precision="7" />
+    <Property Name="time_created" Type="datetime" Nullable="true" />
   </EntityType>
-  <EntityType Name="Town">
+  <EntityType Name="Towns">
     <Key>
       <PropertyRef Name="town_id" />
     </Key>
@@ -165,21 +228,57 @@
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="UCName" Type="nvarchar(max)" />
-    <Property Name="TownID" Type="int" />
+    <Property Name="UCName" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="TownID" Type="int" Nullable="true" />
   </EntityType>
-  <EntityType Name="Voting">
+  <EntityType Name="Votings">
     <Key>
       <PropertyRef Name="vote_id" />
     </Key>
     <Property Name="vote_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="complaint_id" Type="int" Nullable="false" />
     <Property Name="account_id" Type="int" Nullable="false" />
-    <Property Name="time_created" Type="datetime" />
+    <Property Name="time_created" Type="datetime" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Roles">
+    <Key>
+      <PropertyRef Name="Role_Id" />
+    </Key>
+    <Property Name="Role_Id" Type="int" Nullable="false" />
+    <Property Name="Role_Name" Type="nvarchar" Nullable="true" MaxLength="50" />
+    <Property Name="Role_Description" Type="nvarchar(max)" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Announcement1">
+    <Key>
+      <PropertyRef Name="Announcement_id" />
+    </Key>
+    <Property Name="Announcement_id" Type="int" Nullable="false" />
+    <Property Name="title" Type="varchar" Nullable="true" MaxLength="50" />
+    <Property Name="account_id" Type="int" Nullable="true" />
+    <Property Name="description" Type="varchar(max)" Nullable="true" />
+    <Property Name="UC_Area_id" Type="int" Nullable="true" />
+    <Property Name="map_long" Type="float" Nullable="true" />
+    <Property Name="map_lat" Type="float" Nullable="true" />
+    <Property Name="date_creation" Type="datetime" Nullable="false" />
+    <Property Name="date_stage_2" Type="datetime" Nullable="true" />
+    <Property Name="date_stage_3" Type="datetime" Nullable="true" />
+    <Property Name="date_stage_4" Type="datetime" Nullable="true" />
+    <Property Name="date_stage_5" Type="datetime" Nullable="true" />
+    <Property Name="date_stage_6" Type="datetime" Nullable="true" />
+    <Property Name="image_file_1" Type="varchar(max)" Nullable="true" />
+    <Property Name="image_file_2" Type="varchar(max)" Nullable="true" />
+    <Property Name="image_file_3" Type="varchar(max)" Nullable="true" />
+    <Property Name="stage_id" Type="int" Nullable="true" />
+    <Property Name="category_id" Type="int" Nullable="true" />
+    <Property Name="admin_confirm" Type="bit" Nullable="true" />
+    <Property Name="date_last_modified" Type="datetime" Nullable="false" />
+    <Property Name="forwarded_by_account_id" Type="int" Nullable="true" />
+    <Property Name="complaint_type" Type="varchar" Nullable="true" MaxLength="50" />
+    <Property Name="is_notified" Type="bit" Nullable="true" />
   </EntityType>
   <Association Name="FK_Account_ToCategory">
-    <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
-    <End Role="Account" Type="Self.Account" Multiplicity="*" />
+    <End Role="Category" Type="PCP5Model.Store.Categories" Multiplicity="0..1" />
+    <End Role="Account" Type="PCP5Model.Store.Accounts" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Category">
         <PropertyRef Name="category_id" />
@@ -189,21 +288,9 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Account_ToRoles">
-    <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
-    <End Role="Account" Type="Self.Account" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Roles">
-        <PropertyRef Name="Role_Id" />
-      </Principal>
-      <Dependent Role="Account">
-        <PropertyRef Name="Role" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_Account_Town">
-    <End Role="Town" Type="Self.Town" Multiplicity="0..1" />
-    <End Role="Account" Type="Self.Account" Multiplicity="*" />
+    <End Role="Town" Type="PCP5Model.Store.Towns" Multiplicity="0..1" />
+    <End Role="Account" Type="PCP5Model.Store.Accounts" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Town">
         <PropertyRef Name="town_id" />
@@ -214,8 +301,8 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_Accounts_ToUC">
-    <End Role="UCAreas" Type="Self.UCAreas" Multiplicity="0..1" />
-    <End Role="Account" Type="Self.Account" Multiplicity="*" />
+    <End Role="UCAreas" Type="PCP5Model.Store.UCAreas" Multiplicity="0..1" />
+    <End Role="Account" Type="PCP5Model.Store.Accounts" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="UCAreas">
         <PropertyRef Name="ID" />
@@ -225,93 +312,9 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Announcement_ToAccount">
-    <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
-    <End Role="Announcement" Type="Self.Announcement" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Account">
-        <PropertyRef Name="Account_id" />
-      </Principal>
-      <Dependent Role="Announcement">
-        <PropertyRef Name="account_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Announcement_ToCategory">
-    <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
-    <End Role="Announcement" Type="Self.Announcement" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Category">
-        <PropertyRef Name="category_id" />
-      </Principal>
-      <Dependent Role="Announcement">
-        <PropertyRef Name="category_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Announcement_ToForwardedBy">
-    <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
-    <End Role="Announcement" Type="Self.Announcement" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Account">
-        <PropertyRef Name="Account_id" />
-      </Principal>
-      <Dependent Role="Announcement">
-        <PropertyRef Name="forwarded_by_account_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Announcement_ToStatus">
-    <End Role="Status" Type="Self.Status" Multiplicity="0..1" />
-    <End Role="Announcement" Type="Self.Announcement" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Status">
-        <PropertyRef Name="stage_id" />
-      </Principal>
-      <Dependent Role="Announcement">
-        <PropertyRef Name="stage_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Announcement_ToUCArea">
-    <End Role="UCAreas" Type="Self.UCAreas" Multiplicity="0..1" />
-    <End Role="Announcement" Type="Self.Announcement" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="UCAreas">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="Announcement">
-        <PropertyRef Name="UC_Area_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Complaint_Det_Remarks_ToTable">
-    <End Role="Complaints" Type="Self.Complaints" Multiplicity="1" />
-    <End Role="Complaint_Det_Remarks" Type="Self.Complaint_Det_Remarks" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Complaints">
-        <PropertyRef Name="complaint_Id" />
-      </Principal>
-      <Dependent Role="Complaint_Det_Remarks">
-        <PropertyRef Name="Complaint_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Complaints_Category">
-    <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
-    <End Role="Complaints" Type="Self.Complaints" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Category">
-        <PropertyRef Name="category_id" />
-      </Principal>
-      <Dependent Role="Complaints">
-        <PropertyRef Name="category_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_Complaints_ToAccount">
-    <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
-    <End Role="Complaints" Type="Self.Complaints" Multiplicity="*" />
+    <End Role="Account" Type="PCP5Model.Store.Accounts" Multiplicity="0..1" />
+    <End Role="Complaints" Type="PCP5Model.Store.Complaints" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Account">
         <PropertyRef Name="Account_id" />
@@ -322,8 +325,8 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_Complaints_ToForward_Admin_id">
-    <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
-    <End Role="Complaints" Type="Self.Complaints" Multiplicity="*" />
+    <End Role="Account" Type="PCP5Model.Store.Accounts" Multiplicity="0..1" />
+    <End Role="Complaints" Type="PCP5Model.Store.Complaints" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Account">
         <PropertyRef Name="Account_id" />
@@ -333,69 +336,9 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Complaints_ToStatus">
-    <End Role="Status" Type="Self.Status" Multiplicity="1" />
-    <End Role="Complaints" Type="Self.Complaints" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Status">
-        <PropertyRef Name="stage_id" />
-      </Principal>
-      <Dependent Role="Complaints">
-        <PropertyRef Name="stage_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Complaints_ToUC">
-    <End Role="UCAreas" Type="Self.UCAreas" Multiplicity="0..1" />
-    <End Role="Complaints" Type="Self.Complaints" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="UCAreas">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="Complaints">
-        <PropertyRef Name="UC_area_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Feedback_ToComplaint">
-    <End Role="Complaints" Type="Self.Complaints" Multiplicity="0..1" />
-    <End Role="Feedback" Type="Self.Feedback" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Complaints">
-        <PropertyRef Name="complaint_Id" />
-      </Principal>
-      <Dependent Role="Feedback">
-        <PropertyRef Name="complaint_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PendingComplaints_ToTable">
-    <End Role="Complaints" Type="Self.Complaints" Multiplicity="1" />
-    <End Role="PendingComplaints" Type="Self.PendingComplaints" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Complaints">
-        <PropertyRef Name="complaint_Id" />
-      </Principal>
-      <Dependent Role="PendingComplaints">
-        <PropertyRef Name="complaint_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SupportingComplaints_ToComplaints">
-    <End Role="Complaints" Type="Self.Complaints" Multiplicity="1" />
-    <End Role="SupportingComplaints" Type="Self.SupportingComplaints" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Complaints">
-        <PropertyRef Name="complaint_Id" />
-      </Principal>
-      <Dependent Role="SupportingComplaints">
-        <PropertyRef Name="Complaint_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_SupportingComplaints_ToTable">
-    <End Role="Account" Type="Self.Account" Multiplicity="1" />
-    <End Role="SupportingComplaints" Type="Self.SupportingComplaints" Multiplicity="*" />
+    <End Role="Account" Type="PCP5Model.Store.Accounts" Multiplicity="1" />
+    <End Role="SupportingComplaints" Type="PCP5Model.Store.SupportingComplaints" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Account">
         <PropertyRef Name="Account_id" />
@@ -406,8 +349,8 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_Voting_ToAccount">
-    <End Role="Account" Type="Self.Account" Multiplicity="1" />
-    <End Role="Voting" Type="Self.Voting" Multiplicity="*" />
+    <End Role="Account" Type="PCP5Model.Store.Accounts" Multiplicity="1" />
+    <End Role="Voting" Type="PCP5Model.Store.Votings" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Account">
         <PropertyRef Name="Account_id" />
@@ -417,9 +360,93 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Complaints_Category">
+    <End Role="Category" Type="PCP5Model.Store.Categories" Multiplicity="0..1" />
+    <End Role="Complaints" Type="PCP5Model.Store.Complaints" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="category_id" />
+      </Principal>
+      <Dependent Role="Complaints">
+        <PropertyRef Name="category_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Complaint_Det_Remarks_ToTable">
+    <End Role="Complaints" Type="PCP5Model.Store.Complaints" Multiplicity="1" />
+    <End Role="Complaint_Det_Remarks" Type="PCP5Model.Store.Complaint_Det_Remarks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Complaints">
+        <PropertyRef Name="complaint_Id" />
+      </Principal>
+      <Dependent Role="Complaint_Det_Remarks">
+        <PropertyRef Name="Complaint_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Complaints_ToStatus">
+    <End Role="Status" Type="PCP5Model.Store.Status" Multiplicity="1" />
+    <End Role="Complaints" Type="PCP5Model.Store.Complaints" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Status">
+        <PropertyRef Name="stage_id" />
+      </Principal>
+      <Dependent Role="Complaints">
+        <PropertyRef Name="stage_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Complaints_ToUC">
+    <End Role="UCAreas" Type="PCP5Model.Store.UCAreas" Multiplicity="0..1" />
+    <End Role="Complaints" Type="PCP5Model.Store.Complaints" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UCAreas">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Complaints">
+        <PropertyRef Name="UC_area_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Feedback_ToComplaint">
+    <End Role="Complaints" Type="PCP5Model.Store.Complaints" Multiplicity="0..1" />
+    <End Role="Feedback" Type="PCP5Model.Store.Feedbacks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Complaints">
+        <PropertyRef Name="complaint_Id" />
+      </Principal>
+      <Dependent Role="Feedback">
+        <PropertyRef Name="complaint_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PendingComplaints_ToTable">
+    <End Role="Complaints" Type="PCP5Model.Store.Complaints" Multiplicity="1" />
+    <End Role="PendingComplaints" Type="PCP5Model.Store.PendingComplaints" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Complaints">
+        <PropertyRef Name="complaint_Id" />
+      </Principal>
+      <Dependent Role="PendingComplaints">
+        <PropertyRef Name="complaint_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SupportingComplaints_ToComplaints">
+    <End Role="Complaints" Type="PCP5Model.Store.Complaints" Multiplicity="1" />
+    <End Role="SupportingComplaints" Type="PCP5Model.Store.SupportingComplaints" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Complaints">
+        <PropertyRef Name="complaint_Id" />
+      </Principal>
+      <Dependent Role="SupportingComplaints">
+        <PropertyRef Name="Complaint_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Voting_ToComplaints">
-    <End Role="Complaints" Type="Self.Complaints" Multiplicity="1" />
-    <End Role="Voting" Type="Self.Voting" Multiplicity="*" />
+    <End Role="Complaints" Type="PCP5Model.Store.Complaints" Multiplicity="1" />
+    <End Role="Voting" Type="PCP5Model.Store.Votings" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Complaints">
         <PropertyRef Name="complaint_Id" />
@@ -429,103 +456,76 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityContainer Name="PCP5ModelStoreContainer">
-    <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Announcement" EntityType="Self.Announcement" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Complaint_Det_Remarks" EntityType="Self.Complaint_Det_Remarks" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Complaints" EntityType="Self.Complaints" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Feedback" EntityType="Self.Feedback" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="PendingComplaints" EntityType="Self.PendingComplaints" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Status" EntityType="Self.Status" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="SupportingComplaints" EntityType="Self.SupportingComplaints" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Town" EntityType="Self.Town" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="UCAreas" EntityType="Self.UCAreas" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="Voting" EntityType="Self.Voting" Schema="dbo" store:Type="Tables" />
-    <AssociationSet Name="FK_Account_ToCategory" Association="Self.FK_Account_ToCategory">
-      <End Role="Category" EntitySet="Category" />
-      <End Role="Account" EntitySet="Account" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Account_ToRoles" Association="Self.FK_Account_ToRoles">
-      <End Role="Roles" EntitySet="Roles" />
-      <End Role="Account" EntitySet="Account" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Account_Town" Association="Self.FK_Account_Town">
-      <End Role="Town" EntitySet="Town" />
-      <End Role="Account" EntitySet="Account" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Accounts_ToUC" Association="Self.FK_Accounts_ToUC">
-      <End Role="UCAreas" EntitySet="UCAreas" />
-      <End Role="Account" EntitySet="Account" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Announcement_ToAccount" Association="Self.FK_Announcement_ToAccount">
-      <End Role="Account" EntitySet="Account" />
-      <End Role="Announcement" EntitySet="Announcement" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Announcement_ToCategory" Association="Self.FK_Announcement_ToCategory">
-      <End Role="Category" EntitySet="Category" />
-      <End Role="Announcement" EntitySet="Announcement" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Announcement_ToForwardedBy" Association="Self.FK_Announcement_ToForwardedBy">
-      <End Role="Account" EntitySet="Account" />
-      <End Role="Announcement" EntitySet="Announcement" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Announcement_ToStatus" Association="Self.FK_Announcement_ToStatus">
-      <End Role="Status" EntitySet="Status" />
-      <End Role="Announcement" EntitySet="Announcement" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Announcement_ToUCArea" Association="Self.FK_Announcement_ToUCArea">
-      <End Role="UCAreas" EntitySet="UCAreas" />
-      <End Role="Announcement" EntitySet="Announcement" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Complaint_Det_Remarks_ToTable" Association="Self.FK_Complaint_Det_Remarks_ToTable">
-      <End Role="Complaints" EntitySet="Complaints" />
-      <End Role="Complaint_Det_Remarks" EntitySet="Complaint_Det_Remarks" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Complaints_Category" Association="Self.FK_Complaints_Category">
-      <End Role="Category" EntitySet="Category" />
-      <End Role="Complaints" EntitySet="Complaints" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Complaints_ToAccount" Association="Self.FK_Complaints_ToAccount">
-      <End Role="Account" EntitySet="Account" />
-      <End Role="Complaints" EntitySet="Complaints" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Complaints_ToForward_Admin_id" Association="Self.FK_Complaints_ToForward_Admin_id">
-      <End Role="Account" EntitySet="Account" />
-      <End Role="Complaints" EntitySet="Complaints" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Complaints_ToStatus" Association="Self.FK_Complaints_ToStatus">
-      <End Role="Status" EntitySet="Status" />
-      <End Role="Complaints" EntitySet="Complaints" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Complaints_ToUC" Association="Self.FK_Complaints_ToUC">
-      <End Role="UCAreas" EntitySet="UCAreas" />
-      <End Role="Complaints" EntitySet="Complaints" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Feedback_ToComplaint" Association="Self.FK_Feedback_ToComplaint">
-      <End Role="Complaints" EntitySet="Complaints" />
-      <End Role="Feedback" EntitySet="Feedback" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PendingComplaints_ToTable" Association="Self.FK_PendingComplaints_ToTable">
-      <End Role="Complaints" EntitySet="Complaints" />
-      <End Role="PendingComplaints" EntitySet="PendingComplaints" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SupportingComplaints_ToComplaints" Association="Self.FK_SupportingComplaints_ToComplaints">
-      <End Role="Complaints" EntitySet="Complaints" />
-      <End Role="SupportingComplaints" EntitySet="SupportingComplaints" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SupportingComplaints_ToTable" Association="Self.FK_SupportingComplaints_ToTable">
-      <End Role="Account" EntitySet="Account" />
-      <End Role="SupportingComplaints" EntitySet="SupportingComplaints" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Voting_ToAccount" Association="Self.FK_Voting_ToAccount">
-      <End Role="Account" EntitySet="Account" />
-      <End Role="Voting" EntitySet="Voting" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Voting_ToComplaints" Association="Self.FK_Voting_ToComplaints">
-      <End Role="Complaints" EntitySet="Complaints" />
-      <End Role="Voting" EntitySet="Voting" />
-    </AssociationSet>
-  </EntityContainer>
+  <Association Name="FK_Account_ToRoles">
+    <End Role="Role" Type="PCP5Model.Store.Roles" Multiplicity="1" />
+    <End Role="Account" Type="PCP5Model.Store.Accounts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="Role_Id" />
+      </Principal>
+      <Dependent Role="Account">
+        <PropertyRef Name="Role" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Announcement_ToAccount">
+    <End Role="Account" Type="PCP5Model.Store.Accounts" Multiplicity="0..1" />
+    <End Role="Announcement1" Type="PCP5Model.Store.Announcement1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="Account_id" />
+      </Principal>
+      <Dependent Role="Announcement1">
+        <PropertyRef Name="account_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Announcement_ToForwardedBy">
+    <End Role="Account" Type="PCP5Model.Store.Accounts" Multiplicity="0..1" />
+    <End Role="Announcement1" Type="PCP5Model.Store.Announcement1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="Account_id" />
+      </Principal>
+      <Dependent Role="Announcement1">
+        <PropertyRef Name="forwarded_by_account_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Announcement_ToCategory">
+    <End Role="Category" Type="PCP5Model.Store.Categories" Multiplicity="0..1" />
+    <End Role="Announcement1" Type="PCP5Model.Store.Announcement1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="category_id" />
+      </Principal>
+      <Dependent Role="Announcement1">
+        <PropertyRef Name="category_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Announcement_ToStatus">
+    <End Role="Status" Type="PCP5Model.Store.Status" Multiplicity="0..1" />
+    <End Role="Announcement1" Type="PCP5Model.Store.Announcement1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Status">
+        <PropertyRef Name="stage_id" />
+      </Principal>
+      <Dependent Role="Announcement1">
+        <PropertyRef Name="stage_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Announcement_ToUCArea">
+    <End Role="UCArea" Type="PCP5Model.Store.UCAreas" Multiplicity="0..1" />
+    <End Role="Announcement1" Type="PCP5Model.Store.Announcement1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UCArea">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Announcement1">
+        <PropertyRef Name="UC_Area_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

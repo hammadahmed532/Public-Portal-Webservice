@@ -183,3 +183,4 @@ D:\FYP\Public-Portal-Webservice\Public-Portal-Webservice\obj\Debug\Public-Portal
 D:\FYP\Public-Portal-Webservice\Public-Portal-Webservice\obj\Debug\Public-Portal-Webservice.csproj.CopyComplete
 D:\FYP\Public-Portal-Webservice\Public-Portal-Webservice\obj\Debug\Public-Portal-Webservice.dll
 D:\FYP\Public-Portal-Webservice\Public-Portal-Webservice\obj\Debug\Public-Portal-Webservice.pdb
+D:\FYP\Public-Portal-Webservice\Public-Portal-Webservice\obj\Debug\Public-Portal-Webservice.csproj.CoreCompileInputs.cache

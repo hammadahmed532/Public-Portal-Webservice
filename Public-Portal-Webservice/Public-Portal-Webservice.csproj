@@ -290,6 +290,7 @@
       <LastGenOutput>PCPDBModel.Context.cs</LastGenOutput>
       <DependentUpon>PCPDBModel.edmx</DependentUpon>
     </Content>
+    <Content Include="Models\PCPDBModel.edmx.sql" />
     <Content Include="Models\PCPDBModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>PCPDBModel.edmx</DependentUpon>

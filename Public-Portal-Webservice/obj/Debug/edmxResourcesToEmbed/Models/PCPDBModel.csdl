@@ -143,7 +143,7 @@
     <Property Name="Complaint_id" Type="Int32" Nullable="false" />
     <Property Name="account_id" Type="Int32" Nullable="false" />
     <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="time_created" Type="DateTime" Precision="7" />
+    <Property Name="time_created" Type="DateTime" Precision="3" />
     <NavigationProperty Name="Account" Relationship="Self.FK_SupportingComplaints_ToTable" FromRole="SupportingComplaints" ToRole="Account" />
     <NavigationProperty Name="Complaint" Relationship="Self.FK_SupportingComplaints_ToComplaints" FromRole="SupportingComplaints" ToRole="Complaints" />
   </EntityType>
