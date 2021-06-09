@@ -285,6 +285,7 @@
     <Content Include="Content\w3.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Models\PCP Update database FYP.sql" />
     <Content Include="Models\PCPDBModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>PCPDBModel.Context.cs</LastGenOutput>
